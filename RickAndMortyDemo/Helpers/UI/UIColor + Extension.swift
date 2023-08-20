@@ -1,5 +1,7 @@
 import UIKit
 
 extension UIColor {
-    static let blackBG = UIColor(named: "blackBG")
+    static let rmBlackBG = UIColor(named: "blackBG")
+    static let rmBlackSecondary = UIColor(named: "blackSecondary")
+    static let rmWhite = UIColor(named: "rmWhite")
 }
