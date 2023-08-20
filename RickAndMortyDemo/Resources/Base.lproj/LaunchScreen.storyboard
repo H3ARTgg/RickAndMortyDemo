@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,15 +14,48 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stars" translatesAutoresizingMaskIntoConstraints="NO" id="w68-bc-Nwc">
+                                <rect key="frame" x="16" y="113" width="352" height="675"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="portal" translatesAutoresizingMaskIntoConstraints="NO" id="Fl4-gG-P3D">
+                                <rect key="frame" x="126.66666666666669" y="255" width="140" height="228"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="56Z-4R-xuO">
+                                <rect key="frame" x="126.66666666666669" y="179" width="140" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="28S-rk-4aK"/>
+                                    <constraint firstAttribute="width" constant="140" id="4wn-2U-lod"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="blackBG"/>
+                        <constraints>
+                            <constraint firstItem="56Z-4R-xuO" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="IXX-gw-5xg"/>
+                            <constraint firstItem="Fl4-gG-P3D" firstAttribute="top" secondItem="56Z-4R-xuO" secondAttribute="bottom" constant="36" id="LPs-sc-ATU"/>
+                            <constraint firstItem="Fl4-gG-P3D" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="QAU-Oi-sxN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="w68-bc-Nwc" secondAttribute="bottom" constant="30" id="QIy-JX-PYq"/>
+                            <constraint firstItem="w68-bc-Nwc" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="16" id="WnL-jb-aMQ"/>
+                            <constraint firstItem="w68-bc-Nwc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="54" id="ZOd-Hd-Nc4"/>
+                            <constraint firstItem="56Z-4R-xuO" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" constant="120" id="la6-go-PNm"/>
+                            <constraint firstAttribute="trailing" secondItem="w68-bc-Nwc" secondAttribute="trailing" constant="25" id="wV6-hh-GmN"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.671755725190835" y="374.64788732394368"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="logo" width="140" height="40"/>
+        <image name="portal" width="140" height="228"/>
+        <image name="stars" width="334" height="650"/>
+        <namedColor name="blackBG">
+            <color red="0.015686274509803921" green="0.047058823529411764" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>
