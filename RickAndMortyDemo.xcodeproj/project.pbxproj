@@ -54,14 +54,86 @@
 		1DD2FCAC2A9206F100024155 /* RickAndMortyDemo */ = {
 			isa = PBXGroup;
 			children = (
-				1DD2FCAD2A9206F100024155 /* AppDelegate.swift */,
-				1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */,
-				1DD2FCB12A9206F100024155 /* ViewController.swift */,
-				1DD2FCB62A9206F200024155 /* Assets.xcassets */,
-				1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */,
-				1DD2FCBB2A9206F200024155 /* Info.plist */,
+				1DD2FCC12A920B2E00024155 /* App */,
+				1DD2FCC22A920B3B00024155 /* AppBasic */,
+				1DD2FCC32A920B6200024155 /* Presentation */,
+				1DD2FCC92A920C6A00024155 /* Services */,
+				1DD2FCC62A920C2100024155 /* Helpers */,
+				1DD2FCC42A920B7000024155 /* Resources */,
 			);
 			path = RickAndMortyDemo;
+			sourceTree = "<group>";
+		};
+		1DD2FCC12A920B2E00024155 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2FCAD2A9206F100024155 /* AppDelegate.swift */,
+				1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		1DD2FCC22A920B3B00024155 /* AppBasic */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AppBasic;
+			sourceTree = "<group>";
+		};
+		1DD2FCC32A920B6200024155 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2FCC52A920B9500024155 /* CharactersListFlow */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		1DD2FCC42A920B7000024155 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */,
+				1DD2FCB62A9206F200024155 /* Assets.xcassets */,
+				1DD2FCBB2A9206F200024155 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1DD2FCC52A920B9500024155 /* CharactersListFlow */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2FCC72A920C3600024155 /* CharactersListModule */,
+				1DD2FCC82A920C4200024155 /* CharacterInfoModule */,
+			);
+			path = CharactersListFlow;
+			sourceTree = "<group>";
+		};
+		1DD2FCC62A920C2100024155 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1DD2FCC72A920C3600024155 /* CharactersListModule */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2FCB12A9206F100024155 /* ViewController.swift */,
+			);
+			path = CharactersListModule;
+			sourceTree = "<group>";
+		};
+		1DD2FCC82A920C4200024155 /* CharacterInfoModule */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CharacterInfoModule;
+			sourceTree = "<group>";
+		};
+		1DD2FCC92A920C6A00024155 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,7 +349,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CCJ53Q5CP4;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RickAndMortyDemo/Info.plist;
+				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -305,7 +377,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CCJ53Q5CP4;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RickAndMortyDemo/Info.plist;
+				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
