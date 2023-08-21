@@ -8,7 +8,7 @@ final class ModulesFactory: ModulesFactoryProtocol {
     let networkManager: NetworkManagerProtocol = NetworkManager(networkService: DefaultNetworkClient())
     
     func makeCharactersListView() -> (view: Presentable, coordination: CharactersListCoordination) {
-        let listVM = CharactersListViewModel()
+        let listVM = CharactersListViewModel(networkManager: networkManager)
         let list = CharactersListViewController(viewModel: listVM)
         return (list, listVM)
     }
