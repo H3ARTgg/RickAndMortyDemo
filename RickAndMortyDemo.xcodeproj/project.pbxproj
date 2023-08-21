@@ -24,6 +24,7 @@
 		1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E1E2A92A22D00F459C9 /* Consts.swift */; };
 		1D236E232A92AEA100F459C9 /* UIFont + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E222A92AEA100F459C9 /* UIFont + Extension.swift */; };
 		1D236E2A2A92C9D400F459C9 /* CellReusingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E292A92C9D400F459C9 /* CellReusingUtils.swift */; };
+		1D236E2F2A939A4100F459C9 /* CharacterModel + Origin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */; };
 		1D236E312A939D5900F459C9 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E302A939D5900F459C9 /* NetworkClient.swift */; };
 		1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E322A939EBF00F459C9 /* NetworkRequest.swift */; };
 		1D236E352A939F0100F459C9 /* NetworkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E342A939F0100F459C9 /* NetworkTask.swift */; };
@@ -57,6 +58,7 @@
 		1D236E1E2A92A22D00F459C9 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		1D236E222A92AEA100F459C9 /* UIFont + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont + Extension.swift"; sourceTree = "<group>"; };
 		1D236E292A92C9D400F459C9 /* CellReusingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReusingUtils.swift; sourceTree = "<group>"; };
+		1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CharacterModel + Origin.swift"; sourceTree = "<group>"; };
 		1D236E302A939D5900F459C9 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		1D236E322A939EBF00F459C9 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		1D236E342A939F0100F459C9 /* NetworkTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTask.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				1D236E392A93A09900F459C9 /* NetworkManager.swift */,
+				1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */,
 				1D236E382A93A02400F459C9 /* Networking */,
 			);
 			path = Services;
@@ -332,6 +335,7 @@
 				1D236E002A9217BF00F459C9 /* Router.swift in Sources */,
 				1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */,
 				1D236DFE2A9217A500F459C9 /* ModulesFactory.swift in Sources */,
+				1D236E2F2A939A4100F459C9 /* CharacterModel + Origin.swift in Sources */,
 				1D236E0D2A92201F00F459C9 /* CharactersListViewController.swift in Sources */,
 				1D236E112A9220C600F459C9 /* CharactersListNavCon.swift in Sources */,
 				1D236E152A92235F00F459C9 /* CharacterInfoViewModel.swift in Sources */,
