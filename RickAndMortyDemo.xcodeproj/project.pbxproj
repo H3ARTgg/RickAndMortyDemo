@@ -23,7 +23,9 @@
 		1D236E1D2A92A16D00F459C9 /* String + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E1C2A92A16D00F459C9 /* String + Extension.swift */; };
 		1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E1E2A92A22D00F459C9 /* Consts.swift */; };
 		1D236E232A92AEA100F459C9 /* UIFont + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E222A92AEA100F459C9 /* UIFont + Extension.swift */; };
+		1D236E262A92BDC900F459C9 /* CharactersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E252A92BDC900F459C9 /* CharactersListCell.swift */; };
 		1D236E2A2A92C9D400F459C9 /* CellReusingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E292A92C9D400F459C9 /* CellReusingUtils.swift */; };
+		1D236E2D2A92CBC200F459C9 /* CharactersListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E2C2A92CBC200F459C9 /* CharactersListDataSource.swift */; };
 		1D236E2F2A939A4100F459C9 /* CharacterModel + Origin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */; };
 		1D236E312A939D5900F459C9 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E302A939D5900F459C9 /* NetworkClient.swift */; };
 		1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E322A939EBF00F459C9 /* NetworkRequest.swift */; };
@@ -32,6 +34,7 @@
 		1D236E3A2A93A09900F459C9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E392A93A09900F459C9 /* NetworkManager.swift */; };
 		1D236E3D2A93A15E00F459C9 /* CharactersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E3C2A93A15E00F459C9 /* CharactersRequest.swift */; };
 		1D236E3F2A93ACE200F459C9 /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E3E2A93ACE200F459C9 /* ImageRequest.swift */; };
+		1D236E412A93ADEE00F459C9 /* CharactersListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E402A93ADEE00F459C9 /* CharactersListCellModel.swift */; };
 		1D236E452A94282000F459C9 /* UIApplication + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E442A94282000F459C9 /* UIApplication + Extension.swift */; };
 		1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAD2A9206F100024155 /* AppDelegate.swift */; };
 		1DD2FCB02A9206F100024155 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */; };
@@ -58,7 +61,9 @@
 		1D236E1C2A92A16D00F459C9 /* String + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extension.swift"; sourceTree = "<group>"; };
 		1D236E1E2A92A22D00F459C9 /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		1D236E222A92AEA100F459C9 /* UIFont + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont + Extension.swift"; sourceTree = "<group>"; };
+		1D236E252A92BDC900F459C9 /* CharactersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListCell.swift; sourceTree = "<group>"; };
 		1D236E292A92C9D400F459C9 /* CellReusingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReusingUtils.swift; sourceTree = "<group>"; };
+		1D236E2C2A92CBC200F459C9 /* CharactersListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListDataSource.swift; sourceTree = "<group>"; };
 		1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CharacterModel + Origin.swift"; sourceTree = "<group>"; };
 		1D236E302A939D5900F459C9 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		1D236E322A939EBF00F459C9 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -67,6 +72,7 @@
 		1D236E392A93A09900F459C9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		1D236E3C2A93A15E00F459C9 /* CharactersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersRequest.swift; sourceTree = "<group>"; };
 		1D236E3E2A93ACE200F459C9 /* ImageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
+		1D236E402A93ADEE00F459C9 /* CharactersListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListCellModel.swift; sourceTree = "<group>"; };
 		1D236E442A94282000F459C9 /* UIApplication + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication + Extension.swift"; sourceTree = "<group>"; };
 		1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMortyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DD2FCAD2A9206F100024155 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -107,6 +113,23 @@
 				1D236E442A94282000F459C9 /* UIApplication + Extension.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		1D236E242A92BD3F00F459C9 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1D236E252A92BDC900F459C9 /* CharactersListCell.swift */,
+				1D236E402A93ADEE00F459C9 /* CharactersListCellModel.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		1D236E2B2A92CB9200F459C9 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				1D236E2C2A92CBC200F459C9 /* CharactersListDataSource.swift */,
+			);
+			path = DataSource;
 			sourceTree = "<group>";
 		};
 		1D236E382A93A02400F459C9 /* Networking */ = {
@@ -224,6 +247,8 @@
 			children = (
 				1D236E0C2A92201F00F459C9 /* CharactersListViewController.swift */,
 				1D236E0E2A92205400F459C9 /* CharactersListViewModel.swift */,
+				1D236E2B2A92CB9200F459C9 /* DataSource */,
+				1D236E242A92BD3F00F459C9 /* Cell */,
 			);
 			path = CharactersListModule;
 			sourceTree = "<group>";
@@ -320,16 +345,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D236E3A2A93A09900F459C9 /* NetworkManager.swift in Sources */,
+				1D236E2D2A92CBC200F459C9 /* CharactersListDataSource.swift in Sources */,
 				1D236E2A2A92C9D400F459C9 /* CellReusingUtils.swift in Sources */,
 				1D236E3D2A93A15E00F459C9 /* CharactersRequest.swift in Sources */,
 				1D236E232A92AEA100F459C9 /* UIFont + Extension.swift in Sources */,
 				1D236E132A92235300F459C9 /* CharacterInfoViewController.swift in Sources */,
+				1D236E262A92BDC900F459C9 /* CharactersListCell.swift in Sources */,
 				1D236E0F2A92205400F459C9 /* CharactersListViewModel.swift in Sources */,
 				1D236E1D2A92A16D00F459C9 /* String + Extension.swift in Sources */,
 				1D236E312A939D5900F459C9 /* NetworkClient.swift in Sources */,
 				1D236E3F2A93ACE200F459C9 /* ImageRequest.swift in Sources */,
 				1D236E0B2A921A8800F459C9 /* UIViewController + Extension.swift in Sources */,
 				1D236DFC2A92179000F459C9 /* BaseCoordinator.swift in Sources */,
+				1D236E412A93ADEE00F459C9 /* CharactersListCellModel.swift in Sources */,
 				1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */,
 				1D236E352A939F0100F459C9 /* NetworkTask.swift in Sources */,
 				1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */,
