@@ -66,21 +66,21 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CharactersListCell else { return }
+        viewModel.moveToCharacterInfo(with: indexPath)
     }
 }
 
 // MARK: - DiffableDataSource Delegate
 extension CharactersListViewController: DiffableDataSourceDelegate {
     func showActivityIndicator() {
-        var window = UIApplication.keyWindow
+        let window = UIApplication.keyWindow
         window?.isUserInteractionEnabled = false
         configureActivityIndicator(activityIndicator)
         activityIndicator.startAnimating()
     }
     
     func removeActivityIndicator() {
-        var window = UIApplication.keyWindow
+        let window = UIApplication.keyWindow
         window?.isUserInteractionEnabled = true
         
         activityIndicator.stopAnimating()
