@@ -34,6 +34,7 @@ private extension CharactersListCell {
         label.textColor = .rmWhite
         label.font = .title17
         label.numberOfLines = 0
+        label.textAlignment = .center
     }
     
     func configureCharacterImage(_ imageView: UIImageView) {
@@ -69,8 +70,14 @@ private extension CharactersListCell {
             characterImage.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
             characterImage.heightAnchor.constraint(equalToConstant: 140),
             
-            characterLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            characterLabel.topAnchor.constraint(lessThanOrEqualTo: characterImage.bottomAnchor, constant: 16)
+            characterLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+            characterLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8)
         ])
+        let constraint1 = characterLabel.topAnchor.constraint(lessThanOrEqualTo: characterImage.bottomAnchor, constant: 16)
+        constraint1.priority = UILayoutPriority(1000)
+        constraint1.isActive = true
+        let constraint2 = characterLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -8)
+        constraint2.priority = UILayoutPriority(999)
+        constraint2.isActive = true
     }
 }
