@@ -22,6 +22,12 @@ final class CharacterInfoViewController: UIViewController {
         viewModel.requestCharacterOriginAndEpisodes()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let topOffset = CGPoint(x: 0, y: -88)
+        self.scrollView.setContentOffset(topOffset, animated: false)
+    }
+    
     init(viewModel: CharacterInfoViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: .main)
@@ -132,8 +138,6 @@ private extension CharacterInfoViewController {
         scrollView.bounces = true
         scrollView.frame = view.bounds
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + extraSpace)
-        let topOffset = CGPoint(x: 0, y: 0)
-        scrollView.setContentOffset(topOffset, animated: false)
         
         view.addSubview(scrollView)
         
