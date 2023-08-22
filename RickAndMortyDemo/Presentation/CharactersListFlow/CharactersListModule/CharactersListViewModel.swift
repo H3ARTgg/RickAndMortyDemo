@@ -3,7 +3,7 @@ import Combine
 
 protocol CharactersListCoordination {
     var finish: (() -> Void)? { get set }
-    var headForCharacterInfo: (((CharacterModel, Data)) -> Void)? { get set }
+    var headForCharacterInfo: ((CharacterModel, Data) -> Void)? { get set }
 }
 
 protocol CharactersListViewModelProtocol: AnyObject {
@@ -20,7 +20,7 @@ protocol CharactersListViewModelProtocol: AnyObject {
 
 final class CharactersListViewModel: CharactersListViewModelProtocol & CharactersListCoordination {
     var finish: (() -> Void)?
-    var headForCharacterInfo: (((CharacterModel, Data)) -> Void)?
+    var headForCharacterInfo: ((CharacterModel, Data) -> Void)?
     private(set) var charactersPublisher: AnyPublisher<[CharacterModel], NetworkError>
     private(set) var imagesPublisher: AnyPublisher<[Data], NetworkError>
     private(set) var getImages = PassthroughSubject<[String], NetworkError>()
@@ -68,7 +68,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
     }
     
     func moveToCharacterInfo(with indexPath: IndexPath) {
-        headForCharacterInfo?((charactersSubject.value[indexPath.row], imagesSubject.value[indexPath.row]))
+        headForCharacterInfo?(charactersSubject.value[indexPath.row], imagesSubject.value[indexPath.row])
     }
     
     func requestCharacters() {
