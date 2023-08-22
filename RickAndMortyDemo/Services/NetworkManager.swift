@@ -5,6 +5,8 @@ protocol NetworkManagerProtocol: AnyObject {
     func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], NetworkError>
     func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], NetworkError>
     func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError>
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError>
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError>
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -23,6 +25,7 @@ final class NetworkManager: NetworkManagerProtocol {
     func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError> {
         let request = ImageRequest(url: url)
         return networkService.networkPublisher(request: request)
+            .eraseToAnyPublisher()
     }
     
     func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], NetworkError> {
@@ -30,6 +33,18 @@ final class NetworkManager: NetworkManagerProtocol {
             .setFailureType(to: NetworkError.self)
             .flatMap(getImagePublisher)
             .collect()
+            .eraseToAnyPublisher()
+    }
+    
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError> {
+        let request = CharacterOriginRequest(url: url)
+        return networkService.networkPublisher(request: request, type: CharacterOriginModel.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError> {
+        let request = EpisodesRequest(episodes: urls)
+        return networkService.networkPublisher(request: request, type: [EpisodeModel].self)
             .eraseToAnyPublisher()
     }
 }
