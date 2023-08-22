@@ -4,4 +4,6 @@ extension UIColor {
     static let rmBlackBG = UIColor(named: "rmBlackBG") ?? UIColor.black
     static let rmBlackSecondary = UIColor(named: "rmBlackSecondary") ?? UIColor.gray
     static let rmWhite = UIColor(named: "rmWhite") ?? UIColor.white
+    static let rmGreen = UIColor(named: "rmGreen") ?? UIColor.green
+    static let rmRed = UIColor(named: "rmRed") ?? UIColor.red
 }
