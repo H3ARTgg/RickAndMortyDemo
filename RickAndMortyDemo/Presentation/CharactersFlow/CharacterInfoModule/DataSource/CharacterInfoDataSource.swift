@@ -9,7 +9,7 @@ enum Section: Hashable {
 enum SectionItem: Hashable {
     case info(InfoCellModel)
     case origin(OriginCellModel)
-    case episode(EpisodeCellModel)
+    case episode(EpisodeModel)
 }
 
 struct SectionData: Hashable {
@@ -18,25 +18,54 @@ struct SectionData: Hashable {
 }
 
 
-final class CharacterInfoDataSource: UITableViewDiffableDataSource<Section, SectionItem> {
+final class CharacterInfoDataSource: UICollectionViewDiffableDataSource<Section, SectionItem> {
     private var snapshot = NSDiffableDataSourceSnapshot<Section, SectionItem>()
     
-    init(_ tableView: UITableView) {
-        super.init(tableView: tableView) { tableView, indexPath, itemIdentifier in
+    init(_ collectionView: UICollectionView) {
+        super.init(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             switch itemIdentifier {
             case .info(let model):
-                let cell: InfoCell = tableView.dequeueReusableCell()
+                let cell: InfoCell = collectionView.dequeueReusableCell(indexPath: indexPath)
                 cell.cellModel = model
                 return cell
             case .origin(let model):
-                let cell: OriginCell = tableView.dequeueReusableCell()
+                let cell: OriginCell = collectionView.dequeueReusableCell(indexPath: indexPath)
                 cell.cellModel = model
                 return cell
             case .episode(let model):
-                let cell: EpisodeCell = tableView.dequeueReusableCell()
+                let cell: EpisodeCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+                cell.cellModel = model
                 return cell
             }
+        })
+    }
+                   
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "Header"
+        case UICollectionView.elementKindSectionFooter:
+            id = "Footer"
+        default:
+            id = ""
         }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? CharacterInfoSupView else {
+            assertionFailure("No SupplementaryView")
+            return UICollectionReusableView(frame: .zero)
+        }
+        switch indexPath.section {
+        case 0:
+            view.headerModel = Header.info
+        case 1:
+            view.headerModel = Header.origin
+        case 2:
+            view.headerModel = Header.episodes
+        default:
+            return UICollectionReusableView()
+        }
+        return view
     }
     
     func reload(_ data: [SectionData], animated: Bool = true) {

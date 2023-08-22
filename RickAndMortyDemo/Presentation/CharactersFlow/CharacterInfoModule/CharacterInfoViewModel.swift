@@ -89,7 +89,12 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
         ))
         var sectionItems: [SectionItem] = []
         for episode in episodes {
-            let sectionItem = SectionItem.episode(EpisodeCellModel(episode: episode))
+            let sectionItem = SectionItem.episode(EpisodeModel(
+                id: episode.id,
+                name: episode.name,
+                airDate: episode.airDate,
+                episode: makeCorrectEpisodeNumber(episode: episode.episode))
+            )
             sectionItems.append(sectionItem)
         }
         sectionData.append(SectionData(
@@ -97,5 +102,16 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
             values: sectionItems
         ))
         return sectionData
+    }
+    
+    private func makeCorrectEpisodeNumber(episode: String) -> String {
+        episode
+            .replacingOccurrences(of: "0", with: "")
+            .replacingOccurrences(of: "S", with: "Season: ")
+            .replacingOccurrences(of: "E", with: ",Episode: ")
+            .split(separator: ",")
+            .reversed()
+            .joined(separator: ", ")
+
     }
 }

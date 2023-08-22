@@ -6,7 +6,7 @@ struct InfoCellModel: Hashable {
     let gender: String
 }
 
-final class InfoCell: UITableViewCell, ReuseIdentifying, Identifiable {
+final class InfoCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     private let speciesTitle = UILabel()
     private let typeTitle = UILabel()
     private let genderTitle = UILabel()
@@ -22,8 +22,8 @@ final class InfoCell: UITableViewCell, ReuseIdentifying, Identifiable {
         }
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configure()
     }
     

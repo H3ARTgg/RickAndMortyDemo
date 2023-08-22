@@ -17,8 +17,8 @@ enum Header {
     }
 }
 
-final class CharacterInfoHeaderView: UITableViewHeaderFooterView {
-    static let identifier = "CharacterInfoHeaderViewIdentifier"
+final class CharacterInfoSupView: UICollectionReusableView {
+    static let identifier = "Header"
     private let title = UILabel()
     var headerModel: Header? {
         didSet {
@@ -26,8 +26,8 @@ final class CharacterInfoHeaderView: UITableViewHeaderFooterView {
         }
     }
     
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configureTitle()
     }
     
@@ -40,12 +40,13 @@ final class CharacterInfoHeaderView: UITableViewHeaderFooterView {
         title.font = .title17
         
         title.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(title)
+        addSubview(title)
         
         NSLayoutConstraint.activate([
-            title.topAnchor.constraint(equalTo: contentView.topAnchor),
-            title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            title.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+            title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            title.leadingAnchor.constraint(equalTo: leadingAnchor),
+            title.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

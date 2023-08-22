@@ -7,11 +7,11 @@ final class CharacterInfoViewController: UIViewController {
     private let characterImageView = UIImageView()
     private let characterNameLabel = UILabel()
     private let characterStatusLabel = UILabel()
-    private let characterTableView = UITableView(frame: .zero, style: .insetGrouped)
+    private let characterCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let viewModel: CharacterInfoViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
-    private lazy var dataSource = CharacterInfoDataSource(self.characterTableView)
+    private lazy var dataSource = CharacterInfoDataSource(self.characterCollectionView)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,15 +65,15 @@ final class CharacterInfoViewController: UIViewController {
     }
     
     private func configureWith(episodesCount: Int) {
-        let extraSpace = CGFloat((episodesCount * 90) - 90)
+        let extraSpace = CGFloat((episodesCount * 102) - 102)
         configureScrollViewAndContentView(scrollView, contentView, with: extraSpace)
         configureImageView(characterImageView)
         configureNameLabel(characterNameLabel)
         configureStatusLabel(characterStatusLabel)
-        configureTableView(characterTableView)
+        configureTableView(characterCollectionView)
         addSubviews()
         addConstraints()
-        characterTableView.backgroundColor = .clear
+        characterCollectionView.backgroundColor = .clear
     }
     
     private func checkForStatus(_ status: String) {
@@ -88,38 +88,31 @@ final class CharacterInfoViewController: UIViewController {
     }
 }
 
-// MARK: TableView Delegate
-extension CharacterInfoViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: CharacterInfoHeaderView.identifier) as? CharacterInfoHeaderView else { return nil }
-        switch section {
-        case 0:
-            header.headerModel = Header.info
-        case 1:
-            header.headerModel = Header.origin
-        case 2:
-            header.headerModel = Header.episodes
-        default:
-            return nil
-        }
-        return header
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        64
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+// MARK: CollectionView Delegate
+extension CharacterInfoViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
         case 0:
-            return 124
+            return CGSize(width: collectionView.frame.width, height: 124)
         case 1:
-            return 80
+            return CGSize(width: collectionView.frame.width, height: 80)
         case 2:
-            return 86
+            return CGSize(width: collectionView.frame.width, height: 86)
         default:
-            return 42
+            return CGSize(width: collectionView.frame.width, height: 86)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if section == 2 {
+            return 16
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        CGSize(width:collectionView.bounds.width , height: 62)
     }
 }
 
@@ -134,6 +127,8 @@ private extension CharacterInfoViewController {
         scrollView.bounces = true
         scrollView.frame = view.bounds
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + extraSpace)
+        let topOffset = CGPoint(x: 0, y: 0)
+        scrollView.setContentOffset(topOffset, animated: false)
         
         view.addSubview(scrollView)
         
@@ -159,23 +154,23 @@ private extension CharacterInfoViewController {
         label.font = .regular16
     }
     
-    func configureTableView(_ tableView: UITableView) {
-        tableView.register(InfoCell.self)
-        tableView.register(OriginCell.self)
-        tableView.register(EpisodeCell.self)
-        tableView.register(CharacterInfoHeaderView.self, forHeaderFooterViewReuseIdentifier: CharacterInfoHeaderView.identifier)
-        tableView.isScrollEnabled = false
-        tableView.allowsSelection = false
-        tableView.separatorStyle = .none
-        tableView.delegate = self
+    func configureTableView(_ colView: UICollectionView) {
+        colView.register(InfoCell.self)
+        colView.register(OriginCell.self)
+        colView.register(EpisodeCell.self)
+        colView.register(CharacterInfoSupView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CharacterInfoSupView.identifier)
+        colView.isScrollEnabled = false
+        colView.allowsSelection = false
+        colView.delegate = self
+        colView.backgroundColor = .clear
     }
     
     func addSubviews() {
-        [characterImageView, characterNameLabel, characterStatusLabel, characterTableView].forEach {
+        [characterImageView, characterNameLabel, characterStatusLabel, characterCollectionView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        [characterImageView, characterNameLabel, characterStatusLabel, characterTableView].forEach {
+        [characterImageView, characterNameLabel, characterStatusLabel, characterCollectionView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -201,19 +196,19 @@ private extension CharacterInfoViewController {
             characterStatusLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             
-            characterTableView.topAnchor.constraint(
+            characterCollectionView.topAnchor.constraint(
                 equalTo: characterStatusLabel.bottomAnchor,
                 constant: 24
             ),
-            characterTableView.leadingAnchor.constraint(
+            characterCollectionView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
                 constant: 24
             ),
-            characterTableView.trailingAnchor.constraint(
+            characterCollectionView.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
                 constant: -24
             ),
-            characterTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            characterCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

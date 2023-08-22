@@ -5,7 +5,7 @@ struct OriginCellModel: Hashable {
     let originType: String
 }
 
-final class OriginCell: UITableViewCell, ReuseIdentifying, Identifiable {
+final class OriginCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     private let originName = UILabel()
     private let originType = UILabel()
     private let containerView = UIView()
@@ -18,8 +18,8 @@ final class OriginCell: UITableViewCell, ReuseIdentifying, Identifiable {
         }
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configure()
     }
     
@@ -35,6 +35,7 @@ final class OriginCell: UITableViewCell, ReuseIdentifying, Identifiable {
         
         originName.textColor = .rmWhite
         originName.font = .title17
+        originName.numberOfLines = 0
         
         originType.textColor = .rmGreen
         originType.font = .regular13
@@ -61,9 +62,15 @@ final class OriginCell: UITableViewCell, ReuseIdentifying, Identifiable {
             
             originName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             originName.leadingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16),
+            originName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            originType.topAnchor.constraint(equalTo: originName.bottomAnchor, constant: 8),
-            originType.leadingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16)
+            originType.leadingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: 16)
         ])
+        let constraint1 = originType.topAnchor.constraint(lessThanOrEqualTo: originName.bottomAnchor, constant: 8)
+        constraint1.priority = UILayoutPriority(1000)
+        constraint1.isActive = true
+        let constraint2 = originType.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8)
+        constraint2.priority = UILayoutPriority(999)
+        constraint2.isActive = true
     }
 }
