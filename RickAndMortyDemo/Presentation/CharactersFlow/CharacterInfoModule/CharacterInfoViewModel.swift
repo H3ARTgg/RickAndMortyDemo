@@ -76,13 +76,13 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
         var type = characterModel.type
         var originType = origin.type
         if type.isEmpty {
-            type = "None"
+            type = String.none
         }
         if originType.isEmpty {
-            originType = "None"
+            originType = String.none
         }
         sectionData.append(SectionData(key: Section.info, values: [
-            SectionItem.info(InfoCellModel(species: characterModel.species, type: type, gender: characterModel.gender))]))
+            SectionItem.info(InfoCellModel(species: characterModel.species, type: type, gender:  checkForLocalization(gender: characterModel.gender)))]))
         sectionData.append(SectionData(
             key: Section.origin,
             values: [SectionItem.origin(OriginCellModel(originName: characterModel.origin.name, originType: originType))]
@@ -113,5 +113,16 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
             .reversed()
             .joined(separator: ", ")
 
+    }
+    
+    private func checkForLocalization(gender: String) -> String {
+        if gender == "Male" {
+            return .male
+        } else if gender == "Female" {
+            return .female
+        } else if gender == "unknown" {
+            return .unknown
+        }
+        return gender
     }
 }

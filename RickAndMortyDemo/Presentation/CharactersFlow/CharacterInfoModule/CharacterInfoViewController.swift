@@ -77,13 +77,15 @@ final class CharacterInfoViewController: UIViewController {
     }
     
     private func checkForStatus(_ status: String) {
-        characterStatusLabel.text = status
         if status == "Alive" {
             characterStatusLabel.textColor = .rmGreen
+            characterStatusLabel.text = .alive
         } else if status == "Dead" {
             characterStatusLabel.textColor = .rmRed
+            characterStatusLabel.text = .dead
         } else if status == "unknown" {
             characterStatusLabel.textColor = .rmYellow
+            characterStatusLabel.text = .unknown
         }
     }
 }

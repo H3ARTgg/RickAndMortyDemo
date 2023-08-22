@@ -1,4 +1,31 @@
 characters = "Персонажи";
+
 info = "Информация";
 origin = "Происхождение";
 episodes = "Эпизоды";
+
+species = "Вид:";
+type = "Тип:";
+gender = "Пол:";
+
+unknown = "неизвестно";
+none = "Нет";
+
+alive = "Жив";
+dead = "Мертв";
+
+male = "Мужской";
+female = "Женский";
+
+human = "Человек";
+alien = "Пришелец";
+animal = "Животное";
+humanoid = "Человекоподобное";
+mythological_creature = "Мистическое Существо";
+disease = "Болезнь";
+
+parasite = "Паразит";
+dog = "Собака";
+bird_person = "Человек-Птица";
+organic_gun = "Органическое оружие";
+giant = "Гигант";
