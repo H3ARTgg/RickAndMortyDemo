@@ -92,7 +92,7 @@ extension CharactersListViewController: DiffableDataSourceDelegate {
 private extension CharactersListViewController {
     func configureTitleLabel(_ title: UILabel) {
         title.textColor = .rmWhite
-        title.font = .title
+        title.font = .title28
         title.text = .characters
     }
     

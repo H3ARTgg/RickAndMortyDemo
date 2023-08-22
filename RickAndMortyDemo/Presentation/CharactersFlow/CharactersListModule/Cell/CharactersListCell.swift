@@ -32,7 +32,7 @@ private extension CharactersListCell {
     
     func configureCharacterLabel(_ label: UILabel) {
         label.textColor = .rmWhite
-        label.font = .secondTitle
+        label.font = .title17
         label.numberOfLines = 0
     }
     
