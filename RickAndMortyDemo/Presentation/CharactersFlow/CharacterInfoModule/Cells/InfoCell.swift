@@ -37,15 +37,15 @@ final class InfoCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
         contentView.layer.cornerRadius = 16
         contentView.backgroundColor = .rmBlackSecondary
         
-        speciesTitle.text = "Species:"
+        speciesTitle.text = .species
         speciesTitle.textColor = .rmGray
         speciesTitle.font = .regular16
         
-        typeTitle.text = "Type:"
+        typeTitle.text = .type
         typeTitle.textColor = .rmGray
         typeTitle.font = .regular16
         
-        genderTitle.text = "Gender:"
+        genderTitle.text = .gender
         genderTitle.textColor = .rmGray
         genderTitle.font = .regular16
         

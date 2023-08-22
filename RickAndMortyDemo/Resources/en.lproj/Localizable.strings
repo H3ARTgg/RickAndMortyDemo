@@ -1,4 +1,32 @@
 characters = "Characters";
+
 info = "Info";
 origin = "Origin";
 episodes = "Episodes";
+
+species = "Species:";
+type = "Type:";
+gender = "Gender:";
+
+unknown = "unknown";
+none = "None";
+
+alive = "Alive";
+dead = "Dead";
+
+male = "Male";
+female = "Female";
+
+human = "Human";
+alien = "Alien";
+animal = "Animal";
+humanoid = "Humanoid";
+mythological_creature = "Mythological Creature";
+disease = "Disease";
+
+parasite = "Parasite";
+dog = "Dog";
+bird_person = "Bird-Person";
+organic_gun = "Organic gun";
+giant = "Giant";
+

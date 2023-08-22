@@ -46,4 +46,3 @@ extension Router: Routable {
         controller.navigationController?.popToRootViewController(animated: true)
     }
 }
-

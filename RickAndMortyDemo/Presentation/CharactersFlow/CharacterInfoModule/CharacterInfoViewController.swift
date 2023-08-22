@@ -8,6 +8,7 @@ final class CharacterInfoViewController: UIViewController {
     private let characterNameLabel = UILabel()
     private let characterStatusLabel = UILabel()
     private let characterCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
     private let viewModel: CharacterInfoViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -15,9 +16,16 @@ final class CharacterInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showActivityIndicator(activityIndicator)
         configureViewController()
         binds()
         viewModel.requestCharacterOriginAndEpisodes()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let topOffset = CGPoint(x: 0, y: -88)
+        self.scrollView.setContentOffset(topOffset, animated: false)
     }
     
     init(viewModel: CharacterInfoViewModelProtocol) {
@@ -46,6 +54,7 @@ final class CharacterInfoViewController: UIViewController {
                     origin: origin,
                     episodes: episodes
                 )
+                self.removeActivityIndicator(self.activityIndicator)
                 self.dataSource.reload(data)
                 self.characterImageView.image = UIImage(data: viewModel.imageData)
                 self.characterNameLabel.text = viewModel.characterModel.name
@@ -77,13 +86,15 @@ final class CharacterInfoViewController: UIViewController {
     }
     
     private func checkForStatus(_ status: String) {
-        characterStatusLabel.text = status
         if status == "Alive" {
             characterStatusLabel.textColor = .rmGreen
+            characterStatusLabel.text = .alive
         } else if status == "Dead" {
             characterStatusLabel.textColor = .rmRed
+            characterStatusLabel.text = .dead
         } else if status == "unknown" {
             characterStatusLabel.textColor = .rmYellow
+            characterStatusLabel.text = .unknown
         }
     }
 }
@@ -127,8 +138,6 @@ private extension CharacterInfoViewController {
         scrollView.bounces = true
         scrollView.frame = view.bounds
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + extraSpace)
-        let topOffset = CGPoint(x: 0, y: 0)
-        scrollView.setContentOffset(topOffset, animated: false)
         
         view.addSubview(scrollView)
         
