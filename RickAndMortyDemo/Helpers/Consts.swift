@@ -1,3 +1,3 @@
 final class Consts {
-    static let chevronLeft = "chevron.left"
+    static let chevronLeft = "chevron_left"
 }
