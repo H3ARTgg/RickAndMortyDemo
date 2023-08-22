@@ -39,6 +39,8 @@
 		1D236E492A943A4100F459C9 /* CharacterOriginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E482A943A4100F459C9 /* CharacterOriginRequest.swift */; };
 		1D236E4B2A943AA500F459C9 /* CharacterOriginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E4A2A943AA500F459C9 /* CharacterOriginModel.swift */; };
 		1D236E4D2A943B5C00F459C9 /* EpisodesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E4C2A943B5C00F459C9 /* EpisodesRequest.swift */; };
+		1D30D7C92A945DAE000852F9 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D30D7C82A945DAE000852F9 /* InfoCell.swift */; };
+		1D30D7CB2A945DB8000852F9 /* OriginCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D30D7CA2A945DB8000852F9 /* OriginCell.swift */; };
 		1D3D1BE32A943E570008FAD9 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */; };
 		1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAD2A9206F100024155 /* AppDelegate.swift */; };
 		1DD2FCB02A9206F100024155 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */; };
@@ -81,6 +83,8 @@
 		1D236E482A943A4100F459C9 /* CharacterOriginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterOriginRequest.swift; sourceTree = "<group>"; };
 		1D236E4A2A943AA500F459C9 /* CharacterOriginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterOriginModel.swift; sourceTree = "<group>"; };
 		1D236E4C2A943B5C00F459C9 /* EpisodesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesRequest.swift; sourceTree = "<group>"; };
+		1D30D7C82A945DAE000852F9 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		1D30D7CA2A945DB8000852F9 /* OriginCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginCell.swift; sourceTree = "<group>"; };
 		1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMortyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DD2FCAD2A9206F100024155 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +165,15 @@
 				1D236E4C2A943B5C00F459C9 /* EpisodesRequest.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		1D30D7C62A945D84000852F9 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				1D30D7C82A945DAE000852F9 /* InfoCell.swift */,
+				1D30D7CA2A945DB8000852F9 /* OriginCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		1DD2FCA12A9206F100024155 = {
@@ -268,6 +281,7 @@
 			children = (
 				1D236E122A92235300F459C9 /* CharacterInfoViewController.swift */,
 				1D236E142A92235F00F459C9 /* CharacterInfoViewModel.swift */,
+				1D30D7C62A945D84000852F9 /* Cells */,
 			);
 			path = CharacterInfoModule;
 			sourceTree = "<group>";
@@ -374,6 +388,7 @@
 				1D236E412A93ADEE00F459C9 /* CharactersListCellModel.swift in Sources */,
 				1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */,
 				1D236E352A939F0100F459C9 /* NetworkTask.swift in Sources */,
+				1D30D7CB2A945DB8000852F9 /* OriginCell.swift in Sources */,
 				1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */,
 				1D236E082A92196200F459C9 /* CharactersCoordinator.swift in Sources */,
 				1DD2FCCD2A920E2200024155 /* UIColor + Extension.swift in Sources */,
@@ -383,6 +398,7 @@
 				1D236E492A943A4100F459C9 /* CharacterOriginRequest.swift in Sources */,
 				1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */,
 				1D236DFE2A9217A500F459C9 /* ModulesFactory.swift in Sources */,
+				1D30D7C92A945DAE000852F9 /* InfoCell.swift in Sources */,
 				1D236E452A94282000F459C9 /* UIApplication + Extension.swift in Sources */,
 				1D236E2F2A939A4100F459C9 /* CharacterModel + Origin.swift in Sources */,
 				1D236E0D2A92201F00F459C9 /* CharactersListViewController.swift in Sources */,
