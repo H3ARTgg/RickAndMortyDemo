@@ -34,21 +34,6 @@ extension Router: Routable {
         navController.pushViewController(controller, animated: animated)
     }
     
-    func present(_ module: Presentable?) {
-        present(module, animated: true, presentationStyle: .automatic)
-    }
-    
-    func present(_ module: Presentable?, animated: Bool) {
-        present(module, animated: animated, presentationStyle: .automatic)
-    }
-    
-    func present(_ module: Presentable?, animated: Bool, presentationStyle: UIModalPresentationStyle) {
-        guard let controller = module?.toPresent() else { return }
-        controller.modalPresentationStyle = presentationStyle
-        presentingViewController?.toPresent()?.present(controller, animated: animated, completion: nil)
-        presentingViewController = controller
-    }
-    
     func dismissModule(_ module: Presentable?) {
         guard let controller = module?.toPresent() else { return }
         presentingViewController = module?.toPresent()?.presentingViewController
