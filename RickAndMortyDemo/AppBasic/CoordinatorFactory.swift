@@ -13,6 +13,6 @@ extension CoordinatorFactory: CoordinatorsFactoryProtocol {
     }
     
     func makeCharactersListCoordinator(router: Routable, navCon: CharactersListNavCon) -> Coordinatable {
-        return CharactersListCoordinator(modulesFactory: modulesFactory, router: router, navCon: navCon)
+        return CharactersCoordinator(modulesFactory: modulesFactory, router: router, navCon: navCon)
     }
 }

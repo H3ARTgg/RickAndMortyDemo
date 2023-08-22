@@ -12,7 +12,7 @@
 		1D236E002A9217BF00F459C9 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236DFF2A9217BF00F459C9 /* Router.swift */; };
 		1D236E022A9217D700F459C9 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E012A9217D700F459C9 /* CoordinatorFactory.swift */; };
 		1D236E062A92191D00F459C9 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E052A92191D00F459C9 /* AppCoordinator.swift */; };
-		1D236E082A92196200F459C9 /* CharactersListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E072A92196200F459C9 /* CharactersListCoordinator.swift */; };
+		1D236E082A92196200F459C9 /* CharactersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E072A92196200F459C9 /* CharactersCoordinator.swift */; };
 		1D236E0B2A921A8800F459C9 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E0A2A921A8800F459C9 /* UIViewController + Extension.swift */; };
 		1D236E0D2A92201F00F459C9 /* CharactersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E0C2A92201F00F459C9 /* CharactersListViewController.swift */; };
 		1D236E0F2A92205400F459C9 /* CharactersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D236E0E2A92205400F459C9 /* CharactersListViewModel.swift */; };
@@ -51,7 +51,7 @@
 		1D236DFF2A9217BF00F459C9 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		1D236E012A9217D700F459C9 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
 		1D236E052A92191D00F459C9 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
-		1D236E072A92196200F459C9 /* CharactersListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListCoordinator.swift; sourceTree = "<group>"; };
+		1D236E072A92196200F459C9 /* CharactersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersCoordinator.swift; sourceTree = "<group>"; };
 		1D236E0A2A921A8800F459C9 /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
 		1D236E0C2A92201F00F459C9 /* CharactersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListViewController.swift; sourceTree = "<group>"; };
 		1D236E0E2A92205400F459C9 /* CharactersListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListViewModel.swift; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				1D236E052A92191D00F459C9 /* AppCoordinator.swift */,
-				1D236E072A92196200F459C9 /* CharactersListCoordinator.swift */,
+				1D236E072A92196200F459C9 /* CharactersCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -211,7 +211,7 @@
 		1DD2FCC32A920B6200024155 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				1DD2FCC52A920B9500024155 /* CharactersListFlow */,
+				1DD2FCC52A920B9500024155 /* CharactersFlow */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -227,14 +227,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		1DD2FCC52A920B9500024155 /* CharactersListFlow */ = {
+		1DD2FCC52A920B9500024155 /* CharactersFlow */ = {
 			isa = PBXGroup;
 			children = (
 				1D236E462A94376900F459C9 /* CharactersListNavCon.swift */,
 				1DD2FCC72A920C3600024155 /* CharactersListModule */,
 				1DD2FCC82A920C4200024155 /* CharacterInfoModule */,
 			);
-			path = CharactersListFlow;
+			path = CharactersFlow;
 			sourceTree = "<group>";
 		};
 		1DD2FCC62A920C2100024155 /* Helpers */ = {
@@ -367,7 +367,7 @@
 				1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */,
 				1D236E352A939F0100F459C9 /* NetworkTask.swift in Sources */,
 				1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */,
-				1D236E082A92196200F459C9 /* CharactersListCoordinator.swift in Sources */,
+				1D236E082A92196200F459C9 /* CharactersCoordinator.swift in Sources */,
 				1DD2FCCD2A920E2200024155 /* UIColor + Extension.swift in Sources */,
 				1D236E4B2A943AA500F459C9 /* CharacterOriginModel.swift in Sources */,
 				1D236E002A9217BF00F459C9 /* Router.swift in Sources */,
