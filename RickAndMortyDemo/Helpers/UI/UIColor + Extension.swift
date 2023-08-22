@@ -7,4 +7,5 @@ extension UIColor {
     static let rmGreen = UIColor(named: "rmGreen") ?? UIColor.green
     static let rmRed = UIColor(named: "rmRed") ?? UIColor.red
     static let rmYellow = UIColor(named: "rmYellow") ?? UIColor.yellow
+    static let rmGray = UIColor(named: "rmGray") ?? UIColor.lightGray
 }
