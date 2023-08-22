@@ -5,7 +5,7 @@ final class CharactersListViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
     private let titleLabel = UILabel()
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let activityIndicator = UIActivityIndicatorView(style: .medium)
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let viewModel: CharactersListViewModelProtocol
     private lazy var dataSource = CharactersListDataSource(collectionView, viewModel, self)
     
