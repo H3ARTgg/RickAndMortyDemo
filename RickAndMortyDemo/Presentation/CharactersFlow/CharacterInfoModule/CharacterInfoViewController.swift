@@ -8,6 +8,7 @@ final class CharacterInfoViewController: UIViewController {
     private let characterNameLabel = UILabel()
     private let characterStatusLabel = UILabel()
     private let characterCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
     private let viewModel: CharacterInfoViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -15,6 +16,7 @@ final class CharacterInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showActivityIndicator(activityIndicator)
         configureViewController()
         binds()
         viewModel.requestCharacterOriginAndEpisodes()
@@ -46,6 +48,7 @@ final class CharacterInfoViewController: UIViewController {
                     origin: origin,
                     episodes: episodes
                 )
+                self.removeActivityIndicator(self.activityIndicator)
                 self.dataSource.reload(data)
                 self.characterImageView.image = UIImage(data: viewModel.imageData)
                 self.characterNameLabel.text = viewModel.characterModel.name

@@ -73,18 +73,11 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - DiffableDataSource Delegate
 extension CharactersListViewController: DiffableDataSourceDelegate {
     func showActivityIndicator() {
-        let window = UIApplication.keyWindow
-        window?.isUserInteractionEnabled = false
-        configureActivityIndicator(activityIndicator)
-        activityIndicator.startAnimating()
+        showActivityIndicator(activityIndicator)
     }
     
     func removeActivityIndicator() {
-        let window = UIApplication.keyWindow
-        window?.isUserInteractionEnabled = true
-        
-        activityIndicator.stopAnimating()
-        activityIndicator.removeFromSuperview()
+        removeActivityIndicator(activityIndicator)
     }
 }
 
@@ -101,18 +94,6 @@ private extension CharactersListViewController {
         colView.delegate = self
         colView.register(CharactersListCell.self)
         colView.indicatorStyle = .white
-    }
-    
-    func configureActivityIndicator(_ indicator: UIActivityIndicatorView) {
-        indicator.color = .rmWhite
-        
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(activityIndicator)
-        
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
     }
     
     func addSubviews() {
