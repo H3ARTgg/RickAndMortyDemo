@@ -42,13 +42,11 @@ final class CharactersListViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        Publishers.Zip(viewModel.charactersPublisher, viewModel.imagesPublisher)
-            .receive(on: DispatchQueue.main)
+        viewModel.charactersPublisher
             .sink { _ in
         } receiveValue: { [weak self] _ in
             guard let self else { return }
-            let cellModels = self.viewModel.recieveCellModels()
-            self.dataSource.reload(cellModels)
+            self.dataSource.reload(viewModel.getCharactersArray())
             removeActivityIndicator()
         }
         .store(in: &cancellables)

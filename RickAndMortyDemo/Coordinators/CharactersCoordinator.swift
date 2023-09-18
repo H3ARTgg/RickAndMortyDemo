@@ -25,7 +25,6 @@ private extension CharactersCoordinator {
         
         charListCoordination.headForCharacterInfo = { [weak self] (characterModel, imageData) in
             guard let self else { return }
-            
             let charInfoModule = self.modulesFactory.makeCharacterInfoView(characterModel: characterModel, imageData: imageData)
             let charInfoView = charInfoModule.view
             var charInfoCoordination = charInfoModule.coordination
