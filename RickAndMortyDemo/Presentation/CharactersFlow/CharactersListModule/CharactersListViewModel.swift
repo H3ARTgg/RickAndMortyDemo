@@ -3,87 +3,73 @@ import Combine
 
 protocol CharactersListCoordination {
     var finish: (() -> Void)? { get set }
-    var headForCharacterInfo: ((CharacterModel, Data) -> Void)? { get set }
+    var headForCharacterInfo: ((CharacterModel, _ imageData: Data) -> Void)? { get set }
 }
 
 protocol CharactersListViewModelProtocol: AnyObject {
-    var charactersPublisher: AnyPublisher<[CharacterModel], NetworkError> { get }
+    var charactersPublisher: AnyPublisher<[CharactersListCellModel], NetworkError> { get }
     var getCharacters: PassthroughSubject<Void, NetworkError> { get }
-    var imagesPublisher: AnyPublisher<[Data], NetworkError> { get }
-    var getImages: PassthroughSubject<[String], NetworkError> { get }
     var showLoading: AnyPublisher<Bool, Never> { get }
-    func recieveCellModels() -> [CharactersListCellModel]
     func requestCharacters()
     func getCharactersCount() -> Int
+    func getCharactersArray() -> [CharactersListCellModel]
     func moveToCharacterInfo(with indexPath: IndexPath)
 }
 
 final class CharactersListViewModel: CharactersListViewModelProtocol & CharactersListCoordination {
     var finish: (() -> Void)?
-    var headForCharacterInfo: ((CharacterModel, Data) -> Void)?
-    private(set) var charactersPublisher: AnyPublisher<[CharacterModel], NetworkError>
-    private(set) var imagesPublisher: AnyPublisher<[Data], NetworkError>
-    private(set) var getImages = PassthroughSubject<[String], NetworkError>()
+    var headForCharacterInfo: ((CharacterModel, _ imageData: Data) -> Void)?
+    private(set) var charactersPublisher: AnyPublisher<[CharactersListCellModel], NetworkError>
     private(set) var getCharacters = PassthroughSubject<Void, NetworkError>()
     var showLoading: AnyPublisher<Bool, Never> {
         showLoadingSubject.eraseToAnyPublisher()
     }
     private var showedIds: Int = 0
-    private let imagesSubject = CurrentValueSubject<[Data], Never>([])
-    private let charactersSubject = CurrentValueSubject<[CharacterModel], NetworkError>([])
+    private let charactersSubject = CurrentValueSubject<[CharactersListCellModel], NetworkError>([])
+    private var charactersModels: [CharacterModel] = []
     private let showLoadingSubject = PassthroughSubject<Bool, Never>()
     private let networkManager: NetworkManagerProtocol
+    var cellModels: [CharactersListCellModel] = []
     
     init(networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
-        self.imagesPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         self.charactersPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         
         charactersPublisher = getCharacters.flatMap({ [unowned self] _ in
             showLoadingSubject.send(true)
             return self.networkManager.getCharactersPublisher(characterIdsRange: calculateRange(&self.showedIds))
-                .receive(on: DispatchQueue.main)
-                .removeDuplicates()
-                .handleEvents(receiveOutput: { [weak self] characters in
-                    self?.charactersSubject.value.append(contentsOf: characters)
-                    self?.getImages.send(characters.map(\.image))
-                })
-                .handleEvents(receiveCompletion: { [weak self] completion in
-                    if case .failure = completion {
-                        // calls alert
+                .flatMap { responces in
+                    responces.publisher.setFailureType(to: NetworkError.self)
+                }
+                .flatMap { responce in
+                    self.charactersModels.append(responce)
+                return self.networkManager.getImagePublisher(url: responce.image)
+                    .compactMap { image in
+                        CharactersListCellModel(id: UUID(), name: responce.name, imageData: image, rowNumber: 0)
                     }
-                })
-        })
-        .eraseToAnyPublisher()
-        
-        imagesPublisher = getImages.flatMap({ [unowned self] urls in
-            return networkManager.getImagesPublisher(urls: urls)
-                .removeDuplicates()
+            }
+                .collect()
                 .receive(on: DispatchQueue.main)
-                .handleEvents(receiveOutput: { [weak self] images in
-                    self?.imagesSubject.value.append(contentsOf: images)
-                    self?.showLoadingSubject.send(false)
-                })
-        }).eraseToAnyPublisher()
+        })
+        .handleEvents(receiveOutput: { [weak self] characterModel in
+            guard let self else { return }
+            self.showLoadingSubject.send(false)
+            self.charactersSubject.value.append(contentsOf: characterModel)
+        })
+        .removeDuplicates()
+        .eraseToAnyPublisher()
     }
     
     func moveToCharacterInfo(with indexPath: IndexPath) {
-        headForCharacterInfo?(charactersSubject.value[indexPath.row], imagesSubject.value[indexPath.row])
+        headForCharacterInfo?(charactersModels[indexPath.row], charactersSubject.value[indexPath.row].imageData)
     }
     
     func requestCharacters() {
         getCharacters.send()
     }
     
-    func recieveCellModels() -> [CharactersListCellModel] {
-        var cellModels: [CharactersListCellModel] = []
-        let characters = charactersSubject.value
-        let images = imagesSubject.value
-        for indx in characters.startIndex..<characters.endIndex {
-            let cellModel = CharactersListCellModel(id: UUID(), name: characters[indx].name, imageData: images[indx], rowNumber: 0)
-            cellModels.append(cellModel)
-        }
-        return cellModels
+    func getCharactersArray() -> [CharactersListCellModel] {
+        self.charactersSubject.value
     }
     
     func getCharactersCount() -> Int {
