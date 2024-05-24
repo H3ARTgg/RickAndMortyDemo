@@ -45,7 +45,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
                     self.charactersModels.append(responce)
                 return self.networkManager.getImagePublisher(url: responce.image)
                     .compactMap { image in
-                        CharactersListCellModel(id: UUID(), name: responce.name, imageData: image, rowNumber: 0)
+                        CharactersListCellModel(id: UUID(), name: responce.name, imageData: image)
                     }
             }
                 .collect()

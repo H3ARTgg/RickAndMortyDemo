@@ -4,8 +4,7 @@ final class CharactersListDataSource: UICollectionViewDiffableDataSource<Int, Ch
     init(_ collectionView: UICollectionView, _ viewModel: CharactersListViewModelProtocol) {
         super.init(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             let cell: CharactersListCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-            let newItemIdentifier = CharactersListCellModel(id: itemIdentifier.id, name: itemIdentifier.name, imageData: itemIdentifier.imageData, rowNumber: indexPath.row)
-            cell.cellModel = newItemIdentifier
+            cell.cellModel = itemIdentifier
             return cell
         }
     }
