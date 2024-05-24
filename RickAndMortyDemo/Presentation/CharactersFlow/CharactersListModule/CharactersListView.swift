@@ -45,7 +45,7 @@ final class CharactersListView: UIView {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(18)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview().offset(24)
         }
         

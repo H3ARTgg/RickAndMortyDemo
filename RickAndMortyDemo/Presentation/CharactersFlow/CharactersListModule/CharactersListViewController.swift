@@ -38,6 +38,16 @@ final class CharactersListViewController: UIViewController {
     
     // MARK: - Bindings
     private func binds() {
+        // for errors
+        viewModel.errorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                guard self != nil else { return }
+                AlertService.showAlert(style: .alert, title: "Error", message: error.errorDescription)
+            }
+            .store(in: &cancellables)
+        
+        // for activity indicator
         viewModel.showLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isVisible in
@@ -46,11 +56,12 @@ final class CharactersListViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        // for reloading rows
         viewModel.charactersPublisher
             .sink { _ in
-        } receiveValue: { [weak self] _ in
+        } receiveValue: { [weak self] characters in
             guard let self else { return }
-            self.dataSource.reload(viewModel.getCharactersArray())
+            self.dataSource.add(characters)
             self.customView.activityIndicator.stopAnimating()
         }
         .store(in: &cancellables)

@@ -16,7 +16,7 @@ final class CharacterInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showActivityIndicator(activityIndicator)
+//        showActivityIndicator(activityIndicator)
         configureViewController()
         binds()
         viewModel.requestCharacterOriginAndEpisodes()
@@ -54,7 +54,7 @@ final class CharacterInfoViewController: UIViewController {
                     origin: origin,
                     episodes: episodes
                 )
-                self.removeActivityIndicator(self.activityIndicator)
+//                self.removeActivityIndicator(self.activityIndicator)
                 self.dataSource.reload(data)
                 self.characterImageView.image = UIImage(data: viewModel.imageData)
                 self.characterNameLabel.text = viewModel.characterModel.name

@@ -19,6 +19,9 @@ final class CharactersListDataSource: UICollectionViewDiffableDataSource<Int, Ch
     
     func add(_ data: [CharactersListCellModel], animated: Bool = true) {
         var snapshot = snapshot()
+        if snapshot.numberOfSections == 0 {
+            snapshot.appendSections([0])
+        }
         snapshot.appendItems(data, toSection: 0)
         apply(snapshot, animatingDifferences: animated)
     }
