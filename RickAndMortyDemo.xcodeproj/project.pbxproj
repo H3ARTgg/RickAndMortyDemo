@@ -45,11 +45,13 @@
 		1D30D7CF2A945E10000852F9 /* CharacterInfoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D30D7CE2A945E10000852F9 /* CharacterInfoDataSource.swift */; };
 		1D30D7D42A947A1F000852F9 /* CharacterInfoSupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D30D7D32A947A1F000852F9 /* CharacterInfoSupView.swift */; };
 		1D3D1BE32A943E570008FAD9 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */; };
-		1D9A3C262C012045005F687A /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9A3C252C012045005F687A /* AlertService.swift */; };
+		1D9A3C282C0123B2005F687A /* RetryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9A3C272C0123B2005F687A /* RetryView.swift */; };
 		1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAD2A9206F100024155 /* AppDelegate.swift */; };
 		1DD2FCB72A9206F200024155 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD2FCB62A9206F200024155 /* Assets.xcassets */; };
 		1DD2FCBA2A9206F200024155 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */; };
 		1DD2FCCD2A920E2200024155 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCCC2A920E2200024155 /* UIColor + Extension.swift */; };
+		1DDC4F1E2C014686006FF4F7 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDC4F1D2C014686006FF4F7 /* Lottie */; };
+		1DDC4F292C014C4A006FF4F7 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DDC4F282C014C4A006FF4F7 /* loading.json */; };
 		F49A281C2C00E5D700789281 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A281B2C00E5D700789281 /* CharactersListView.swift */; };
 		F49A281F2C00E6B100789281 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F49A281E2C00E6B100789281 /* SnapKit */; };
 		F49A28212C00EB4E00789281 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28202C00EB4E00789281 /* UIView + Extension.swift */; };
@@ -95,13 +97,14 @@
 		1D30D7CE2A945E10000852F9 /* CharacterInfoDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoDataSource.swift; sourceTree = "<group>"; };
 		1D30D7D32A947A1F000852F9 /* CharacterInfoSupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoSupView.swift; sourceTree = "<group>"; };
 		1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
-		1D9A3C252C012045005F687A /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
+		1D9A3C272C0123B2005F687A /* RetryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryView.swift; sourceTree = "<group>"; };
 		1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMortyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DD2FCAD2A9206F100024155 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1DD2FCB62A9206F200024155 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1DD2FCB92A9206F200024155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1DD2FCBB2A9206F200024155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DD2FCCC2A920E2200024155 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
+		1DDC4F282C014C4A006FF4F7 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		F49A281B2C00E5D700789281 /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
 		F49A28202C00EB4E00789281 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49A281F2C00E6B100789281 /* SnapKit in Frameworks */,
+				1DDC4F1E2C014686006FF4F7 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +270,7 @@
 		1DD2FCC42A920B7000024155 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1DDC4F1F2C01468C006FF4F7 /* LottieAnimations */,
 				1D236E1A2A92A0C700F459C9 /* Localizable.strings */,
 				1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */,
 				1DD2FCB62A9206F200024155 /* Assets.xcassets */,
@@ -277,6 +282,7 @@
 		1DD2FCC52A920B9500024155 /* CharactersFlow */ = {
 			isa = PBXGroup;
 			children = (
+				1D9A3C272C0123B2005F687A /* RetryView.swift */,
 				1D236E462A94376900F459C9 /* CharactersListNavCon.swift */,
 				1DD2FCC72A920C3600024155 /* CharactersListModule */,
 				1DD2FCC82A920C4200024155 /* CharacterInfoModule */,
@@ -321,7 +327,6 @@
 		1DD2FCC92A920C6A00024155 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				1D9A3C252C012045005F687A /* AlertService.swift */,
 				1D236E392A93A09900F459C9 /* NetworkManager.swift */,
 				1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */,
 				1D236E4A2A943AA500F459C9 /* CharacterOriginModel.swift */,
@@ -329,6 +334,14 @@
 				1D236E382A93A02400F459C9 /* Networking */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1DDC4F1F2C01468C006FF4F7 /* LottieAnimations */ = {
+			isa = PBXGroup;
+			children = (
+				1DDC4F282C014C4A006FF4F7 /* loading.json */,
+			);
+			path = LottieAnimations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +362,7 @@
 			name = RickAndMortyDemo;
 			packageProductDependencies = (
 				F49A281E2C00E6B100789281 /* SnapKit */,
+				1DDC4F1D2C014686006FF4F7 /* Lottie */,
 			);
 			productName = RickAndMortyDemo;
 			productReference = 1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */;
@@ -381,6 +395,7 @@
 			mainGroup = 1DD2FCA12A9206F100024155;
 			packageReferences = (
 				F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				1DDC4F1C2C014686006FF4F7 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 1DD2FCAB2A9206F100024155 /* Products */;
 			projectDirPath = "";
@@ -398,6 +413,7 @@
 			files = (
 				1DD2FCBA2A9206F200024155 /* LaunchScreen.storyboard in Resources */,
 				1D236E182A92A0C700F459C9 /* Localizable.strings in Resources */,
+				1DDC4F292C014C4A006FF4F7 /* loading.json in Resources */,
 				1DD2FCB72A9206F200024155 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,11 +441,11 @@
 				1D236E312A939D5900F459C9 /* NetworkClient.swift in Sources */,
 				1D236E3F2A93ACE200F459C9 /* ImageRequest.swift in Sources */,
 				1D236E0B2A921A8800F459C9 /* UIViewController + Extension.swift in Sources */,
-				1D9A3C262C012045005F687A /* AlertService.swift in Sources */,
 				1D236DFC2A92179000F459C9 /* BaseCoordinator.swift in Sources */,
 				1D236E412A93ADEE00F459C9 /* CharactersListCellModel.swift in Sources */,
 				1D236E332A939EBF00F459C9 /* NetworkRequest.swift in Sources */,
 				1D236E352A939F0100F459C9 /* NetworkTask.swift in Sources */,
+				1D9A3C282C0123B2005F687A /* RetryView.swift in Sources */,
 				1D30D7CB2A945DB8000852F9 /* OriginCell.swift in Sources */,
 				1D236E1F2A92A22D00F459C9 /* Consts.swift in Sources */,
 				1D236E082A92196200F459C9 /* CharactersCoordinator.swift in Sources */,
@@ -598,11 +614,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RickAndMorty;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -630,11 +648,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RickAndMorty;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -681,6 +701,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1DDC4F1C2C014686006FF4F7 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.3;
+			};
+		};
 		F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -692,6 +720,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1DDC4F1D2C014686006FF4F7 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1DDC4F1C2C014686006FF4F7 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		F49A281E2C00E6B100789281 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */;

@@ -21,4 +21,4 @@ RickAndMortyDemo - приложение со всеми персонажами �
 
 # Стек
 
-MVVM + Coordinators, Combine, URLSession, без сторонних зависимостей.
+UIKit, MVVM + Coordinators, Combine, URLSession, SnapKit, Lottie.

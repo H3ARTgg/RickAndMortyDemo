@@ -12,11 +12,22 @@ final class CharactersListViewController: UIViewController {
     override func loadView() {
         self.view = customView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         binds()
         viewModel.requestCharacters()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     // MARK: - Init
@@ -34,25 +45,19 @@ final class CharactersListViewController: UIViewController {
         // DataSource & Delegate
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self
+        
+        // Target
+        customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
     }
     
     // MARK: - Bindings
     private func binds() {
-        // for errors
-        viewModel.errorPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] error in
-                guard self != nil else { return }
-                AlertService.showAlert(style: .alert, title: "Error", message: error.errorDescription)
-            }
-            .store(in: &cancellables)
-        
         // for activity indicator
         viewModel.showLoading
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isVisible in
+            .sink { [weak self] isShowing in
                 guard let self else { return }
-                isVisible ? self.customView.activityIndicator.startAnimating() : self.customView.activityIndicator.stopAnimating()
+                isShowing ? self.customView.showIndicator(true) : self.customView.showIndicator(false)
             }
             .store(in: &cancellables)
         
@@ -61,8 +66,13 @@ final class CharactersListViewController: UIViewController {
             .sink { _ in
         } receiveValue: { [weak self] characters in
             guard let self else { return }
+            guard !characters.isEmpty else {
+                self.customView.showRetry(true)
+                return
+            }
+            self.customView.showRetry(false)
+            self.customView.showIndicator(false)
             self.dataSource.add(characters)
-            self.customView.activityIndicator.stopAnimating()
         }
         .store(in: &cancellables)
     }
@@ -80,8 +90,15 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == viewModel.getCharactersCount() - 1 {
-            customView.activityIndicator.startAnimating()
             viewModel.requestCharacters()
         }
+    }
+}
+
+// MARK: - Actions
+@objc
+private extension CharactersListViewController {
+    func didTapRetry() {
+        viewModel.requestCharacters()
     }
 }

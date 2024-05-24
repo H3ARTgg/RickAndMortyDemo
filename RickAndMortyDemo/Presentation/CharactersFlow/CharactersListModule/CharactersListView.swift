@@ -1,4 +1,5 @@
 import UIKit
+import Lottie
 
 final class CharactersListView: UIView {
     lazy var titleLabel: UILabel = {
@@ -21,9 +22,17 @@ final class CharactersListView: UIView {
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .large)
-        view.color = .rmWhite
+    lazy var activityIndicator: LottieAnimationView = {
+        let view = LottieAnimationView(name: "loading")
+        view.loopMode = .loop
+        view.backgroundColor = .rmBlackSecondary.withAlphaComponent(0.75)
+        view.cornerRadius(30)
+        view.alpha = 0
+        return view
+    }()
+    lazy var retryView: RetryView = {
+        let view = RetryView()
+        view.tag = 1
         return view
     }()
     
@@ -36,10 +45,36 @@ final class CharactersListView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Showing RetryView if connection fails
+    func showRetry(_ isShowing: Bool) {
+        let tag: Int = isShowing ? 0 : 1
+        
+        guard tag != retryView.tag else { return }
+        
+        let height: CGFloat = isShowing ? 40 : 0
+        
+        retryView.tag = tag
+        UIView.animate(withDuration: 0.5) {
+            self.retryView.snp.updateConstraints { make in
+                make.height.equalTo(height)
+            }
+            self.layoutIfNeeded()
+        }
+    }
+    
+    func showIndicator(_ isShowing: Bool) {
+        let alpha: CGFloat = isShowing ? 1 : 0
+        isShowing ? activityIndicator.play() : activityIndicator.stop()
+        UIView.animate(withDuration: 0.2) {
+            self.activityIndicator.alpha = alpha
+        }
+    }
+    
     private func fill() {
         backgroundColor = .rmBlackBG
         [
-            titleLabel, collectionView, activityIndicator
+            titleLabel, collectionView, activityIndicator,
+            retryView
         ].forEach {
             addSubview($0)
         }
@@ -56,7 +91,15 @@ final class CharactersListView: UIView {
             make.bottom.equalToSuperview()
         }
         
+        retryView.snp.makeConstraints { make in
+            make.height.equalTo(0)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
         activityIndicator.snp.makeConstraints { make in
+            make.width.height.equalTo(60)
             make.center.equalToSuperview()
         }
     }

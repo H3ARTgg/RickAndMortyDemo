@@ -11,10 +11,11 @@ struct CharacterModel: Codable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(name)
     }
     
     static func == (lhs: CharacterModel, rhs: CharacterModel) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id && lhs.name == rhs.name
     }
 }
 
