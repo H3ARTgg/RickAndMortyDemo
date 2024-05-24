@@ -1,15 +1,29 @@
 import UIKit
+import SnapKit
+
+protocol RouterDelegate: AnyObject {
+    func setRootViewController(_ viewController: Presentable?)
+}
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+    private lazy var router: Routable = Router(routerDelegate: self)
+    private lazy var appCoordinator = coordinatorFactory.makeAppCoordinator(router: router)
+    private let coordinatorFactory: CoordinatorsFactoryProtocol = CoordinatorFactory()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        appCoordinator.startFlow()
         return true
     }
+}
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+// MARK: - Router Delegate
+extension AppDelegate: RouterDelegate {
+    func setRootViewController(_ viewController: Presentable?) {
+        window?.rootViewController = viewController?.toPresent()
     }
 }
 

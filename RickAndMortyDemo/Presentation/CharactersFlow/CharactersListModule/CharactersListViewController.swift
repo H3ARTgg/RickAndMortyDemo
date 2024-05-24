@@ -2,23 +2,24 @@ import UIKit
 import Combine
 
 final class CharactersListViewController: UIViewController {
+    // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
-    private let titleLabel = UILabel()
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let customView = CharactersListView()
     private let viewModel: CharactersListViewModelProtocol
-    private lazy var dataSource = CharactersListDataSource(collectionView, viewModel, self)
+    private lazy var dataSource = CharactersListDataSource(customView.collectionView, viewModel)
     
+    // MARK: - Lifecycle
+    override func loadView() {
+        self.view = customView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.dataSource = dataSource
-        configures()
-        addSubviews()
-        addConstraints()
+        setupUI()
         binds()
         viewModel.requestCharacters()
     }
     
+    // MARK: - Init
     required init(viewModel: CharactersListViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: .main)
@@ -28,17 +29,20 @@ final class CharactersListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configures() {
-        view.backgroundColor = .rmBlackBG
-        configureTitleLabel(titleLabel)
-        configureCollectionView(collectionView)
+    // MARK: - Initial UI setup
+    private func setupUI() {
+        // DataSource & Delegate
+        customView.collectionView.dataSource = dataSource
+        customView.collectionView.delegate = self
     }
     
+    // MARK: - Bindings
     private func binds() {
         viewModel.showLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isVisible in
-                isVisible ? self?.showActivityIndicator() : self?.removeActivityIndicator()
+                guard let self else { return }
+                isVisible ? self.customView.activityIndicator.startAnimating() : self.customView.activityIndicator.stopAnimating()
             }
             .store(in: &cancellables)
         
@@ -47,69 +51,26 @@ final class CharactersListViewController: UIViewController {
         } receiveValue: { [weak self] _ in
             guard let self else { return }
             self.dataSource.reload(viewModel.getCharactersArray())
-            removeActivityIndicator()
+            self.customView.activityIndicator.stopAnimating()
         }
         .store(in: &cancellables)
     }
 }
 
-// MARK: - CollectionView Delegate
+// MARK: - Collection Delegate
 extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: collectionView.bounds.width / 2 - 8, height: 202)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        16
+        CGSize(width: collectionView.bounds.width / 2 - 8, height: collectionView.bounds.width / 1.6)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel.moveToCharacterInfo(with: indexPath)
     }
-}
-
-// MARK: - DiffableDataSource Delegate
-extension CharactersListViewController: DiffableDataSourceDelegate {
-    func showActivityIndicator() {
-        showActivityIndicator(activityIndicator)
-    }
     
-    func removeActivityIndicator() {
-        removeActivityIndicator(activityIndicator)
-    }
-}
-
-// MARK: - UI elements
-private extension CharactersListViewController {
-    func configureTitleLabel(_ title: UILabel) {
-        title.textColor = .rmWhite
-        title.font = .title28
-        title.text = .characters
-    }
-    
-    func configureCollectionView(_ colView: UICollectionView) {
-        colView.backgroundColor = .clear
-        colView.delegate = self
-        colView.register(CharactersListCell.self)
-        colView.indicatorStyle = .white
-    }
-    
-    func addSubviews() {
-        [titleLabel, collectionView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.getCharactersCount() - 1 {
+            customView.activityIndicator.startAnimating()
+            viewModel.requestCharacters()
         }
-    }
-    
-    func addConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 18 + 48),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 31),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
 }

@@ -46,10 +46,12 @@
 		1D30D7D42A947A1F000852F9 /* CharacterInfoSupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D30D7D32A947A1F000852F9 /* CharacterInfoSupView.swift */; };
 		1D3D1BE32A943E570008FAD9 /* EpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */; };
 		1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAD2A9206F100024155 /* AppDelegate.swift */; };
-		1DD2FCB02A9206F100024155 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */; };
 		1DD2FCB72A9206F200024155 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DD2FCB62A9206F200024155 /* Assets.xcassets */; };
 		1DD2FCBA2A9206F200024155 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */; };
 		1DD2FCCD2A920E2200024155 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2FCCC2A920E2200024155 /* UIColor + Extension.swift */; };
+		F49A281C2C00E5D700789281 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A281B2C00E5D700789281 /* CharactersListView.swift */; };
+		F49A281F2C00E6B100789281 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F49A281E2C00E6B100789281 /* SnapKit */; };
+		F49A28212C00EB4E00789281 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28202C00EB4E00789281 /* UIView + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,11 +96,12 @@
 		1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeModel.swift; sourceTree = "<group>"; };
 		1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMortyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DD2FCAD2A9206F100024155 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1DD2FCB62A9206F200024155 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1DD2FCB92A9206F200024155 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1DD2FCBB2A9206F200024155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DD2FCCC2A920E2200024155 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
+		F49A281B2C00E5D700789281 /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
+		F49A28202C00EB4E00789281 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F49A281F2C00E6B100789281 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,11 +128,12 @@
 		1D236E092A921A7900F459C9 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				1D236E442A94282000F459C9 /* UIApplication + Extension.swift */,
+				F49A28202C00EB4E00789281 /* UIView + Extension.swift */,
 				1D236E0A2A921A8800F459C9 /* UIViewController + Extension.swift */,
 				1DD2FCCC2A920E2200024155 /* UIColor + Extension.swift */,
 				1D236E222A92AEA100F459C9 /* UIFont + Extension.swift */,
 				1D236E292A92C9D400F459C9 /* CellReusingUtils.swift */,
-				1D236E442A94282000F459C9 /* UIApplication + Extension.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -136,8 +141,8 @@
 		1D236E242A92BD3F00F459C9 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				1D236E252A92BDC900F459C9 /* CharactersListCell.swift */,
 				1D236E402A93ADEE00F459C9 /* CharactersListCellModel.swift */,
+				1D236E252A92BDC900F459C9 /* CharactersListCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -233,7 +238,6 @@
 			isa = PBXGroup;
 			children = (
 				1DD2FCAD2A9206F100024155 /* AppDelegate.swift */,
-				1DD2FCAF2A9206F100024155 /* SceneDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -260,10 +264,10 @@
 		1DD2FCC42A920B7000024155 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1D236E1A2A92A0C700F459C9 /* Localizable.strings */,
 				1DD2FCB82A9206F200024155 /* LaunchScreen.storyboard */,
 				1DD2FCB62A9206F200024155 /* Assets.xcassets */,
 				1DD2FCBB2A9206F200024155 /* Info.plist */,
-				1D236E1A2A92A0C700F459C9 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -291,6 +295,7 @@
 		1DD2FCC72A920C3600024155 /* CharactersListModule */ = {
 			isa = PBXGroup;
 			children = (
+				F49A281B2C00E5D700789281 /* CharactersListView.swift */,
 				1D236E0C2A92201F00F459C9 /* CharactersListViewController.swift */,
 				1D236E0E2A92205400F459C9 /* CharactersListViewModel.swift */,
 				1D236E2B2A92CB9200F459C9 /* DataSource */,
@@ -339,6 +344,9 @@
 			dependencies = (
 			);
 			name = RickAndMortyDemo;
+			packageProductDependencies = (
+				F49A281E2C00E6B100789281 /* SnapKit */,
+			);
 			productName = RickAndMortyDemo;
 			productReference = 1DD2FCAA2A9206F100024155 /* RickAndMortyDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -368,6 +376,9 @@
 				ru,
 			);
 			mainGroup = 1DD2FCA12A9206F100024155;
+			packageReferences = (
+				F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 1DD2FCAB2A9206F100024155 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -421,19 +432,20 @@
 				1DD2FCCD2A920E2200024155 /* UIColor + Extension.swift in Sources */,
 				1D236E4B2A943AA500F459C9 /* CharacterOriginModel.swift in Sources */,
 				1D236E002A9217BF00F459C9 /* Router.swift in Sources */,
+				F49A281C2C00E5D700789281 /* CharactersListView.swift in Sources */,
 				1D236E472A94376900F459C9 /* CharactersListNavCon.swift in Sources */,
 				1D236E492A943A4100F459C9 /* CharacterOriginRequest.swift in Sources */,
 				1DD2FCAE2A9206F100024155 /* AppDelegate.swift in Sources */,
 				1D236DFE2A9217A500F459C9 /* ModulesFactory.swift in Sources */,
 				1D30D7C92A945DAE000852F9 /* InfoCell.swift in Sources */,
 				1D236E452A94282000F459C9 /* UIApplication + Extension.swift in Sources */,
+				F49A28212C00EB4E00789281 /* UIView + Extension.swift in Sources */,
 				1D236E2F2A939A4100F459C9 /* CharacterModel + Origin.swift in Sources */,
 				1D236E0D2A92201F00F459C9 /* CharactersListViewController.swift in Sources */,
 				1D236E152A92235F00F459C9 /* CharacterInfoViewModel.swift in Sources */,
 				1D236E062A92191D00F459C9 /* AppCoordinator.swift in Sources */,
 				1D236E372A939F5300F459C9 /* NetworkError.swift in Sources */,
 				1D30D7D42A947A1F000852F9 /* CharacterInfoSupView.swift in Sources */,
-				1DD2FCB02A9206F100024155 /* SceneDelegate.swift in Sources */,
 				1D236E022A9217D700F459C9 /* CoordinatorFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,7 +524,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -567,7 +579,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -584,14 +596,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CCJ53Q5CP4;
+				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -599,9 +611,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.h3artgg.RickAndMortyDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -612,14 +628,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CCJ53Q5CP4;
+				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -627,9 +643,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.h3artgg.RickAndMortyDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -655,6 +675,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F49A281E2C00E6B100789281 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F49A281D2C00E6B100789281 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1DD2FCA22A9206F100024155 /* Project object */;
 }

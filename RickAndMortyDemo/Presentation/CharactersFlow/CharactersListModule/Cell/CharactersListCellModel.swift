@@ -8,5 +8,10 @@ struct CharactersListCellModel: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(name)
+    }
+    
+    static func == (lhs: CharactersListCellModel, rhs: CharactersListCellModel) -> Bool {
+        return lhs.id == rhs.id && lhs.name == rhs.name
     }
 }
