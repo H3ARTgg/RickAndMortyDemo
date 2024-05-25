@@ -1,7 +1,9 @@
+// MARK: - AppCoordinatorOutput Protocol
 protocol AppCoordinatorOutput {
     var finishFlow: (() -> Void)? { get set }
 }
 
+// MARK: - AppCoordinator
 final class AppCoordinator: BaseCoordinator, Coordinatable, AppCoordinatorOutput {
     var finishFlow: (() -> Void)?
     
@@ -10,6 +12,7 @@ final class AppCoordinator: BaseCoordinator, Coordinatable, AppCoordinatorOutput
     private var router: Routable
     private let charactersNavCon = CharactersListNavCon()
     
+    // MARK: - Init
     init(coordinatorsFactory: CoordinatorsFactoryProtocol, modulesFactory: ModulesFactoryProtocol, router: Routable) {
         self.coordinatorsFactory = coordinatorsFactory
         self.modulesFactory = modulesFactory
@@ -22,6 +25,7 @@ final class AppCoordinator: BaseCoordinator, Coordinatable, AppCoordinatorOutput
     }
 }
 
+// MARK: - AppCoordinator Extension
 private extension AppCoordinator {
     func routeToCharactersListNavController() {
         router.setRootViewController(viewController: charactersNavCon)

@@ -19,34 +19,35 @@ enum Header {
 
 final class CharacterInfoSupView: UICollectionReusableView {
     static let identifier = "Header"
-    private let title = UILabel()
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .title17
+        return label
+    }()
     var headerModel: Header? {
         didSet {
-            title.text = headerModel?.getTitle()
+            titleLabel.text = headerModel?.getTitle()
         }
     }
     
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureTitle()
+        fill()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureTitle() {
-        title.textColor = .rmWhite
-        title.font = .title17
-        
-        title.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(title)
-        
-        NSLayoutConstraint.activate([
-            title.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            title.leadingAnchor.constraint(equalTo: leadingAnchor),
-            title.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+    // MARK: Initial UI setup
+    private func fill() {
+        addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(24)
+            make.bottom.equalToSuperview().offset(-16)
+            make.horizontalEdges.equalToSuperview()
+        }
     }
 }

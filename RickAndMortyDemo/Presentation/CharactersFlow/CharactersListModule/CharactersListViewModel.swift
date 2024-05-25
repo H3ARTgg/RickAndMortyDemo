@@ -1,17 +1,19 @@
 import UIKit
 import Combine
 
+// MARK: - CharactersListCoordination Protocol
 protocol CharactersListCoordination {
     /// Callback for routing to CharacterInfo Screen
     var headForCharacterInfo: ((CharacterModel, _ imageData: Data) -> Void)? { get set }
 }
 
+// MARK: - CharactersListViewModelProtocol
 protocol CharactersListViewModelProtocol: AnyObject {
     /// Publishes CharactersListModel array (10 models) or empty array (if its error)
     var charactersPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
     /// Publishes Bool value. Is downloading in progress
     var showLoading: AnyPublisher<Bool, Never> { get }
-    /// Requesting 10 next characters
+    /// Requesting next 10 characters
     func requestCharacters()
     /// Get download characters count (Int)
     func getCharactersCount() -> Int
@@ -19,9 +21,13 @@ protocol CharactersListViewModelProtocol: AnyObject {
     func moveToCharacterInfo(with indexPath: IndexPath)
 }
 
+// MARK: - CharactersListViewModel
 final class CharactersListViewModel: CharactersListViewModelProtocol & CharactersListCoordination {
+    /// Callback for routing to CharacterInfo Screen
     var headForCharacterInfo: ((CharacterModel, _ imageData: Data) -> Void)?
+    /// Publishes CharactersListModel array (10 models) or empty array (if its error)
     var charactersPublisher: AnyPublisher<[CharactersListCellModel], Never>
+    /// Publishes Bool value. Is downloading in progress
     var showLoading: AnyPublisher<Bool, Never> {
         showLoadingSubject.eraseToAnyPublisher()
     }
@@ -32,8 +38,9 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
     private var charactersModels: [(model: CharacterModel, imageData: Data)] = []
     private var showedIds: Int = 0
     private var isShowedIdsJustIncreased: Bool = false
-    var cellModels: [CharactersListCellModel] = []
+    private var cellModels: [CharactersListCellModel] = []
     
+    // MARK: - Init
     init(networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
         self.charactersPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
@@ -68,18 +75,22 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
         .eraseToAnyPublisher()
     }
     
+    /// Move to CharacterInfo Screen (triggers headForCharacterInfo)
     func moveToCharacterInfo(with indexPath: IndexPath) {
         headForCharacterInfo?(charactersModels[indexPath.row].model, charactersModels[indexPath.row].imageData)
     }
     
+    /// Requesting next 10 characters
     func requestCharacters() {
         getCharacters.send()
     }
     
+    /// Get download characters count (Int)
     func getCharactersCount() -> Int {
         self.charactersModels.count
     }
     
+    /// Calculating new character ids to show
     private func calculateRange(_ showedIds: inout Int) -> Range<Int> {
         var range: Range<Int>
         if showedIds == 0 {

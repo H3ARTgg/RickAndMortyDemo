@@ -1,6 +1,7 @@
 import UIKit
 import Lottie
 
+// MARK: - CharactersListView
 final class CharactersListView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -28,6 +29,7 @@ final class CharactersListView: UIView {
         view.backgroundColor = .rmBlackSecondary.withAlphaComponent(0.75)
         view.cornerRadius(30)
         view.alpha = 0
+        view.tag = 1
         return view
     }()
     lazy var retryView: RetryView = {
@@ -36,6 +38,7 @@ final class CharactersListView: UIView {
         return view
     }()
     
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         fill()
@@ -49,6 +52,7 @@ final class CharactersListView: UIView {
     func showRetry(_ isShowing: Bool) {
         let tag: Int = isShowing ? 0 : 1
         
+        // return if state is already set
         guard tag != retryView.tag else { return }
         
         let height: CGFloat = isShowing ? 40 : 0
@@ -62,14 +66,24 @@ final class CharactersListView: UIView {
         }
     }
     
+    /// Showing indicator
     func showIndicator(_ isShowing: Bool) {
+        let tag: Int = isShowing ? 0 : 1
+        
+        // return if state is already set
+        guard tag != activityIndicator.tag else { return }
+        
+        activityIndicator.tag = tag
         let alpha: CGFloat = isShowing ? 1 : 0
-        isShowing ? activityIndicator.play() : activityIndicator.stop()
+        isShowing ? activityIndicator.play() : nil
         UIView.animate(withDuration: 0.2) {
             self.activityIndicator.alpha = alpha
+        } completion: { [weak self] _ in
+            isShowing ? nil : self?.activityIndicator.stop()
         }
     }
     
+    // MARK: - Initial UI setup
     private func fill() {
         backgroundColor = .rmBlackBG
         [

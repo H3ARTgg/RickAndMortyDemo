@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - CharactersListCell
 final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     lazy var characterLabel: UILabel = {
         let label = UILabel()

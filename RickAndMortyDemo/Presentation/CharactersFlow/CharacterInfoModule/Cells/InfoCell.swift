@@ -1,18 +1,53 @@
 import UIKit
 
+// MARK: - InfoCellModel
 struct InfoCellModel: Hashable {
     let species: String
     let type: String
     let gender: String
 }
 
+// MARK: - InfoCell
 final class InfoCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
-    private let speciesTitle = UILabel()
-    private let typeTitle = UILabel()
-    private let genderTitle = UILabel()
-    private let speciesInfo = UILabel()
-    private let typeInfo = UILabel()
-    private let genderInfo = UILabel()
+    private let speciesTitle: UILabel = {
+        let label = UILabel()
+        label.text = .species
+        label.textColor = .rmGray
+        label.font = .regular16
+        return label
+    }()
+    private let typeTitle: UILabel = {
+        let label = UILabel()
+        label.text = .type
+        label.textColor = .rmGray
+        label.font = .regular16
+        return label
+    }()
+    private let genderTitle: UILabel = {
+        let label = UILabel()
+        label.text = .gender
+        label.textColor = .rmGray
+        label.font = .regular16
+        return label
+    }()
+    private let speciesInfo: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .regular16
+        return label
+    }()
+    private let typeInfo: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .regular16
+        return label
+    }()
+    private let genderInfo: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .regular16
+        return label
+    }()
     var cellModel: InfoCellModel? {
         didSet {
             guard let cellModel else { return }
@@ -22,65 +57,56 @@ final class InfoCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
         }
     }
     
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        fill()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI
-    private func configure() {
-        contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 16
-        contentView.backgroundColor = .rmBlackSecondary
+    // MARK: - Initial UI setup
+    private func fill() {
+        cornerRadius(16)
+        backgroundColor = .rmBlackSecondary
         
-        speciesTitle.text = .species
-        speciesTitle.textColor = .rmGray
-        speciesTitle.font = .regular16
-        
-        typeTitle.text = .type
-        typeTitle.textColor = .rmGray
-        typeTitle.font = .regular16
-        
-        genderTitle.text = .gender
-        genderTitle.textColor = .rmGray
-        genderTitle.font = .regular16
-        
-        speciesInfo.textColor = .rmWhite
-        speciesInfo.font = .regular16
-        
-        typeInfo.textColor = .rmWhite
-        typeInfo.font = .regular16
-        
-        genderInfo.textColor = .rmWhite
-        genderInfo.font = .regular16
-        
-        [speciesTitle, typeTitle, genderTitle, speciesInfo, typeInfo, genderInfo].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
+        [
+            speciesTitle, typeTitle, genderTitle,
+            speciesInfo, typeInfo, genderInfo
+        ].forEach {
+            addSubview($0)
         }
         
-        NSLayoutConstraint.activate([
-            speciesTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            speciesTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
-            typeTitle.topAnchor.constraint(equalTo: speciesTitle.bottomAnchor, constant: 16),
-            typeTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
-            genderTitle.topAnchor.constraint(equalTo: typeTitle.bottomAnchor, constant: 16),
-            genderTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            
-            speciesInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            speciesInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            typeInfo.topAnchor.constraint(equalTo: speciesInfo.bottomAnchor, constant: 16),
-            typeInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            genderInfo.topAnchor.constraint(equalTo: typeInfo.bottomAnchor, constant: 16),
-            genderInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
-        ])
+        speciesTitle.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        typeTitle.snp.makeConstraints { make in
+            make.top.equalTo(speciesTitle.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        genderTitle.snp.makeConstraints { make in
+            make.top.equalTo(typeTitle.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(16)
+        }
+        
+        speciesInfo.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
+        typeInfo.snp.makeConstraints { make in
+            make.top.equalTo(speciesInfo.snp.bottom).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
+        genderInfo.snp.makeConstraints { make in
+            make.top.equalTo(typeInfo.snp.bottom).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
     }
 }

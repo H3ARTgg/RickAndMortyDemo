@@ -1,7 +1,9 @@
+// MARK: - Coordinatable
 protocol Coordinatable: AnyObject {
     func startFlow()
 }
 
+// MARK: - BaseCoordinator
 class BaseCoordinator {
     private var childCoordinators: [Coordinatable] = []
     

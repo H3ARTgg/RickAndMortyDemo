@@ -1,12 +1,13 @@
 import UIKit
 
+// MARK: - RetryView
 final class RetryView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title17
         label.textAlignment = .center
-        label.text = "Failed to get characters"
+        label.text = .failedCharacters
         return label
     }()
     lazy var retryButton: UIButton = {
@@ -17,6 +18,7 @@ final class RetryView: UIView {
         return button
     }()
     
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         fill()
@@ -26,6 +28,7 @@ final class RetryView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Initial UI setup
     private func fill() {
         backgroundColor = .rmRed
         cornerRadius(12, maskedCorners: [.layerMinXMaxYCorner, .layerMaxXMaxYCorner])

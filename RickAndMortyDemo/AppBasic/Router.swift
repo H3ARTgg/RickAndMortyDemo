@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - Routable Protocol
 protocol Routable: AnyObject {
     func setRootViewController(viewController: Presentable)
     
@@ -11,6 +12,7 @@ protocol Routable: AnyObject {
     func popToRoot(_ module: Presentable?)
 }
 
+// MARK: - Router
 final class Router: NSObject {
     weak var delegate: RouterDelegate?
     private var presentingViewController: Presentable?
@@ -20,6 +22,7 @@ final class Router: NSObject {
     }
 }
 
+// MARK: - Router Routable
 extension Router: Routable {
     func setRootViewController(viewController: Presentable) {
         delegate?.setRootViewController(viewController)

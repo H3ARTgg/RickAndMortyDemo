@@ -30,3 +30,5 @@ bird_person = "Bird-Person";
 organic_gun = "Organic gun";
 giant = "Giant";
 
+failed_character_info = "Failed to get character info";
+failed_characters = "Failed to get characters";

@@ -1,15 +1,36 @@
 import UIKit
 
+// MARK: - OriginCellModel
 struct OriginCellModel: Hashable {
     let originName: String
     let originType: String
 }
 
+// MARK: - OriginCell
 final class OriginCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
-    private let originName = UILabel()
-    private let originType = UILabel()
-    private let containerView = UIView()
-    private let planetImageView = UIImageView()
+    private let originName: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .title17
+        label.numberOfLines = 0
+        return label
+    }()
+    private let originType: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmGreen
+        label.font = .regular13
+        return label
+    }()
+    private let containerView: UIView = {
+        let view = UIView()
+        view.cornerRadius(10)
+        view.backgroundColor = .rmBlack2
+        return view
+    }()
+    private let planetImageView: UIImageView = {
+        let view = UIImageView(image: .planet)
+        return view
+    }()
     var cellModel: OriginCellModel? {
         didSet {
             guard let cellModel else { return }
@@ -18,59 +39,49 @@ final class OriginCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
         }
     }
     
+    // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        fill()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI
-    private func configure() {
-        contentView.backgroundColor = .rmBlackSecondary
-        contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 16
+    // MARK: - Intial UI setup
+    private func fill() {
+        cornerRadius(16)
+        backgroundColor = .rmBlackSecondary
         
-        originName.textColor = .rmWhite
-        originName.font = .title17
-        originName.numberOfLines = 0
-        
-        originType.textColor = .rmGreen
-        originType.font = .regular13
-        
-        containerView.layer.masksToBounds = true
-        containerView.layer.cornerRadius = 10
-        containerView.backgroundColor = .rmBlack2
-        
-        planetImageView.image = UIImage(named: Consts.planet) ?? UIImage()
-        
-        [originName, originType, containerView, planetImageView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
+        [
+            containerView, planetImageView,
+            originName, originType
+        ].forEach {
+            addSubview($0)
         }
         
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            containerView.widthAnchor.constraint(equalToConstant: 64),
-            
-            planetImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            planetImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            
-            originName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            originName.leadingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 16),
-            originName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            originType.leadingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: 16)
-        ])
-        let constraint1 = originType.topAnchor.constraint(lessThanOrEqualTo: originName.bottomAnchor, constant: 8)
-        constraint1.priority = UILayoutPriority(1000)
-        constraint1.isActive = true
-        let constraint2 = originType.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8)
-        constraint2.priority = UILayoutPriority(999)
-        constraint2.isActive = true
+        containerView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.leading.equalToSuperview().offset(8)
+            make.bottom.equalToSuperview().offset(-8)
+            make.width.equalTo(64)
+        }
+        
+        planetImageView.snp.makeConstraints { make in
+            make.center.equalTo(containerView.snp.center)
+        }
+        
+        originName.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalTo(containerView.snp.trailing).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
+        originType.snp.makeConstraints { make in
+            make.leading.lessThanOrEqualTo(containerView.snp.trailing).offset(16)
+            make.top.lessThanOrEqualTo(originName.snp.bottom).offset(8).priority(1000)
+            make.bottom.lessThanOrEqualToSuperview().offset(-8).priority(999)
+        }
     }
 }

@@ -5,9 +5,8 @@ protocol NetworkManagerProtocol: AnyObject {
     func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], Never>
     func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], Never>
     func getImagePublisher(url: String) -> AnyPublisher<Data, Never>
-    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError>
-    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError>
-    func getEpisodePublisher(url: String) -> AnyPublisher<EpisodeModel, NetworkError>
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, Never>
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], Never>
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -38,21 +37,24 @@ final class NetworkManager: NetworkManagerProtocol {
             .eraseToAnyPublisher()
     }
     
-    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError> {
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, Never> {
         let request = CharacterOriginRequest(url: url)
         return networkService.networkPublisher(request: request, type: CharacterOriginModel.self)
+            .replaceError(with: .init(id: -1, name: "Error", type: "Error"))
             .eraseToAnyPublisher()
     }
     
-    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError> {
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], Never> {
         let request = EpisodesRequest(episodes: urls)
-        return networkService.networkPublisher(request: request, type: [EpisodeModel].self)
-            .eraseToAnyPublisher()
-    }
-    
-    func getEpisodePublisher(url: String) -> AnyPublisher<EpisodeModel, NetworkError> {
-        let request = EpisodesRequest(episodes: [url])
-        return networkService.networkPublisher(request: request, type: EpisodeModel.self)
-            .eraseToAnyPublisher()
+        if urls.count == 1 {
+            return networkService.networkPublisher(request: request, type: EpisodeModel.self)
+                .map({ [$0] })
+                .replaceError(with: [])
+                .eraseToAnyPublisher()
+        } else {
+            return networkService.networkPublisher(request: request, type: [EpisodeModel].self)
+                .replaceError(with: [])
+                .eraseToAnyPublisher()
+        }
     }
 }

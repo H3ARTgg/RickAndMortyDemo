@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+// MARK: - NetworkClientError
 enum NetworkClientError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
@@ -8,6 +9,7 @@ enum NetworkClientError: Error {
     case parsingError
 }
 
+// MARK: - NetworkClient Protocol
 protocol NetworkClient {
     @discardableResult
     func send(request: NetworkRequest,
@@ -28,6 +30,7 @@ protocol NetworkClient {
     ) -> AnyPublisher<Data, NetworkError>
 }
 
+// MARK: - DefaultNetworkClient
 struct DefaultNetworkClient: NetworkClient {
     private let session: URLSession
     private let decoder: JSONDecoder
@@ -87,7 +90,6 @@ struct DefaultNetworkClient: NetworkClient {
     }
 
     // MARK: - Private
-
     private func create(request: NetworkRequest) -> URLRequest? {
         guard let endpoint = request.endpoint else {
             assertionFailure("Empty endpoint")

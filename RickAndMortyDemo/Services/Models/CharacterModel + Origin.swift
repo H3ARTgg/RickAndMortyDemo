@@ -1,3 +1,4 @@
+// MARK: - CharacterModel
 struct CharacterModel: Codable, Hashable {
     let id: Int
     let name: String
@@ -19,6 +20,7 @@ struct CharacterModel: Codable, Hashable {
     }
 }
 
+// MARK: - Origin
 struct Origin: Codable {
     let name: String
     let url: String

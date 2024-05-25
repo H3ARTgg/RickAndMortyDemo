@@ -2,32 +2,26 @@ import UIKit
 import Combine
 
 final class CharacterInfoViewController: UIViewController {
-    private let scrollView = UIScrollView(frame: .zero)
-    private let contentView = UIView(frame: .zero)
-    private let characterImageView = UIImageView()
-    private let characterNameLabel = UILabel()
-    private let characterStatusLabel = UILabel()
-    private let characterCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let activityIndicator = UIActivityIndicatorView(style: .medium)
+    // MARK: - Properties
+    private let customView = CharacterInfoView()
     private let viewModel: CharacterInfoViewModelProtocol
-    
     private var cancellables = Set<AnyCancellable>()
-    private lazy var dataSource = CharacterInfoDataSource(self.characterCollectionView)
+    private lazy var dataSource = CharacterInfoDataSource(customView.characterCollectionView)
+    
+    // MARK: - Lifecycle
+    override func loadView() {
+        self.view = customView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        showActivityIndicator(activityIndicator)
-        configureViewController()
+        setupUI()
         binds()
+        customView.showIndicator(true)
         viewModel.requestCharacterOriginAndEpisodes()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let topOffset = CGPoint(x: 0, y: -88)
-        self.scrollView.setContentOffset(topOffset, animated: false)
-    }
-    
+    // MARK: - Init
     init(viewModel: CharacterInfoViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: .main)
@@ -37,65 +31,53 @@ final class CharacterInfoViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc
-    private func moveBackToRootViewController() {
-        viewModel.moveBackToRootViewController()
+    // MARK: - Initial UI setup
+    private func setupUI() {
+        // Back Button
+        let button = UIBarButtonItem(image: UIImage(named: "chevron_left"), style: .done, target: self, action: #selector(didTapBack))
+        button.tintColor = .rmWhite
+        navigationItem.hidesBackButton = true
+        navigationItem.setLeftBarButton(button, animated: true)
+        
+        // DataSource & Delegate
+        customView.characterCollectionView.dataSource = dataSource
+        customView.characterCollectionView.delegate = self
+        
+        // Target
+        customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
     }
     
+    // MARK: - Bindings
     private func binds() {
         Publishers.Zip(viewModel.characterOriginPublisher, viewModel.episodesPublisher)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in
             }, receiveValue: { [weak self] (origin, episodes) in
                 guard let self else { return }
-                self.configureWith(episodesCount: episodes.count)
+                // if error
+                guard origin.name != "Error" else {
+                    self.customView.showRetry(true)
+                    self.customView.showIndicator(false)
+                    return
+                }
+                guard !episodes.isEmpty else {
+                    self.customView.showRetry(true)
+                    self.customView.showIndicator(false)
+                    return
+                }
+                self.customView.showRetry(false)
+                
+                let model = viewModel.getCharactersInfo()
                 let data = self.viewModel.makeDataSourceData(
-                    characterModel: self.viewModel.characterModel,
+                    characterModel: model.model,
                     origin: origin,
                     episodes: episodes
                 )
-//                self.removeActivityIndicator(self.activityIndicator)
                 self.dataSource.reload(data)
-                self.characterImageView.image = UIImage(data: viewModel.imageData)
-                self.characterNameLabel.text = viewModel.characterModel.name
-                self.checkForStatus(viewModel.characterModel.status)
+                self.customView.setCharacterInfo(model: model.model, imageData: model.imageData)
+                self.customView.showIndicator(false)
             })
             .store(in: &cancellables)
-    }
-    
-    private func configureViewController() {
-        view.backgroundColor = .rmBlackBG
-        self.navigationItem.hidesBackButton = true
-        
-        let button = UIBarButtonItem(image: UIImage(named: "chevron_left"), style: .done, target: self, action: #selector(moveBackToRootViewController))
-        button.tintColor = .rmWhite
-        
-        self.navigationItem.setLeftBarButton(button, animated: true)
-    }
-    
-    private func configureWith(episodesCount: Int) {
-        let extraSpace = CGFloat((episodesCount * 102) - 102)
-        configureScrollViewAndContentView(scrollView, contentView, with: extraSpace)
-        configureImageView(characterImageView)
-        configureNameLabel(characterNameLabel)
-        configureStatusLabel(characterStatusLabel)
-        configureTableView(characterCollectionView)
-        addSubviews()
-        addConstraints()
-        characterCollectionView.backgroundColor = .clear
-    }
-    
-    private func checkForStatus(_ status: String) {
-        if status == "Alive" {
-            characterStatusLabel.textColor = .rmGreen
-            characterStatusLabel.text = .alive
-        } else if status == "Dead" {
-            characterStatusLabel.textColor = .rmRed
-            characterStatusLabel.text = .dead
-        } else if status == "unknown" {
-            characterStatusLabel.textColor = .rmYellow
-            characterStatusLabel.text = .unknown
-        }
     }
 }
 
@@ -123,101 +105,19 @@ extension CharacterInfoViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width:collectionView.bounds.width , height: 62)
+        CGSize(width:collectionView.bounds.width, height: 62)
     }
 }
 
-// MARK: - UI elements
+// MARK: - Actions
+@objc
 private extension CharacterInfoViewController {
-    func configureScrollViewAndContentView(_ scrollView: UIScrollView, _ contentView: UIView, with extraSpace: CGFloat) {
-        scrollView.maximumZoomScale = 1.0
-        scrollView.maximumZoomScale = 1.0
-        scrollView.isScrollEnabled = true
-        scrollView.indicatorStyle = .white
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.bounces = true
-        scrollView.frame = view.bounds
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + extraSpace)
-        
-        view.addSubview(scrollView)
-        
-        contentView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height + extraSpace)
-        
-        contentView.backgroundColor = .rmBlackBG
-        scrollView.addSubview(contentView)
+    func didTapBack() {
+        viewModel.moveBackToRootViewController()
     }
     
-    func configureImageView(_ imageView: UIImageView) {
-        imageView.layer.cornerRadius = 10
-        imageView.layer.masksToBounds = true
-    }
-    
-    func configureNameLabel(_ label: UILabel) {
-        label.textColor = .rmWhite
-        label.font = .title22
-        label.numberOfLines = 0
-    }
-    
-    func configureStatusLabel(_ label: UILabel) {
-        label.textColor = .rmWhite
-        label.font = .regular16
-    }
-    
-    func configureTableView(_ colView: UICollectionView) {
-        colView.register(InfoCell.self)
-        colView.register(OriginCell.self)
-        colView.register(EpisodeCell.self)
-        colView.register(CharacterInfoSupView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CharacterInfoSupView.identifier)
-        colView.isScrollEnabled = false
-        colView.allowsSelection = false
-        colView.delegate = self
-        colView.backgroundColor = .clear
-    }
-    
-    func addSubviews() {
-        [characterImageView, characterNameLabel, characterStatusLabel, characterCollectionView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-        
-        [characterImageView, characterNameLabel, characterStatusLabel, characterCollectionView].forEach {
-            contentView.addSubview($0)
-        }
-    }
-    
-    func addConstraints() {
-        NSLayoutConstraint.activate([
-            characterImageView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 16),
-            characterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            characterImageView.widthAnchor.constraint(equalToConstant: 148),
-            characterImageView.heightAnchor.constraint(equalToConstant: 148),
-            
-            characterNameLabel.topAnchor.constraint(
-                equalTo: characterImageView.bottomAnchor,
-                constant: 24
-            ),
-            characterNameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            
-            characterStatusLabel.topAnchor.constraint(
-                equalTo: characterNameLabel.bottomAnchor,
-                constant: 8
-            ),
-            characterStatusLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            
-            characterCollectionView.topAnchor.constraint(
-                equalTo: characterStatusLabel.bottomAnchor,
-                constant: 24
-            ),
-            characterCollectionView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 24
-            ),
-            characterCollectionView.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -24
-            ),
-            characterCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+    func didTapRetry() {
+        viewModel.requestCharacterOriginAndEpisodes()
+        customView.showIndicator(true)
     }
 }

@@ -3,9 +3,9 @@ import Combine
 
 final class CharactersListViewController: UIViewController {
     // MARK: - Properties
-    var cancellables = Set<AnyCancellable>()
     private let customView = CharactersListView()
     private let viewModel: CharactersListViewModelProtocol
+    private var cancellables = Set<AnyCancellable>()
     private lazy var dataSource = CharactersListDataSource(customView.collectionView, viewModel)
     
     // MARK: - Lifecycle
@@ -66,12 +66,12 @@ final class CharactersListViewController: UIViewController {
             .sink { _ in
         } receiveValue: { [weak self] characters in
             guard let self else { return }
+            // if error
             guard !characters.isEmpty else {
                 self.customView.showRetry(true)
                 return
             }
             self.customView.showRetry(false)
-            self.customView.showIndicator(false)
             self.dataSource.add(characters)
         }
         .store(in: &cancellables)

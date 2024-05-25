@@ -1,11 +1,13 @@
 import Foundation
 
+// MARK: - CharactersCoordinator
 final class CharactersCoordinator: BaseCoordinator, Coordinatable {
     var finishFlow: (() -> Void)?
     private let modulesFactory: ModulesFactoryProtocol
     private let router: Routable
     private let navController: CharactersListNavCon
     
+    // MARK: - Init
     init(modulesFactory: ModulesFactoryProtocol, router: Routable, navCon: CharactersListNavCon) {
         self.modulesFactory = modulesFactory
         self.router = router
@@ -17,6 +19,7 @@ final class CharactersCoordinator: BaseCoordinator, Coordinatable {
     }
 }
 
+// MARK: - CharactersCoordinator Extension
 private extension CharactersCoordinator {
     func perfomFlow() {
         let charListModule = modulesFactory.makeCharactersListView()

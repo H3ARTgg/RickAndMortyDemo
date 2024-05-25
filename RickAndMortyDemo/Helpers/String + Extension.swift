@@ -32,16 +32,21 @@ enum LocalizedKeys: String {
     case birdPerson = "bird_person"
     case organicGun = "organic_gun"
     case giant = "giant"
+    
+    case failedCharacterInfo = "failed_character_info"
+    case failedCharacters = "failed_characters"
 }
 
 extension String {
     // Characters Screen
     static let characters = NSLocalizedString(LocalizedKeys.characters.rawValue, comment: "")
+    static let failedCharacters = NSLocalizedString(LocalizedKeys.failedCharacters.rawValue, comment: "")
     
     // Headers - CharacterInfo Screen
     static let info = NSLocalizedString(LocalizedKeys.info.rawValue, comment: "")
     static let origin = NSLocalizedString(LocalizedKeys.origin.rawValue, comment: "")
     static let episodes = NSLocalizedString(LocalizedKeys.episodes.rawValue, comment: "")
+    static let failedCharacterInfo = NSLocalizedString(LocalizedKeys.failedCharacterInfo.rawValue, comment: "")
     
     // Lines - CharacterInfo Screen
     static let species = NSLocalizedString(LocalizedKeys.species.rawValue, comment: "")
