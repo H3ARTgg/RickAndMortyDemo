@@ -55,6 +55,8 @@
 		F49A281F2C00E6B100789281 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F49A281E2C00E6B100789281 /* SnapKit */; };
 		F49A28212C00EB4E00789281 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28202C00EB4E00789281 /* UIView + Extension.swift */; };
 		F49A28AE2C076A0D00789281 /* CustomIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28AD2C076A0D00789281 /* CustomIndicator.swift */; };
+		F49A28B32C077BFA00789281 /* CharacterByNameRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28B22C077BFA00789281 /* CharacterByNameRequest.swift */; };
+		F49A28B52C077CEB00789281 /* CharacterByNameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28B42C077CEB00789281 /* CharacterByNameModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +109,8 @@
 		F49A281B2C00E5D700789281 /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
 		F49A28202C00EB4E00789281 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 		F49A28AD2C076A0D00789281 /* CustomIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIndicator.swift; sourceTree = "<group>"; };
+		F49A28B22C077BFA00789281 /* CharacterByNameRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterByNameRequest.swift; sourceTree = "<group>"; };
+		F49A28B42C077CEB00789281 /* CharacterByNameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterByNameModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +183,7 @@
 				1D236E3E2A93ACE200F459C9 /* ImageRequest.swift */,
 				1D236E482A943A4100F459C9 /* CharacterOriginRequest.swift */,
 				1D236E4C2A943B5C00F459C9 /* EpisodesRequest.swift */,
+				F49A28B22C077BFA00789281 /* CharacterByNameRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 		1D9E9EA72C0172010090812F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F49A28B42C077CEB00789281 /* CharacterByNameModel.swift */,
 				1D236E2E2A939A4100F459C9 /* CharacterModel + Origin.swift */,
 				1D236E4A2A943AA500F459C9 /* CharacterOriginModel.swift */,
 				1D3D1BE22A943E570008FAD9 /* EpisodeModel.swift */,
@@ -447,6 +453,7 @@
 				1D30D7CF2A945E10000852F9 /* CharacterInfoDataSource.swift in Sources */,
 				1D236E1D2A92A16D00F459C9 /* String + Extension.swift in Sources */,
 				1D236E312A939D5900F459C9 /* NetworkClient.swift in Sources */,
+				F49A28B32C077BFA00789281 /* CharacterByNameRequest.swift in Sources */,
 				1D236E3F2A93ACE200F459C9 /* ImageRequest.swift in Sources */,
 				1D236E0B2A921A8800F459C9 /* UIViewController + Extension.swift in Sources */,
 				1D236DFC2A92179000F459C9 /* BaseCoordinator.swift in Sources */,
@@ -475,6 +482,7 @@
 				1DDC4F2B2C0153AF006FF4F7 /* CharacterInfoView.swift in Sources */,
 				1D30D7D42A947A1F000852F9 /* CharacterInfoSupView.swift in Sources */,
 				1D236E022A9217D700F459C9 /* CoordinatorFactory.swift in Sources */,
+				F49A28B52C077CEB00789281 /* CharacterByNameModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,7 +635,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CCJ53Q5CP4;
+				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RickAndMorty;
@@ -661,7 +669,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CCJ53Q5CP4;
+				DEVELOPMENT_TEAM = 4G6268F43H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMortyDemo/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RickAndMorty;

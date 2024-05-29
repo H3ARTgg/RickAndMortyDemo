@@ -23,12 +23,40 @@ final class CharactersListView: UIView {
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
+    lazy var searchField: UITextField = {
+        let field = UITextField()
+        field.backgroundColor = .rmBlackSecondary
+        field.tintColor = .rmWhite
+        field.font = .regular16
+        field.cornerRadius(16)
+        field.textColor = .rmWhite
+        field.leftViewMode = .always
+        field.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+        field.attributedPlaceholder = NSAttributedString(
+            string: "Type the character name..",
+            attributes: [
+                .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
+                .font: UIFont.regular16
+            ]
+        )
+        return field
+    }()
+    lazy var cancelButton: UIButton = {
+        let button = UIButton.systemButton(with: UIImage(), target: nil, action: nil)
+        button.backgroundColor = .clear
+        button.setTitle("Cancel", for: .normal)
+        button.setTitleColor(.rmWhite, for: .normal)
+        button.titleLabel?.font = .regular16
+        button.alpha = 0
+        return button
+    }()
     lazy var indicator: CustomIndicator = CustomIndicator(frame: .zero)
     lazy var retryView: RetryView = {
         let view = RetryView()
         view.tag = 1
         return view
     }()
+    private let cancelButtonWidth: CGFloat = 50
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -58,12 +86,31 @@ final class CharactersListView: UIView {
         }
     }
     
+    func showCancel(_ isShowing: Bool) {
+        let alpha: CGFloat = isShowing ? 1 : 0
+        guard alpha != cancelButton.alpha else { return }
+        let fieldTrailingOffset: CGFloat = isShowing ? -80 : -20
+        let cancelWidth: CGFloat = isShowing ? cancelButtonWidth : 0
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.alpha = alpha
+            
+            self.cancelButton.snp.updateConstraints { make in
+                make.width.equalTo(cancelWidth)
+            }
+            self.searchField.snp.updateConstraints { make in
+                make.trailing.equalToSuperview().offset(fieldTrailingOffset)
+            }
+            
+            self.layoutIfNeeded()
+        }
+    }
+    
     // MARK: - Initial UI setup
     private func fill() {
         backgroundColor = .rmBlackBG
         [
             titleLabel, collectionView, indicator,
-            retryView
+            retryView, searchField, cancelButton
         ].forEach {
             addSubview($0)
         }
@@ -73,8 +120,22 @@ final class CharactersListView: UIView {
             make.leading.equalToSuperview().offset(24)
         }
         
-        collectionView.snp.makeConstraints { make in
+        searchField.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(30)
+        }
+        
+        cancelButton.snp.makeConstraints { make in
+            make.centerY.equalTo(searchField)
+            make.height.equalTo(30)
+            make.trailing.equalToSuperview().offset(-20)
+            make.width.equalTo(0)
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchField.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.bottom.equalToSuperview()

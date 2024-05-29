@@ -19,6 +19,9 @@ protocol CharactersListViewModelProtocol: AnyObject {
     func getCharactersCount() -> Int
     /// Move to CharacterInfo Screen (triggers headForCharacterInfo)
     func moveToCharacterInfo(with indexPath: IndexPath)
+    
+    var characterSearchPublisher: AnyPublisher<CharacterByNameModel, Never>? { get }
+    func search(_ name: String)
 }
 
 // MARK: - CharactersListViewModel
@@ -39,6 +42,10 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
     private var showedIds: Int = 0
     private var isShowedIdsJustIncreased: Bool = false
     private var cellModels: [CharactersListCellModel] = []
+    
+    var characterSearchPublisher: AnyPublisher<CharacterByNameModel, Never>?
+    private let searchSubject = PassthroughSubject<String, Never>()
+    
     
     // MARK: - Init
     init(networkManager: NetworkManagerProtocol) {
@@ -73,6 +80,15 @@ final class CharactersListViewModel: CharactersListViewModelProtocol & Character
         })
         .removeDuplicates()
         .eraseToAnyPublisher()
+        
+        characterSearchPublisher = searchSubject.flatMap({ [unowned self] text in
+            return self.networkManager.getCharactersByName(name: text)
+        })
+        .eraseToAnyPublisher()
+    }
+    
+    func search(_ name: String) {
+        searchSubject.send(name)
     }
     
     /// Move to CharacterInfo Screen (triggers headForCharacterInfo)

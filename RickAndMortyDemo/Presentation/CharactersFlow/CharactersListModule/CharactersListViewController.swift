@@ -46,8 +46,10 @@ final class CharactersListViewController: UIViewController {
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self
         
-        // Target
+        // Targets
         customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
+        customView.searchField.addTarget(self, action: #selector(didInteractWithSearch), for: .allEditingEvents)
+        customView.cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
     }
     
     // MARK: - Bindings
@@ -75,6 +77,15 @@ final class CharactersListViewController: UIViewController {
             self.dataSource.add(characters)
         }
         .store(in: &cancellables)
+        
+        viewModel.characterSearchPublisher?
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { searchModel in
+                print(searchModel.results.count)
+                self.dataSource.reload(searchModel.results.map({ CharactersListCellModel(id: UUID(), name: $0.name, imageData: Data()) }))
+            })
+            .store(in: &cancellables)
     }
 }
 
@@ -100,5 +111,20 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
 private extension CharactersListViewController {
     func didTapRetry() {
         viewModel.requestCharacters()
+    }
+    
+    func didTapCancel() {
+        customView.endEditing(true)
+        customView.showCancel(false)
+        customView.searchField.text = ""
+    }
+    
+    func didInteractWithSearch() {
+        if let text = customView.searchField.text, !text.isEmpty {
+            customView.showCancel(true)
+            viewModel.search(text)
+        } else {
+            customView.showCancel(false)
+        }
     }
 }

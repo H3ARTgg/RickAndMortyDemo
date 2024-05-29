@@ -7,6 +7,7 @@ protocol NetworkManagerProtocol: AnyObject {
     func getImagePublisher(url: String) -> AnyPublisher<Data, Never>
     func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, Never>
     func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], Never>
+    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, Never>
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -56,5 +57,12 @@ final class NetworkManager: NetworkManagerProtocol {
                 .replaceError(with: [])
                 .eraseToAnyPublisher()
         }
+    }
+    
+    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, Never> {
+        let request = CharacterByNameRequest(name: name)
+        return networkService.networkPublisher(request: request, type: CharacterByNameModel.self)
+            .replaceError(with: .init(info: Info(count: -1, pages: -1, next: "error", prev: "error"), results: []))
+            .eraseToAnyPublisher()
     }
 }
