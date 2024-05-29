@@ -23,15 +23,7 @@ final class CharactersListView: UIView {
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
-    lazy var activityIndicator: LottieAnimationView = {
-        let view = LottieAnimationView(name: "loading")
-        view.loopMode = .loop
-        view.backgroundColor = .rmBlackSecondary.withAlphaComponent(0.75)
-        view.cornerRadius(30)
-        view.alpha = 0
-        view.tag = 1
-        return view
-    }()
+    lazy var indicator: CustomIndicator = CustomIndicator(frame: .zero)
     lazy var retryView: RetryView = {
         let view = RetryView()
         view.tag = 1
@@ -66,28 +58,11 @@ final class CharactersListView: UIView {
         }
     }
     
-    /// Showing indicator
-    func showIndicator(_ isShowing: Bool) {
-        let tag: Int = isShowing ? 0 : 1
-        
-        // return if state is already set
-        guard tag != activityIndicator.tag else { return }
-        
-        activityIndicator.tag = tag
-        let alpha: CGFloat = isShowing ? 1 : 0
-        isShowing ? activityIndicator.play() : nil
-        UIView.animate(withDuration: 0.2) {
-            self.activityIndicator.alpha = alpha
-        } completion: { [weak self] _ in
-            isShowing ? nil : self?.activityIndicator.stop()
-        }
-    }
-    
     // MARK: - Initial UI setup
     private func fill() {
         backgroundColor = .rmBlackBG
         [
-            titleLabel, collectionView, activityIndicator,
+            titleLabel, collectionView, indicator,
             retryView
         ].forEach {
             addSubview($0)
@@ -112,7 +87,7 @@ final class CharactersListView: UIView {
             make.trailing.equalToSuperview()
         }
         
-        activityIndicator.snp.makeConstraints { make in
+        indicator.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalToSuperview()
         }

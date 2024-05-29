@@ -54,6 +54,7 @@
 		F49A281C2C00E5D700789281 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A281B2C00E5D700789281 /* CharactersListView.swift */; };
 		F49A281F2C00E6B100789281 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F49A281E2C00E6B100789281 /* SnapKit */; };
 		F49A28212C00EB4E00789281 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28202C00EB4E00789281 /* UIView + Extension.swift */; };
+		F49A28AE2C076A0D00789281 /* CustomIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49A28AD2C076A0D00789281 /* CustomIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,6 +106,7 @@
 		1DDC4F2A2C0153AE006FF4F7 /* CharacterInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoView.swift; sourceTree = "<group>"; };
 		F49A281B2C00E5D700789281 /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
 		F49A28202C00EB4E00789281 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
+		F49A28AD2C076A0D00789281 /* CustomIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				1D9A3C272C0123B2005F687A /* RetryView.swift */,
+				F49A28AD2C076A0D00789281 /* CustomIndicator.swift */,
 				1D236E462A94376900F459C9 /* CharactersListNavCon.swift */,
 				1DD2FCC72A920C3600024155 /* CharactersListModule */,
 				1DD2FCC82A920C4200024155 /* CharacterInfoModule */,
@@ -468,6 +471,7 @@
 				1D236E152A92235F00F459C9 /* CharacterInfoViewModel.swift in Sources */,
 				1D236E062A92191D00F459C9 /* AppCoordinator.swift in Sources */,
 				1D236E372A939F5300F459C9 /* NetworkError.swift in Sources */,
+				F49A28AE2C076A0D00789281 /* CustomIndicator.swift in Sources */,
 				1DDC4F2B2C0153AF006FF4F7 /* CharacterInfoView.swift in Sources */,
 				1D30D7D42A947A1F000852F9 /* CharacterInfoSupView.swift in Sources */,
 				1D236E022A9217D700F459C9 /* CoordinatorFactory.swift in Sources */,

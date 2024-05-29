@@ -48,14 +48,7 @@ final class CharacterInfoView: UIView {
         collection.showsVerticalScrollIndicator = false
         return collection
     }()
-    lazy var activityIndicator: LottieAnimationView = {
-        let view = LottieAnimationView(name: "loading")
-        view.loopMode = .loop
-        view.backgroundColor = .rmBlackSecondary.withAlphaComponent(0.75)
-        view.cornerRadius(30)
-        view.alpha = 0
-        return view
-    }()
+    lazy var indicator = CustomIndicator(frame: .zero)
     lazy var retryView: RetryView = {
         let view = RetryView()
         view.titleLabel.text = .failedCharacterInfo
@@ -91,23 +84,6 @@ final class CharacterInfoView: UIView {
         }
     }
     
-    /// Showing indicator
-    func showIndicator(_ isShowing: Bool) {
-        let tag: Int = isShowing ? 0 : 1
-        
-        // return if state is already set
-        guard tag != activityIndicator.tag else { return }
-        
-        activityIndicator.tag = tag
-        let alpha: CGFloat = isShowing ? 1 : 0
-        isShowing ? activityIndicator.play() : nil
-        UIView.animate(withDuration: 0.2) {
-            self.activityIndicator.alpha = alpha
-        } completion: { [weak self] _ in
-            isShowing ? nil : self?.activityIndicator.stop()
-        }
-    }
-    
     /// Updating CharacterInfoView with data
     func setCharacterInfo(model: CharacterModel, imageData: Data) {
         characterImageView.image = UIImage(data: imageData)
@@ -137,7 +113,7 @@ final class CharacterInfoView: UIView {
     private func fill() {
         backgroundColor = .rmBlackBG
         
-        [scrollView, activityIndicator, retryView].forEach {
+        [scrollView, indicator, retryView].forEach {
             addSubview($0)
         }
         
@@ -147,7 +123,7 @@ final class CharacterInfoView: UIView {
             make.bottom.equalToSuperview()
         }
         
-        activityIndicator.snp.makeConstraints { make in
+        indicator.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalToSuperview()
         }

@@ -57,7 +57,7 @@ final class CharactersListViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isShowing in
                 guard let self else { return }
-                isShowing ? self.customView.showIndicator(true) : self.customView.showIndicator(false)
+                isShowing ? self.customView.indicator.show(true) : self.customView.indicator.show(false)
             }
             .store(in: &cancellables)
         

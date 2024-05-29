@@ -17,7 +17,7 @@ final class CharacterInfoViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         binds()
-        customView.showIndicator(true)
+        customView.indicator.show(true)
         viewModel.requestCharacterOriginAndEpisodes()
     }
     
@@ -45,6 +45,11 @@ final class CharacterInfoViewController: UIViewController {
         
         // Target
         customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
+        
+        // Swipe Gesture
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didTapBack))
+        swipeGesture.direction = .right
+        customView.addGestureRecognizer(swipeGesture)
     }
     
     // MARK: - Bindings
@@ -57,12 +62,12 @@ final class CharacterInfoViewController: UIViewController {
                 // if error
                 guard origin.name != "Error" else {
                     self.customView.showRetry(true)
-                    self.customView.showIndicator(false)
+                    self.customView.indicator.show(false)
                     return
                 }
                 guard !episodes.isEmpty else {
                     self.customView.showRetry(true)
-                    self.customView.showIndicator(false)
+                    self.customView.indicator.show(false)
                     return
                 }
                 self.customView.showRetry(false)
@@ -75,7 +80,7 @@ final class CharacterInfoViewController: UIViewController {
                 )
                 self.dataSource.reload(data)
                 self.customView.setCharacterInfo(model: model.model, imageData: model.imageData)
-                self.customView.showIndicator(false)
+                self.customView.indicator.show(false)
             })
             .store(in: &cancellables)
     }
@@ -118,6 +123,6 @@ private extension CharacterInfoViewController {
     
     func didTapRetry() {
         viewModel.requestCharacterOriginAndEpisodes()
-        customView.showIndicator(true)
+        customView.indicator.show(true)
     }
 }
