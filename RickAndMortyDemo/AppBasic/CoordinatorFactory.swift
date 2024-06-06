@@ -6,7 +6,11 @@ protocol CoordinatorsFactoryProtocol: AnyObject {
 
 // MARK: - CoordinatorFactory
 final class CoordinatorFactory {
-    private let modulesFactory: ModulesFactoryProtocol = ModulesFactory()
+    private let modulesFactory: ModulesFactoryProtocol
+    
+    init(modulesFactory: ModulesFactoryProtocol) {
+        self.modulesFactory = modulesFactory
+    }
 }
 
 // MARK: - CoordinatorFactory CoordinatorsFactoryProtocol

@@ -1,5 +1,10 @@
 import UIKit
 
+// MARK: - Presentable
+protocol Presentable: AnyObject {
+    func toPresent() -> UIViewController?
+}
+
 // MARK: - Routable Protocol
 protocol Routable: AnyObject {
     func setRootViewController(viewController: Presentable)
@@ -7,15 +12,12 @@ protocol Routable: AnyObject {
     func push(_ module: Presentable?, to navController: UINavigationController)
     func push(_ module: Presentable?, to navController: UINavigationController, animated: Bool)
     
-    func dismissModule(_ module: Presentable?)
-    
     func popToRoot(_ module: Presentable?)
 }
 
 // MARK: - Router
 final class Router: NSObject {
-    weak var delegate: RouterDelegate?
-    private var presentingViewController: Presentable?
+    private let delegate: RouterDelegate?
     
     init(routerDelegate: RouterDelegate) {
         self.delegate = routerDelegate
@@ -37,15 +39,8 @@ extension Router: Routable {
         navController.pushViewController(controller, animated: animated)
     }
     
-    func dismissModule(_ module: Presentable?) {
-        guard let controller = module?.toPresent() else { return }
-        presentingViewController = module?.toPresent()?.presentingViewController
-        controller.dismiss(animated: true, completion: nil)
-    }
-    
     func popToRoot(_ module: Presentable?) {
         guard let controller = module?.toPresent() else { return }
-        presentingViewController = module?.toPresent()?.presentingViewController
         controller.navigationController?.popToRootViewController(animated: true)
     }
 }

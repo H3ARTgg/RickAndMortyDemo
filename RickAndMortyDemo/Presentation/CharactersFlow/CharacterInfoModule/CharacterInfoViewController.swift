@@ -17,7 +17,7 @@ final class CharacterInfoViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         binds()
-        customView.indicator.show(true)
+        customView.showLoader(true)
         viewModel.requestCharacterOriginAndEpisodes()
     }
     
@@ -54,22 +54,21 @@ final class CharacterInfoViewController: UIViewController {
     
     // MARK: - Bindings
     private func binds() {
+        // for errors
+        viewModel.errorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.customView.showRetry(true)
+                self.customView.showLoader(false)
+            }
+            .store(in: &cancellables)
+        
+        // for data
         Publishers.Zip(viewModel.characterOriginPublisher, viewModel.episodesPublisher)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in
-            }, receiveValue: { [weak self] (origin, episodes) in
+            .sink(receiveValue: { [weak self] (origin, episodes) in
                 guard let self else { return }
-                // if error
-                guard origin.name != "Error" else {
-                    self.customView.showRetry(true)
-                    self.customView.indicator.show(false)
-                    return
-                }
-                guard !episodes.isEmpty else {
-                    self.customView.showRetry(true)
-                    self.customView.indicator.show(false)
-                    return
-                }
                 self.customView.showRetry(false)
                 
                 let model = viewModel.getCharactersInfo()
@@ -80,13 +79,14 @@ final class CharacterInfoViewController: UIViewController {
                 )
                 self.dataSource.reload(data)
                 self.customView.setCharacterInfo(model: model.model, imageData: model.imageData)
-                self.customView.indicator.show(false)
+                
+                self.customView.showLoader(false)
             })
             .store(in: &cancellables)
     }
 }
 
-// MARK: CollectionView Delegate
+// MARK: Collection Delegate
 extension CharacterInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
@@ -123,6 +123,6 @@ private extension CharacterInfoViewController {
     
     func didTapRetry() {
         viewModel.requestCharacterOriginAndEpisodes()
-        customView.indicator.show(true)
+        customView.showLoader(true)
     }
 }

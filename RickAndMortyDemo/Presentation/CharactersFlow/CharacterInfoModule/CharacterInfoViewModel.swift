@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 // MARK: - CharacterInfoCoordination Protocol
-protocol CharacterInfoCoordination {
+protocol CharacterInfoCoordination: AnyObject {
     /// Callback for exit from screen
     var finish: (() -> Void)? { get set }
 }
@@ -13,6 +13,7 @@ protocol CharacterInfoViewModelProtocol: AnyObject {
     var characterOriginPublisher: AnyPublisher<CharacterOriginModel, Never> { get }
     /// Publishes character episodes, where empty array is Error
     var episodesPublisher: AnyPublisher<[EpisodeModel], Never> { get }
+    var errorPublisher: AnyPublisher<NetworkError, Never> { get }
     
     /// Returns CharacterModel and Image Data
     func getCharactersInfo() -> (model: CharacterModel, imageData: Data)
@@ -21,11 +22,7 @@ protocol CharacterInfoViewModelProtocol: AnyObject {
     /// Requesting character origin and episodes
     func requestCharacterOriginAndEpisodes()
     /// Making array for updating CharacterInfoDataSource
-    func makeDataSourceData(
-        characterModel: CharacterModel,
-        origin: CharacterOriginModel,
-        episodes: [EpisodeModel]
-    ) -> [SectionData]
+    func makeDataSourceData(characterModel: CharacterModel, origin: CharacterOriginModel, episodes: [EpisodeModel]) -> [SectionData]
 }
 
 // MARK: - CharacterInfoViewModel
@@ -34,56 +31,72 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
     var finish: (() -> Void)?
     
     /// Publishes character origin, where origin.name == "Error" is Error
-    private(set) var characterOriginPublisher: AnyPublisher<CharacterOriginModel, Never>
-    /// Publishes character episodes, where empty array is Error
-    private(set) var episodesPublisher: AnyPublisher<[EpisodeModel], Never>
+    private let characterOriginSubject = PassthroughSubject<CharacterOriginModel, Never>()
+    var characterOriginPublisher: AnyPublisher<CharacterOriginModel, Never> {
+        characterOriginSubject.eraseToAnyPublisher()
+    }
     
-    private let getOrigin = PassthroughSubject<Void, Never>()
-    private let getEpisodes = PassthroughSubject<Void, Never>()
+    /// Publishes character episodes, where empty array is Error
+    private let episodesSubject = PassthroughSubject<[EpisodeModel], Never>()
+    var episodesPublisher: AnyPublisher<[EpisodeModel], Never> {
+        episodesSubject.eraseToAnyPublisher()
+    }
+    
+    private let errorSubject = PassthroughSubject<NetworkError, Never>()
+    var errorPublisher: AnyPublisher<NetworkError, Never> {
+        errorSubject.eraseToAnyPublisher()
+    }
+    
     private let networkManager: NetworkManagerProtocol
     private let characterModel: CharacterModel
     private let imageData: Data
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
-    init(
-        networkManager: NetworkManagerProtocol,
-        characterModel: CharacterModel,
-        imageData: Data
-    ) {
+    init(networkManager: NetworkManagerProtocol, characterModel: CharacterModel, imageData: Data) {
         self.networkManager = networkManager
-        self.imageData = imageData
         self.characterModel = characterModel
-        
-        // first init
-        characterOriginPublisher = Empty(completeImmediately: false)
-            .eraseToAnyPublisher()
-        episodesPublisher = Empty(completeImmediately: false)
-            .eraseToAnyPublisher()
-        
-        // triggers to request
-        characterOriginPublisher = getOrigin.flatMap({ [unowned self] _ in
-            if characterModel.origin.url == "" {
-                let publisher = CurrentValueSubject<CharacterOriginModel, Never>(CharacterOriginModel(id: 1, name: characterModel.origin.name, type: ""))
-                return publisher
-                    .eraseToAnyPublisher()
-            } else {
-                return self.networkManager.getCharacterOriginPublisher(url: characterModel.origin.url)
-                    .eraseToAnyPublisher()
-            }
-        })
-        .eraseToAnyPublisher()
-        
-        episodesPublisher = getEpisodes.flatMap({ [unowned self] _ in
-            self.networkManager.getEpisodesPublisher(urls: characterModel.episode)
-                .eraseToAnyPublisher()
-        })
-        .eraseToAnyPublisher()
+        self.imageData = imageData
     }
     
     /// Requesting character origin and episodes
     func requestCharacterOriginAndEpisodes() {
-        getOrigin.send()
-        getEpisodes.send()
+        requestCharacterOrigin()
+        requestCharacterEpisodes()
+    }
+    
+    /// Request character origin
+    private func requestCharacterOrigin() {
+        if characterModel.origin.url.isEmpty {
+            characterOriginSubject.send(CharacterOriginModel(id: 1, name: characterModel.origin.name, type: ""))
+        } else {
+            networkManager.getCharacterOriginPublisher(url: characterModel.origin.url)
+                .sink(receiveCompletion: { [weak self] completion in
+                    guard let self else { return }
+                    if case .failure(let error) = completion {
+                        self.errorSubject.send(error)
+                    }
+                }, receiveValue: { [weak self] origin in
+                    guard let self else { return }
+                    self.characterOriginSubject.send(origin)
+                })
+                .store(in: &cancellables)
+        }
+    }
+    
+    /// Request character episodes
+    private func requestCharacterEpisodes() {
+        networkManager.getEpisodesPublisher(urls: characterModel.episode)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
+                if case .failure(let error) = completion {
+                    self.errorSubject.send(error)
+                }
+            }, receiveValue: { [weak self] episodes in
+                guard let self else { return }
+                self.episodesSubject.send(episodes)
+            })
+            .store(in: &cancellables)
     }
     
     /// Returns CharacterModel and Image Data
@@ -97,46 +110,42 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
     }
     
     /// Making array for updating CharacterInfoDataSource
-    func makeDataSourceData(
-        characterModel: CharacterModel,
-        origin: CharacterOriginModel,
-        episodes: [EpisodeModel]
-    ) -> [SectionData] {
+    func makeDataSourceData(characterModel: CharacterModel, origin: CharacterOriginModel, episodes: [EpisodeModel]) -> [SectionData] {
         var sectionData: [SectionData] = []
-        var type = characterModel.type
-        var originType = origin.type
         
-        if type.isEmpty {
-            type = String.none
-        }
-        if originType.isEmpty {
-            originType = String.none
-        }
-        // for info section
+        let type = characterModel.type.isEmpty ? String.none : characterModel.type
+        let originType = origin.type.isEmpty ? String.none : origin.type
+        
+        // Info section
         sectionData.append(SectionData(
-            key: Section.info, 
-            values: [SectionItem.info(InfoCellModel(species: characterModel.species, type: type, gender:  checkForLocalization(gender: characterModel.gender)))]
+            key: .info,
+            values: [SectionItem.info(InfoCellModel(
+                species: characterModel.species,
+                type: type,
+                gender: checkForLocalization(gender: characterModel.gender)
+            ))]
         ))
-        // for origin section
+        
+        // Origin section
         sectionData.append(SectionData(
-            key: Section.origin,
-            values: [SectionItem.origin(OriginCellModel(originName: characterModel.origin.name, originType: originType))]
+            key: .origin,
+            values: [SectionItem.origin(OriginCellModel(
+                originName: characterModel.origin.name,
+                originType: originType
+            ))]
         ))
-        // for episode section
-        var sectionItems: [SectionItem] = []
-        for episode in episodes {
-            let sectionItem = SectionItem.episode(EpisodeModel(
+        
+        // Episodes section
+        let sectionItems = episodes.map { episode in
+            SectionItem.episode(EpisodeModel(
                 id: episode.id,
                 name: episode.name,
                 airDate: episode.airDate,
-                episode: makeCorrectEpisodeNumber(episode: episode.episode))
-            )
-            sectionItems.append(sectionItem)
+                episode: makeCorrectEpisodeNumber(episode: episode.episode)
+            ))
         }
-        sectionData.append(SectionData(
-            key: Section.episode,
-            values: sectionItems
-        ))
+        sectionData.append(SectionData(key: .episode, values: sectionItems))
+        
         return sectionData
     }
     
@@ -144,29 +153,26 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
     private func makeCorrectEpisodeNumber(episode: String) -> String {
         episode
             .replacingOccurrences(of: "S", with: "Season: ")
-            .replacingOccurrences(of: "E", with: ",Episode: ")
+            .replacingOccurrences(of: "E", with: ", Episode: ")
             .split(separator: ",")
             .reversed()
-            .map({
-                if String($0).contains("Episode: 0") || String($0).contains("Season: 0") {
-                    let new = $0.replacingOccurrences(of: "0", with: "")
-                    return new
-                } else {
-                    return String($0)
-                }
-            })
+            .map {
+                $0.contains("Episode: 0") || $0.contains("Season: 0") ? $0.replacingOccurrences(of: "0", with: "") : String($0)
+            }
             .joined(separator: ", ")
     }
     
-    /// Is got localization for gender
+    /// Checks for localization for gender
     private func checkForLocalization(gender: String) -> String {
-        if gender == "Male" {
+        switch gender {
+        case "Male":
             return .male
-        } else if gender == "Female" {
+        case "Female":
             return .female
-        } else if gender == "unknown" {
+        case "unknown":
             return .unknown
+        default:
+            return gender
         }
-        return gender
     }
 }

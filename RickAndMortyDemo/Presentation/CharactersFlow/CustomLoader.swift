@@ -2,7 +2,7 @@ import Lottie
 import UIKit
 
 // MARK: - CustomIndicator
-final class CustomIndicator: LottieAnimationView {
+final class CustomLoader: LottieAnimationView {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(animation: .named("loading"))
@@ -17,7 +17,7 @@ final class CustomIndicator: LottieAnimationView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /// Showing indicator
+    /// Showing loader
     func show(_ isShowing: Bool) {
         let newTag: Int = isShowing ? 0 : 1
         

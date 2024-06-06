@@ -1,7 +1,7 @@
 import Foundation
 
 struct CharactersListCellModel: Hashable {
-    let id: UUID
+    let id = UUID()
     let name: String
     let imageData: Data
     

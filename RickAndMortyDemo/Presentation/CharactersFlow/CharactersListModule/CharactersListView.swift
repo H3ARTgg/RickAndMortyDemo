@@ -3,14 +3,7 @@ import Lottie
 
 // MARK: - CharactersListView
 final class CharactersListView: UIView {
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .rmWhite
-        label.font = .title28
-        label.text = .characters
-        return label
-    }()
-    lazy var collectionView: UICollectionView = {
+    private(set) var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 16
@@ -23,7 +16,7 @@ final class CharactersListView: UIView {
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
-    lazy var searchField: UITextField = {
+    private(set) var searchField: UITextField = {
         let field = UITextField()
         field.backgroundColor = .rmBlackSecondary
         field.tintColor = .rmWhite
@@ -41,7 +34,12 @@ final class CharactersListView: UIView {
         )
         return field
     }()
-    lazy var cancelButton: UIButton = {
+    private(set) var retryView: RetryView = {
+        let view = RetryView()
+        view.tag = 1
+        return view
+    }()
+    private(set) var cancelButton: UIButton = {
         let button = UIButton.systemButton(with: UIImage(), target: nil, action: nil)
         button.backgroundColor = .clear
         button.setTitle("Cancel", for: .normal)
@@ -50,12 +48,23 @@ final class CharactersListView: UIView {
         button.alpha = 0
         return button
     }()
-    lazy var indicator: CustomIndicator = CustomIndicator(frame: .zero)
-    lazy var retryView: RetryView = {
-        let view = RetryView()
-        view.tag = 1
-        return view
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .title28
+        label.text = .characters
+        return label
     }()
+    private let nothingFoundLabel: UILabel = {
+        let label = UILabel()
+        label.font = .title17
+        label.textColor = .rmWhite
+        label.textAlignment = .center
+        label.text = "Nothing found :("
+        label.alpha = 0
+        return label
+    }()
+    private let loader: CustomLoader = CustomLoader(frame: .zero)
     private let cancelButtonWidth: CGFloat = 50
     
     // MARK: - Init
@@ -86,6 +95,12 @@ final class CharactersListView: UIView {
         }
     }
     
+    /// Show loader
+    func showLoader(_ isShowing: Bool) {
+        loader.show(isShowing)
+    }
+    
+    /// Show cancel button for text field
     func showCancel(_ isShowing: Bool) {
         let alpha: CGFloat = isShowing ? 1 : 0
         guard alpha != cancelButton.alpha else { return }
@@ -105,12 +120,21 @@ final class CharactersListView: UIView {
         }
     }
     
+    func showNothingFoundLabel(_ isShowing: Bool) {
+        let alpha: CGFloat = isShowing ? 1 : 0
+        guard alpha != nothingFoundLabel.alpha else { return }
+        UIView.animate(withDuration: 0.3) {
+            self.nothingFoundLabel.alpha = alpha
+        }
+    }
+    
     // MARK: - Initial UI setup
     private func fill() {
         backgroundColor = .rmBlackBG
         [
-            titleLabel, collectionView, indicator,
-            retryView, searchField, cancelButton
+            titleLabel, collectionView, loader,
+            retryView, searchField, cancelButton,
+            nothingFoundLabel
         ].forEach {
             addSubview($0)
         }
@@ -143,14 +167,18 @@ final class CharactersListView: UIView {
         
         retryView.snp.makeConstraints { make in
             make.height.equalTo(0)
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(searchField.snp.bottom).offset(20)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
         
-        indicator.snp.makeConstraints { make in
+        loader.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalToSuperview()
+        }
+        
+        nothingFoundLabel.snp.makeConstraints { make in
+            make.center.equalTo(collectionView.snp.center)
         }
     }
 }

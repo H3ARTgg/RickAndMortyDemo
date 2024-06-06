@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - CharactersListCell
 final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
-    lazy var characterLabel: UILabel = {
+    private let characterLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title17

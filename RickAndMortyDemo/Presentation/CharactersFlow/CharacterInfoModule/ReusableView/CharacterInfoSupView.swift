@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - Header
 enum Header {
     case info
     case origin
@@ -17,9 +18,10 @@ enum Header {
     }
 }
 
+// MARK: - CharacterInfoSupView
 final class CharacterInfoSupView: UICollectionReusableView {
     static let identifier = "Header"
-    lazy var titleLabel: UILabel = {
+    private(set) var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title17

@@ -17,7 +17,8 @@ final class CharactersListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         binds()
-        viewModel.requestCharacters()
+        customView.showLoader(true)
+        viewModel.requestCharacters(isNext: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,45 +46,49 @@ final class CharactersListViewController: UIViewController {
         // DataSource & Delegate
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self
+        customView.searchField.delegate = self
         
         // Targets
         customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
-        customView.searchField.addTarget(self, action: #selector(didInteractWithSearch), for: .allEditingEvents)
+        customView.searchField.addTarget(self, action: #selector(didInteractWithSearch), for: .editingChanged)
         customView.cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
     }
     
     // MARK: - Bindings
     private func binds() {
-        // for activity indicator
-        viewModel.showLoading
+        // for errors
+        viewModel.errorPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isShowing in
+            .sink { [weak self] _ in
                 guard let self else { return }
-                isShowing ? self.customView.indicator.show(true) : self.customView.indicator.show(false)
+                self.customView.showRetry(true)
+                self.customView.showLoader(false)
             }
             .store(in: &cancellables)
         
-        // for reloading rows
+        // for data
         viewModel.charactersPublisher
-            .sink { _ in
-        } receiveValue: { [weak self] characters in
-            guard let self else { return }
-            // if error
-            guard !characters.isEmpty else {
-                self.customView.showRetry(true)
-                return
-            }
-            self.customView.showRetry(false)
-            self.dataSource.add(characters)
-        }
-        .store(in: &cancellables)
-        
-        viewModel.characterSearchPublisher?
-            .debounce(for: 0.5, scheduler: RunLoop.main)
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { searchModel in
-                print(searchModel.results.count)
-                self.dataSource.reload(searchModel.results.map({ CharactersListCellModel(id: UUID(), name: $0.name, imageData: Data()) }))
+            .sink(receiveValue: { [weak self] (cellModels, isNext) in
+                guard let self else { return }
+                self.customView.showRetry(false)
+                self.customView.showLoader(false)
+                
+                print("got", cellModels.count)
+                isNext ? self.dataSource.add(cellModels) : self.dataSource.reload(cellModels)
+            })
+            .store(in: &cancellables)
+        
+        // for search
+        viewModel.characterSearchPublisher
+            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
+            .sink(receiveValue: { [weak self] models in
+                guard let self else { return }
+                
+                models.isEmpty ? customView.showNothingFoundLabel(true) : customView.showNothingFoundLabel(false)
+                
+                self.customView.showLoader(false)
+                self.dataSource.reload(models)
             })
             .store(in: &cancellables)
     }
@@ -101,8 +106,17 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == viewModel.getCharactersCount() - 1 {
-            viewModel.requestCharacters()
+            viewModel.requestCharacters(isNext: true)
+            customView.showLoader(true)
         }
+    }
+}
+
+// MARK: - TextField Delegate
+extension CharactersListViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
     }
 }
 
@@ -110,21 +124,27 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
 @objc
 private extension CharactersListViewController {
     func didTapRetry() {
-        viewModel.requestCharacters()
+        customView.showLoader(true)
+        viewModel.requestCharacters(isNext: true)
     }
     
     func didTapCancel() {
         customView.endEditing(true)
         customView.showCancel(false)
         customView.searchField.text = ""
+        customView.showNothingFoundLabel(false)
+        viewModel.requestCharacters(isNext: false)
     }
     
     func didInteractWithSearch() {
         if let text = customView.searchField.text, !text.isEmpty {
             customView.showCancel(true)
+            customView.showLoader(true)
             viewModel.search(text)
         } else {
             customView.showCancel(false)
+            customView.showNothingFoundLabel(false)
+            viewModel.requestCharacters(isNext: false)
         }
     }
 }

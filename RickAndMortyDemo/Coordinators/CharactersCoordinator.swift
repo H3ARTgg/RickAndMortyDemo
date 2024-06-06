@@ -15,30 +15,35 @@ final class CharactersCoordinator: BaseCoordinator, Coordinatable {
     }
     
     func startFlow() {
-        perfomFlow()
+        routeToCharacterList()
     }
 }
 
 // MARK: - CharactersCoordinator Extension
 private extension CharactersCoordinator {
-    func perfomFlow() {
+    func routeToCharacterList() {
         let charListModule = modulesFactory.makeCharactersListView()
         let charListView = charListModule.view
-        var charListCoordination = charListModule.coordination
+        let charListCoordination = charListModule.coordination
         
         charListCoordination.headForCharacterInfo = { [weak self] (characterModel, imageData) in
             guard let self else { return }
-            let charInfoModule = self.modulesFactory.makeCharacterInfoView(characterModel: characterModel, imageData: imageData)
-            let charInfoView = charInfoModule.view
-            var charInfoCoordination = charInfoModule.coordination
-            
-            charInfoCoordination.finish = {
-                self.router.popToRoot(charInfoView)
-            }
-            
-            self.router.push(charInfoView, to: navController)
+            // routing to CharacterInfo
+            routeToCharacrerInfo(character: characterModel, imageData: imageData)
         }
         
         router.push(charListView, to: navController)
+    }
+    
+    func routeToCharacrerInfo(character: CharacterModel, imageData: Data) {
+        let charInfoModule = self.modulesFactory.makeCharacterInfoView(characterModel: character, imageData: imageData)
+        let charInfoView = charInfoModule.view
+        let charInfoCoordination = charInfoModule.coordination
+        
+        charInfoCoordination.finish = {
+            self.router.popToRoot(charInfoView)
+        }
+        
+        self.router.push(charInfoView, to: navController)
     }
 }

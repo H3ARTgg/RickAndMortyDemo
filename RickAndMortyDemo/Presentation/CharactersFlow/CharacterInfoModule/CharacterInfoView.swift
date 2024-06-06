@@ -3,38 +3,38 @@ import Lottie
 
 // MARK: - CharacterInfoView
 final class CharacterInfoView: UIView {
-    lazy var scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
         view.bounces = true
         view.backgroundColor = .clear
         return view
     }()
-    lazy var contentView: UIView = {
+    private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
-    lazy var characterImageView: UIImageView = {
+    private let characterImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.cornerRadius(10)
         return view
     }()
-    lazy var characterNameLabel: UILabel = {
+    private let characterNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title22
         label.numberOfLines = 0
         return label
     }()
-    lazy var characterStatusLabel: UILabel = {
+    private let characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .regular16
         return label
     }()
-    lazy var characterCollectionView: UICollectionView = {
+    private(set) var characterCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         let collection = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -48,8 +48,8 @@ final class CharacterInfoView: UIView {
         collection.showsVerticalScrollIndicator = false
         return collection
     }()
-    lazy var indicator = CustomIndicator(frame: .zero)
-    lazy var retryView: RetryView = {
+    private let loader = CustomLoader(frame: .zero)
+    private(set) var retryView: RetryView = {
         let view = RetryView()
         view.titleLabel.text = .failedCharacterInfo
         view.tag = 1
@@ -84,6 +84,11 @@ final class CharacterInfoView: UIView {
         }
     }
     
+    /// Showing loader
+    func showLoader(_ isShowing: Bool) {
+        loader.show(isShowing)
+    }
+    
     /// Updating CharacterInfoView with data
     func setCharacterInfo(model: CharacterModel, imageData: Data) {
         characterImageView.image = UIImage(data: imageData)
@@ -113,7 +118,7 @@ final class CharacterInfoView: UIView {
     private func fill() {
         backgroundColor = .rmBlackBG
         
-        [scrollView, indicator, retryView].forEach {
+        [scrollView, loader, retryView].forEach {
             addSubview($0)
         }
         
@@ -123,7 +128,7 @@ final class CharacterInfoView: UIView {
             make.bottom.equalToSuperview()
         }
         
-        indicator.snp.makeConstraints { make in
+        loader.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalToSuperview()
         }

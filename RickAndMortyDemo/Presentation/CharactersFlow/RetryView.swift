@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - RetryView
 final class RetryView: UIView {
-    lazy var titleLabel: UILabel = {
+    private(set) var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title17
@@ -10,7 +10,7 @@ final class RetryView: UIView {
         label.text = .failedCharacters
         return label
     }()
-    lazy var retryButton: UIButton = {
+    private(set) var retryButton: UIButton = {
         let image = UIImage(systemName: "repeat")?.withTintColor(.rmBlack2, renderingMode: .alwaysOriginal) ?? UIImage()
         let button = UIButton.systemButton(with: image, target: nil, action: nil)
         button.backgroundColor = .rmWhite

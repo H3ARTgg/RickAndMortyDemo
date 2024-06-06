@@ -10,9 +10,15 @@ protocol RouterDelegate: AnyObject {
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+    private let coordinatorFactory: CoordinatorsFactoryProtocol = {
+        let networkService = DefaultNetworkClient()
+        let networkManager = NetworkManager(networkService: networkService)
+        let modulesFactory = ModulesFactory(networkManager: networkManager)
+        let coordinatorFactory = CoordinatorFactory(modulesFactory: modulesFactory)
+        return coordinatorFactory
+    }()
     private lazy var router: Routable = Router(routerDelegate: self)
     private lazy var appCoordinator = coordinatorFactory.makeAppCoordinator(router: router)
-    private let coordinatorFactory: CoordinatorsFactoryProtocol = CoordinatorFactory()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)

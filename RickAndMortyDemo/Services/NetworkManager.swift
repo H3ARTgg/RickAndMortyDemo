@@ -2,12 +2,12 @@ import Combine
 import Foundation
 
 protocol NetworkManagerProtocol: AnyObject {
-    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], Never>
-    func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], Never>
-    func getImagePublisher(url: String) -> AnyPublisher<Data, Never>
-    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, Never>
-    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], Never>
-    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, Never>
+    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], NetworkError>
+    func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], NetworkError>
+    func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError>
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError>
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError>
+    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, NetworkError>
 }
 
 final class NetworkManager: NetworkManagerProtocol {
@@ -17,52 +17,46 @@ final class NetworkManager: NetworkManagerProtocol {
         self.networkService = networkService
     }
     
-    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], Never> {
+    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], NetworkError> {
         let request = CharactersRequest(characterIdsRange)
         return networkService.networkPublisher(request: request, type: [CharacterModel].self)
-            .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     
-    func getImagePublisher(url: String) -> AnyPublisher<Data, Never> {
+    func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError> {
         let request = ImageRequest(url: url)
         return networkService.networkPublisher(request: request)
-            .replaceError(with: Data())
             .eraseToAnyPublisher()
     }
     
-    func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], Never> {
+    func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], NetworkError> {
         return urls.publisher
             .flatMap(getImagePublisher)
             .collect()
             .eraseToAnyPublisher()
     }
     
-    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, Never> {
+    func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError> {
         let request = CharacterOriginRequest(url: url)
         return networkService.networkPublisher(request: request, type: CharacterOriginModel.self)
-            .replaceError(with: .init(id: -1, name: "Error", type: "Error"))
             .eraseToAnyPublisher()
     }
     
-    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], Never> {
+    func getEpisodesPublisher(urls: [String]) -> AnyPublisher<[EpisodeModel], NetworkError> {
         let request = EpisodesRequest(episodes: urls)
         if urls.count == 1 {
             return networkService.networkPublisher(request: request, type: EpisodeModel.self)
                 .map({ [$0] })
-                .replaceError(with: [])
                 .eraseToAnyPublisher()
         } else {
             return networkService.networkPublisher(request: request, type: [EpisodeModel].self)
-                .replaceError(with: [])
                 .eraseToAnyPublisher()
         }
     }
     
-    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, Never> {
+    func getCharactersByName(name: String) -> AnyPublisher<CharacterByNameModel, NetworkError> {
         let request = CharacterByNameRequest(name: name)
         return networkService.networkPublisher(request: request, type: CharacterByNameModel.self)
-            .replaceError(with: .init(info: Info(count: -1, pages: -1, next: "error", prev: "error"), results: []))
             .eraseToAnyPublisher()
     }
 }
