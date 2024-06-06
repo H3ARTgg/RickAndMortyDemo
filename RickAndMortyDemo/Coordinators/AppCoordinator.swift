@@ -7,9 +7,9 @@ protocol AppCoordinatorOutput {
 final class AppCoordinator: BaseCoordinator, Coordinatable, AppCoordinatorOutput {
     var finishFlow: (() -> Void)?
     
-    private var coordinatorsFactory: CoordinatorsFactoryProtocol
-    private var modulesFactory: ModulesFactoryProtocol
-    private var router: Routable
+    private let coordinatorsFactory: CoordinatorsFactoryProtocol
+    private let modulesFactory: ModulesFactoryProtocol
+    private let router: Routable
     private let charactersNavCon = CharactersListNavCon()
     
     // MARK: - Init
