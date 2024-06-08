@@ -26,7 +26,7 @@ final class CharactersListView: UIView {
         field.leftViewMode = .always
         field.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
         field.attributedPlaceholder = NSAttributedString(
-            string: "Type the character name..",
+            string: .searchPlaceholder,
             attributes: [
                 .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
                 .font: UIFont.regular16
@@ -42,7 +42,7 @@ final class CharactersListView: UIView {
     private(set) var cancelButton: UIButton = {
         let button = UIButton.systemButton(with: UIImage(), target: nil, action: nil)
         button.backgroundColor = .clear
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(.cancel, for: .normal)
         button.setTitleColor(.rmWhite, for: .normal)
         button.titleLabel?.font = .regular16
         button.alpha = 0
@@ -60,7 +60,7 @@ final class CharactersListView: UIView {
         label.font = .title17
         label.textColor = .rmWhite
         label.textAlignment = .center
-        label.text = "Nothing found :("
+        label.text = .nothingFound
         label.alpha = 0
         return label
     }()

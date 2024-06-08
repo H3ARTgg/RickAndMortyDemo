@@ -74,7 +74,6 @@ final class CharactersListViewController: UIViewController {
                 self.customView.showRetry(false)
                 self.customView.showLoader(false)
                 
-                print("got", cellModels.count)
                 isNext ? self.dataSource.add(cellModels) : self.dataSource.reload(cellModels)
             })
             .store(in: &cancellables)
@@ -101,7 +100,7 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.moveToCharacterInfo(with: indexPath)
+        viewModel.routeToCharacterInfo(with: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

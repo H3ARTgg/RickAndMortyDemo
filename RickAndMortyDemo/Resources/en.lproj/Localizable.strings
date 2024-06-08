@@ -32,3 +32,8 @@ giant = "Giant";
 
 failed_character_info = "Failed to get character info";
 failed_characters = "Failed to get characters";
+
+cancel = "Cancel";
+
+search_placeholder = "Type the character name..";
+nothing_found = "Nothing found :(";

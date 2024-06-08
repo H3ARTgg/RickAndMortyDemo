@@ -13,6 +13,7 @@ protocol CharacterInfoViewModelProtocol: AnyObject {
     var characterOriginPublisher: AnyPublisher<CharacterOriginModel, Never> { get }
     /// Publishes character episodes, where empty array is Error
     var episodesPublisher: AnyPublisher<[EpisodeModel], Never> { get }
+    /// Publishes error
     var errorPublisher: AnyPublisher<NetworkError, Never> { get }
     
     /// Returns CharacterModel and Image Data
@@ -42,6 +43,7 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
         episodesSubject.eraseToAnyPublisher()
     }
     
+    /// Publishes error
     private let errorSubject = PassthroughSubject<NetworkError, Never>()
     var errorPublisher: AnyPublisher<NetworkError, Never> {
         errorSubject.eraseToAnyPublisher()

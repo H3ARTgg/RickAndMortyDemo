@@ -35,12 +35,19 @@ enum LocalizedKeys: String {
     
     case failedCharacterInfo = "failed_character_info"
     case failedCharacters = "failed_characters"
+    
+    case cancel = "cancel"
+    case searchPlaceholder = "search_placeholder"
+    case nothingFound = "nothing_found"
 }
 
 extension String {
     // Characters Screen
     static let characters = NSLocalizedString(LocalizedKeys.characters.rawValue, comment: "")
     static let failedCharacters = NSLocalizedString(LocalizedKeys.failedCharacters.rawValue, comment: "")
+    static let cancel = NSLocalizedString(LocalizedKeys.cancel.rawValue, comment: "")
+    static let searchPlaceholder = NSLocalizedString(LocalizedKeys.searchPlaceholder.rawValue, comment: "")
+    static let nothingFound = NSLocalizedString(LocalizedKeys.nothingFound.rawValue, comment: "")
     
     // Headers - CharacterInfo Screen
     static let info = NSLocalizedString(LocalizedKeys.info.rawValue, comment: "")

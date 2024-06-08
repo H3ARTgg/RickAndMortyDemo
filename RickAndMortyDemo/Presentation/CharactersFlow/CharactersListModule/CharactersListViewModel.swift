@@ -13,14 +13,15 @@ protocol CharactersListViewModelProtocol: AnyObject {
     var charactersPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> { get }
     /// Publishes search results
     var characterSearchPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
+    /// Publishes error
     var errorPublisher: AnyPublisher<NetworkError, Never> { get }
     
     /// Requesting next 10 characters or request already downloaded characters
     func requestCharacters(isNext: Bool)
     /// Get download characters count (Int)
     func getCharactersCount() -> Int
-    /// Move to CharacterInfo Screen (triggers headForCharacterInfo)
-    func moveToCharacterInfo(with indexPath: IndexPath)
+    /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
+    func routeToCharacterInfo(with indexPath: IndexPath)
     /// Search characters by name
     func search(_ name: String?)
 }
@@ -42,6 +43,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
         characterSearchSubject.eraseToAnyPublisher()
     }
     
+    /// Publishes error
     private let errorSubject = PassthroughSubject<NetworkError, Never>()
     var errorPublisher: AnyPublisher<NetworkError, Never> {
         errorSubject.eraseToAnyPublisher()
@@ -60,18 +62,20 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     // MARK: - CharactersListViewModelProtocol
+    /// Requesting next 10 characters or request already downloaded characters
     func requestCharacters(isNext: Bool) {
+        /// showing already downloaded characters
         if !isNext {
-            print(charactersCellModels.count)
-            print(charactersModels.count)
             charactersSubject.send((charactersCellModels, isNext))
             return
         }
         
+        /// requesting new 10 characters
         networkManager.getCharactersPublisher(characterIdsRange: calculateRange(&showedIds))
             .flatMap { [unowned self] characters in
                 characters.publisher
                     .flatMap { character in
+                        /// downloading image for character
                         self.networkManager.getImagePublisher(url: character.image)
                             .map { imageData in
                                 (character, imageData)
@@ -83,6 +87,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 if case .failure(let error) = completion {
+                    /// if fails, then return showedIds value to old value (oldShowedIds)
                     showedIds = oldShowedIds
                     self.errorSubject.send(error)
                 }
@@ -91,6 +96,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
                 /// adding characters
                 self.charactersModels.append(contentsOf: results)
                 
+                /// making models for cells
                 let cellModels = results.map { CharactersListCellModel(name: $0.0.name, imageData: $0.1) }
                 self.charactersCellModels.append(contentsOf: cellModels)
                 self.charactersSubject.send((cellModels, isNext))
@@ -98,15 +104,18 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             .store(in: &cancellables)
     }
     
-    func moveToCharacterInfo(with indexPath: IndexPath) {
+    /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
+    func routeToCharacterInfo(with indexPath: IndexPath) {
         let characterModel = charactersModels[indexPath.row]
         headForCharacterInfo?(characterModel.model, characterModel.imageData)
     }
     
+    /// Get download characters count (Int)
     func getCharactersCount() -> Int {
         return charactersCellModels.count
     }
     
+    /// Search characters by name
     func search(_ name: String?) {
         networkManager.getCharactersByName(name: name ?? "")
             .flatMap({ [unowned self] characterNameModel in
@@ -126,6 +135,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
                 }
             }, receiveValue: { [weak self] foundCharacters in
                 guard let self else { return }
+                /// making models for cells
                 let cellModels = foundCharacters.map { CharactersListCellModel(name: $0.0.name, imageData: $0.1) }
                 self.characterSearchSubject.send(cellModels)
             })
@@ -133,11 +143,11 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     // MARK: - Private Methods
+    /// Calculating range for next character ids
     private func calculateRange(_ showedIds: inout Int) -> Range<Int> {
         let range = Range((showedIds + 1)...(showedIds + 10))
         oldShowedIds = showedIds
         showedIds = oldShowedIds + 10
-        print("old", oldShowedIds, "new", showedIds)
         return range
     }
 }

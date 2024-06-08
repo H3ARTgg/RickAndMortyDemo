@@ -32,3 +32,8 @@ giant = "Гигант";
 
 failed_character_info = "Не удалось получать данные персонажа";
 failed_characters = "Не удалось получать персонажей";
+
+cancel = "Отмена";
+
+search_placeholder = "Введите имя персонажа..";
+nothing_found = "Ничего не найдено :(";
