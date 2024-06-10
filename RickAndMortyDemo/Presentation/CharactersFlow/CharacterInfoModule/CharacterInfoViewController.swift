@@ -34,7 +34,7 @@ final class CharacterInfoViewController: UIViewController {
     // MARK: - Initial UI setup
     private func setupUI() {
         // Back Button
-        let button = UIBarButtonItem(image: UIImage(named: "chevron_left"), style: .done, target: self, action: #selector(didTapBack))
+        let button = UIBarButtonItem(image: .chevronLeft, style: .done, target: self, action: #selector(didTapBack))
         button.tintColor = .rmWhite
         navigationItem.hidesBackButton = true
         navigationItem.setLeftBarButton(button, animated: true)

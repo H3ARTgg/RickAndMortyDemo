@@ -6,7 +6,7 @@ final class CharactersListViewController: UIViewController {
     private let customView = CharactersListView()
     private let viewModel: CharactersListViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
-    private lazy var dataSource = CharactersListDataSource(customView.collectionView, viewModel)
+    private lazy var dataSource = CharactersListDataSource(customView.collectionView)
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -43,6 +43,22 @@ final class CharactersListViewController: UIViewController {
     
     // MARK: - Initial UI setup
     private func setupUI() {
+        // TabBar Settings
+        let tabBarItem = UITabBarItem(
+            title: .characters,
+            image: .character.resize(to: CGSize(width: 25, height: 25))?.withTintColor(.rmGray2, renderingMode: .alwaysOriginal),
+            selectedImage: .character.resize(to: CGSize(width: 25, height: 25))?.withTintColor(.rmWhite, renderingMode: .alwaysOriginal)
+        )
+        tabBarItem.setTitleTextAttributes([
+            .font: UIFont.boldSystemFont(ofSize: 12),
+            .foregroundColor: UIColor.rmGray2
+        ], for: .normal)
+        tabBarItem.setTitleTextAttributes([
+            .font: UIFont.boldSystemFont(ofSize: 12),
+            .foregroundColor: UIColor.rmWhite
+        ], for: .selected)
+        self.tabBarItem = tabBarItem
+        
         // DataSource & Delegate
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self

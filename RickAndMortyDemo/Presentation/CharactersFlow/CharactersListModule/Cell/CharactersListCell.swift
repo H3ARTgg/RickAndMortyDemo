@@ -15,11 +15,18 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
         view.cornerRadius(10)
         return view
     }()
+    private(set) lazy var likeButton: UIButton = {
+        let button = UIButton.systemButton(with: .heart, target: self, action: #selector(didTapLike))
+        button.backgroundColor = .clear
+        button.tintColor = .rmGray2
+        return button
+    }()
     var cellModel: CharactersListCellModel? {
         didSet {
             guard let cellModel else { return }
-            self.characterLabel.text = cellModel.name
-            self.characterImage.image = UIImage(data: cellModel.imageData)
+            characterLabel.text = cellModel.name
+            characterImage.image = UIImage(data: cellModel.imageData)
+            likeButton.tintColor = cellModel.isLiked ? .rmRed : .rmGray2
         }
     }
     
@@ -38,7 +45,7 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
         backgroundColor = .rmBlackSecondary
         cornerRadius(16)
         
-        [characterImage, characterLabel].forEach {
+        [characterImage, characterLabel, likeButton].forEach {
             addSubview($0)
         }
         
@@ -56,5 +63,23 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
             make.top.lessThanOrEqualTo(characterImage.snp.bottom).offset(16).priority(1000)
             make.bottom.lessThanOrEqualToSuperview().offset(-8).priority(999)
         }
+        
+        likeButton.snp.makeConstraints { make in
+            make.top.equalTo(characterImage.snp.top).offset(5)
+            make.trailing.equalTo(characterImage.snp.trailing).offset(-5)
+            make.width.height.equalTo(30)
+        }
+    }
+}
+
+// MARK: - Actions
+@objc
+private extension CharactersListCell {
+    func didTapLike(_ sender: UIButton) {
+        let isLiked = sender.tintColor == .rmRed ? true : false
+        let newColor: UIColor = isLiked ? .rmGray2 : .rmRed
+        
+        sender.tintColor = newColor
+        cellModel?.isLiked = !isLiked
     }
 }

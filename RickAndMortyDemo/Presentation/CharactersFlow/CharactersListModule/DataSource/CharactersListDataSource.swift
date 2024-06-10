@@ -1,7 +1,7 @@
 import UIKit
 
 final class CharactersListDataSource: UICollectionViewDiffableDataSource<Int, CharactersListCellModel> {
-    init(_ collectionView: UICollectionView, _ viewModel: CharactersListViewModelProtocol) {
+    init(_ collectionView: UICollectionView) {
         super.init(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             let cell: CharactersListCell = collectionView.dequeueReusableCell(indexPath: indexPath)
             cell.cellModel = itemIdentifier

@@ -1,6 +1,8 @@
 import UIKit
 
-final class CharactersListNavCon: UINavigationController {
+// MARK: - CustomNavigationController
+final class CustomNavigationController: UINavigationController {
+    // MARK: - Init
     init() {
         super.init(nibName: nil, bundle: .main)
         self.navigationBar.barStyle = .black

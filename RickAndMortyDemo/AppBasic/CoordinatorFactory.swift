@@ -1,7 +1,8 @@
 // MARK: - CoordinatorsFactoryProtocol
 protocol CoordinatorsFactoryProtocol: AnyObject {
     func makeAppCoordinator(router: Routable) -> Coordinatable & AppCoordinatorOutput
-    func makeCharactersListCoordinator(router: Routable, navCon: CharactersListNavCon) -> Coordinatable
+    func makeCharactersListCoordinator(router: Routable, navigationController: CustomNavigationController) -> Coordinatable
+    func makeFavoritesCoordinator(router: Routable, navigationController: CustomNavigationController) -> Coordinatable
 }
 
 // MARK: - CoordinatorFactory
@@ -19,7 +20,11 @@ extension CoordinatorFactory: CoordinatorsFactoryProtocol {
         return AppCoordinator(coordinatorsFactory: self, modulesFactory: modulesFactory, router: router)
     }
     
-    func makeCharactersListCoordinator(router: Routable, navCon: CharactersListNavCon) -> Coordinatable {
-        return CharactersCoordinator(modulesFactory: modulesFactory, router: router, navCon: navCon)
+    func makeCharactersListCoordinator(router: Routable, navigationController: CustomNavigationController) -> Coordinatable {
+        return CharactersCoordinator(modulesFactory: modulesFactory, router: router, navigationController: navigationController)
+    }
+    
+    func makeFavoritesCoordinator(router: Routable, navigationController: CustomNavigationController) -> Coordinatable {
+        return FavoritesCoordinator(modulesFactory: modulesFactory, router: router, navigationController: navigationController)
     }
 }

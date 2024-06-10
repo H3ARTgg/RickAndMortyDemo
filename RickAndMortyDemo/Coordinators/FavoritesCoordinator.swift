@@ -1,7 +1,7 @@
 import Foundation
 
-// MARK: - CharactersCoordinator
-final class CharactersCoordinator: BaseCoordinator, Coordinatable {
+// MARK: - FavoritesCoordinator
+final class FavoritesCoordinator: BaseCoordinator, Coordinatable {
     var finishFlow: (() -> Void)?
     private let modulesFactory: ModulesFactoryProtocol
     private let router: Routable
@@ -15,24 +15,24 @@ final class CharactersCoordinator: BaseCoordinator, Coordinatable {
     }
     
     func startFlow() {
-        routeToCharacterList()
+        routeToFavorites()
     }
 }
 
-// MARK: - CharactersCoordinator Extension
-private extension CharactersCoordinator {
-    func routeToCharacterList() {
-        let charListModule = modulesFactory.makeCharactersListView()
-        let charListView = charListModule.view
-        let charListCoordination = charListModule.coordination
+// MARK: - FavoritesCoordinator Extension
+private extension FavoritesCoordinator {
+    func routeToFavorites() {
+        let module = self.modulesFactory.makeFavoritesView()
+        let favoritesView = module.view
+        let favoritesCoordination = module.coordination
         
-        charListCoordination.headForCharacterInfo = { [weak self] (characterModel, imageData) in
+        favoritesCoordination.headForCharacterInfo = { [weak self] (characterModel, imageData) in
             guard let self else { return }
             // routing to CharacterInfo
             routeToCharacrerInfo(character: characterModel, imageData: imageData)
         }
         
-        router.push(charListView, to: navigationController)
+        router.push(favoritesView, to: navigationController)
     }
     
     func routeToCharacrerInfo(character: CharacterModel, imageData: Data) {

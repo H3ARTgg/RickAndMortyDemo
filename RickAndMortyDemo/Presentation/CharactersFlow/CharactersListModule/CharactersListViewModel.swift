@@ -50,6 +50,8 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     private let networkManager: NetworkManagerProtocol
+    private let realmStorage: StorageProtocol
+    
     private var charactersModels: [(model: CharacterModel, imageData: Data)] = []
     private var charactersCellModels: [CharactersListCellModel] = []
     private var oldShowedIds: Int = 0
@@ -57,8 +59,9 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
-    init(networkManager: NetworkManagerProtocol) {
+    init(networkManager: NetworkManagerProtocol, storage: StorageProtocol) {
         self.networkManager = networkManager
+        self.realmStorage = storage
     }
     
     // MARK: - CharactersListViewModelProtocol
@@ -97,7 +100,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
                 self.charactersModels.append(contentsOf: results)
                 
                 /// making models for cells
-                let cellModels = results.map { CharactersListCellModel(name: $0.0.name, imageData: $0.1) }
+                let cellModels = results.map { CharactersListCellModel(characterId: $0.0.id, name: $0.0.name, imageData: $0.1, storage: self.realmStorage) }
                 self.charactersCellModels.append(contentsOf: cellModels)
                 self.charactersSubject.send((cellModels, isNext))
             })
@@ -136,7 +139,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             }, receiveValue: { [weak self] foundCharacters in
                 guard let self else { return }
                 /// making models for cells
-                let cellModels = foundCharacters.map { CharactersListCellModel(name: $0.0.name, imageData: $0.1) }
+                let cellModels = foundCharacters.map { CharactersListCellModel(characterId: $0.0.id, name: $0.0.name, imageData: $0.1, storage: self.realmStorage) }
                 self.characterSearchSubject.send(cellModels)
             })
             .store(in: &cancellables)

@@ -13,7 +13,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     private let coordinatorFactory: CoordinatorsFactoryProtocol = {
         let networkService = DefaultNetworkClient()
         let networkManager = NetworkManager(networkService: networkService)
-        let modulesFactory = ModulesFactory(networkManager: networkManager)
+        let storage = RealmStorage()
+        let modulesFactory = ModulesFactory(networkManager: networkManager, storage: storage)
         let coordinatorFactory = CoordinatorFactory(modulesFactory: modulesFactory)
         return coordinatorFactory
     }()
