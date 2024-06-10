@@ -1,15 +1,15 @@
 import RealmSwift
 import Foundation
 
-// MARK: - RealmOperationsProtocol
+// MARK: - StorageProtocol
 protocol StorageProtocol: AnyObject {
     func addToFavorite(_ id: Int)
     func removeFromFavorite(_ id: Int)
     func getFavorites() -> [Int]
 }
 
-// MARK: - RealmOperations
-final class RealmStorage: StorageProtocol {
+// MARK: - RealmStorage
+final class RealmStorage {
     private let realm = try! Realm()
     
     private func readData<T: Object>(forType: T.Type = T.self) -> [T]  {
@@ -26,8 +26,8 @@ final class RealmStorage: StorageProtocol {
     }
 }
 
-// MARK: - CharacterObject
-extension RealmStorage {
+// MARK: - StorageProtocol Extension
+extension RealmStorage: StorageProtocol {
     func addToFavorite(_ id: Int) {
         let object = CharacterObject()
         object.characterId = id
