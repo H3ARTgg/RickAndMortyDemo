@@ -4,7 +4,7 @@ RickAndMortyDemo - приложение со всеми персонажами �
 
 # Ссылки
 
-[Дизайн Figma](https://www.figma.com/file/JUuVDTfYCwDeuY1EsR76qH/Untitled?type=design&node-id=1-219&mode=design)
+[Дизайн Figma](https://www.figma.com/design/T7hrn6GVUHtzCnKkcZY2YA/RickAndMortyDemo?node-id=0-1&t=UIQVPeeQGwKWsgem-1)
 
 [API](https://rickandmortyapi.com)
 
