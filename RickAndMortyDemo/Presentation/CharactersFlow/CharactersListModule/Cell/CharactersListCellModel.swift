@@ -30,9 +30,10 @@ extension CharactersListCellModel: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(name)
+        hasher.combine(isLiked)
     }
     
     static func == (lhs: CharactersListCellModel, rhs: CharactersListCellModel) -> Bool {
-        return lhs.id == rhs.id && lhs.name == rhs.name
+        return lhs.id == rhs.id && lhs.name == rhs.name && lhs.isLiked == rhs.isLiked
     }
 }

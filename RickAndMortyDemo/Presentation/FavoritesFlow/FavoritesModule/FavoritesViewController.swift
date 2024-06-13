@@ -18,11 +18,13 @@ final class FavoritesViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         binds()
+        customView.showLoader(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        viewModel.requestFavoriteCharacters()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,7 +67,27 @@ final class FavoritesViewController: UIViewController {
     
     // MARK: - Bindings
     private func binds() {
+        viewModel.errorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.customView.showRetry(true)
+                self.customView.showLoader(false)
+            }
+            .store(in: &cancellables)
         
+        viewModel.charactersPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] characters in
+                guard let self else { return }
+                self.customView.noFavoritesLabel.isHidden = !characters.isEmpty
+                
+                self.customView.showRetry(false)
+                self.customView.showLoader(false)
+                
+                self.dataSource.reload(characters)
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -76,7 +98,7 @@ extension FavoritesViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        viewModel.routeToCharacterInfo(with: indexPath)
+        viewModel.routeToCharacterInfo(with: indexPath)
     }
 }
 
@@ -85,6 +107,6 @@ extension FavoritesViewController: UICollectionViewDelegateFlowLayout {
 private extension FavoritesViewController {
     func didTapRetry() {
         customView.showLoader(true)
-//        viewModel.requestCharacters(isNext: true)
+        viewModel.requestFavoriteCharacters()
     }
 }

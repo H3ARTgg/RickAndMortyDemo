@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 protocol NetworkManagerProtocol: AnyObject {
-    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], NetworkError>
+    func getCharactersPublisher(characterIds: [Int]) -> AnyPublisher<[CharacterModel], NetworkError>
     func getImagesPublisher(urls: [String]) -> AnyPublisher<[Data], NetworkError>
     func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError>
     func getCharacterOriginPublisher(url: String) -> AnyPublisher<CharacterOriginModel, NetworkError>
@@ -17,10 +17,16 @@ final class NetworkManager: NetworkManagerProtocol {
         self.networkService = networkService
     }
     
-    func getCharactersPublisher(characterIdsRange: Range<Int>) -> AnyPublisher<[CharacterModel], NetworkError> {
-        let request = CharactersRequest(characterIdsRange)
-        return networkService.networkPublisher(request: request, type: [CharacterModel].self)
-            .eraseToAnyPublisher()
+    func getCharactersPublisher(characterIds: [Int]) -> AnyPublisher<[CharacterModel], NetworkError> {
+        let request = CharactersRequest(characterIds)
+        if characterIds.count == 1 {
+            return networkService.networkPublisher(request: request, type: CharacterModel.self)
+                .compactMap({ [$0] })
+                .eraseToAnyPublisher()
+        } else {
+            return networkService.networkPublisher(request: request, type: [CharacterModel].self)
+                .eraseToAnyPublisher()
+        }
     }
     
     func getImagePublisher(url: String) -> AnyPublisher<Data, NetworkError> {

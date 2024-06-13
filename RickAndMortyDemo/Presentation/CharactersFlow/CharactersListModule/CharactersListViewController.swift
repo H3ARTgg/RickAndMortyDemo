@@ -24,6 +24,8 @@ final class CharactersListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        /// for updating like state (if disliked in favorites screen)
+        customView.collectionView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

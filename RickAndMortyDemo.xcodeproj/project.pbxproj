@@ -60,12 +60,13 @@
 		F4A0F7572C1718B000725694 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7562C1718B000725694 /* FavoritesViewController.swift */; };
 		F4A0F7592C1718B800725694 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7582C1718B800725694 /* FavoritesViewModel.swift */; };
 		F4A0F75F2C1719D200725694 /* RealmObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F75E2C1719D200725694 /* RealmObjects.swift */; };
-		F4A0F7612C1719E000725694 /* RealmOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7602C1719E000725694 /* RealmOperations.swift */; };
+		F4A0F7612C1719E000725694 /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7602C1719E000725694 /* RealmStorage.swift */; };
 		F4A0F76C2C17377700725694 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F4A0F76B2C17377700725694 /* RealmSwift */; };
 		F4A0F76D2C17388600725694 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = F4A0F76B2C17377700725694 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F4A0F7702C173EDB00725694 /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F76F2C173EDB00725694 /* FavoritesCoordinator.swift */; };
 		F4A0F7722C1743AA00725694 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7712C1743AA00725694 /* CustomTabBarController.swift */; };
 		F4A0F7742C1757C900725694 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A0F7732C1757C900725694 /* UIImage + Extension.swift */; };
+		F4DAE2392C1B293400F2F1E5 /* CustomTabBarAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DAE2382C1B293400F2F1E5 /* CustomTabBarAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -137,10 +138,11 @@
 		F4A0F7562C1718B000725694 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		F4A0F7582C1718B800725694 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		F4A0F75E2C1719D200725694 /* RealmObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjects.swift; sourceTree = "<group>"; };
-		F4A0F7602C1719E000725694 /* RealmOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmOperations.swift; sourceTree = "<group>"; };
+		F4A0F7602C1719E000725694 /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
 		F4A0F76F2C173EDB00725694 /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
 		F4A0F7712C1743AA00725694 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		F4A0F7732C1757C900725694 /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
+		F4DAE2382C1B293400F2F1E5 /* CustomTabBarAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				F4A0F7712C1743AA00725694 /* CustomTabBarController.swift */,
+				F4DAE2382C1B293400F2F1E5 /* CustomTabBarAnimator.swift */,
 				1DD2FCC52A920B9500024155 /* CharactersFlow */,
 				F4A0F7522C17166900725694 /* FavoritesFlow */,
 			);
@@ -415,7 +418,7 @@
 			isa = PBXGroup;
 			children = (
 				F4A0F75E2C1719D200725694 /* RealmObjects.swift */,
-				F4A0F7602C1719E000725694 /* RealmOperations.swift */,
+				F4A0F7602C1719E000725694 /* RealmStorage.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -509,7 +512,7 @@
 				F4A0F75F2C1719D200725694 /* RealmObjects.swift in Sources */,
 				1D236E4D2A943B5C00F459C9 /* EpisodesRequest.swift in Sources */,
 				1D236E2D2A92CBC200F459C9 /* CharactersListDataSource.swift in Sources */,
-				F4A0F7612C1719E000725694 /* RealmOperations.swift in Sources */,
+				F4A0F7612C1719E000725694 /* RealmStorage.swift in Sources */,
 				1D236E2A2A92C9D400F459C9 /* CellReusingUtils.swift in Sources */,
 				1D3D1BE32A943E570008FAD9 /* EpisodeModel.swift in Sources */,
 				1D30D7CD2A945DC3000852F9 /* EpisodeCell.swift in Sources */,
@@ -517,6 +520,7 @@
 				1D236E232A92AEA100F459C9 /* UIFont + Extension.swift in Sources */,
 				1D236E132A92235300F459C9 /* CharacterInfoViewController.swift in Sources */,
 				F4A0F7722C1743AA00725694 /* CustomTabBarController.swift in Sources */,
+				F4DAE2392C1B293400F2F1E5 /* CustomTabBarAnimator.swift in Sources */,
 				1D236E262A92BDC900F459C9 /* CharactersListCell.swift in Sources */,
 				1D236E0F2A92205400F459C9 /* CharactersListViewModel.swift in Sources */,
 				1D30D7CF2A945E10000852F9 /* CharacterInfoDataSource.swift in Sources */,

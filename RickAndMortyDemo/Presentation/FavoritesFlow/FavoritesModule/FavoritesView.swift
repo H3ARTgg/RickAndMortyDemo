@@ -17,7 +17,16 @@ final class FavoritesView: UIView {
     private(set) var retryView: RetryView = {
         let view = RetryView()
         view.tag = 1
+        view.titleLabel.text = "Failed to get favorites"
         return view
+    }()
+    private(set) var noFavoritesLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .rmWhite
+        label.font = .title17
+        label.text = "No favorites yet"
+        label.isHidden = true
+        return label
     }()
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -66,7 +75,7 @@ final class FavoritesView: UIView {
     private func fill() {
         backgroundColor = .rmBlackBG
         
-        [titleLabel, collectionView, retryView, loader].forEach {
+        [titleLabel, collectionView, retryView, loader, noFavoritesLabel].forEach {
             addSubview($0)
         }
         
@@ -92,6 +101,10 @@ final class FavoritesView: UIView {
         loader.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalToSuperview()
+        }
+        
+        noFavoritesLabel.snp.makeConstraints { make in
+            make.center.equalTo(collectionView.snp.center)
         }
     }
 }

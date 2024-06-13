@@ -9,7 +9,7 @@ protocol CharactersListCoordination: AnyObject {
 
 // MARK: - CharactersListViewModelProtocol
 protocol CharactersListViewModelProtocol: AnyObject {
-    /// Publishes CharactersListModel array (10 models) or empty array (if it's an error)
+    /// Publishes CharactersListModel array (10 models)
     var charactersPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> { get }
     /// Publishes search results
     var characterSearchPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
@@ -28,10 +28,11 @@ protocol CharactersListViewModelProtocol: AnyObject {
 
 // MARK: - CharactersListViewModel
 final class CharactersListViewModel: CharactersListViewModelProtocol, CharactersListCoordination {
+    // MARK: - Properties
     /// Callback for routing to CharacterInfo Screen
     var headForCharacterInfo: ((CharacterModel, Data) -> Void)?
     
-    /// Publishes CharactersListModel array (10 models) or empty array (if it's an error)
+    /// Publishes CharactersListModel array (10 models)
     private let charactersSubject = PassthroughSubject<(cellModels: [CharactersListCellModel], isNext: Bool), Never>()
     var charactersPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> {
         charactersSubject.eraseToAnyPublisher()
@@ -74,7 +75,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
         }
         
         /// requesting new 10 characters
-        networkManager.getCharactersPublisher(characterIdsRange: calculateRange(&showedIds))
+        networkManager.getCharactersPublisher(characterIds: calculateRange(&showedIds))
             .flatMap { [unowned self] characters in
                 characters.publisher
                     .flatMap { character in
@@ -109,6 +110,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     
     /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
     func routeToCharacterInfo(with indexPath: IndexPath) {
+        guard charactersModels.indices.contains(indexPath.row) else { return }
         let characterModel = charactersModels[indexPath.row]
         headForCharacterInfo?(characterModel.model, characterModel.imageData)
     }
@@ -147,10 +149,10 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     
     // MARK: - Private Methods
     /// Calculating range for next character ids
-    private func calculateRange(_ showedIds: inout Int) -> Range<Int> {
-        let range = Range((showedIds + 1)...(showedIds + 10))
+    private func calculateRange(_ showedIds: inout Int) -> [Int] {
+        let array = Array((showedIds + 1)...(showedIds + 10))
         oldShowedIds = showedIds
         showedIds = oldShowedIds + 10
-        return range
+        return array
     }
 }

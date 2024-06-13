@@ -25,6 +25,9 @@ private extension FavoritesCoordinator {
         let module = self.modulesFactory.makeFavoritesView()
         let favoritesView = module.view
         let favoritesCoordination = module.coordination
+
+        // fixing bug where view hasn't load yet and tab item is hidden
+        _ = module.view.toPresent()?.view
         
         favoritesCoordination.headForCharacterInfo = { [weak self] (characterModel, imageData) in
             guard let self else { return }

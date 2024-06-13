@@ -3,13 +3,21 @@ import Foundation
 
 // MARK: - StorageProtocol
 protocol StorageProtocol: AnyObject {
+    var delegate: RealmStorageDelegate? { set get }
+    
     func addToFavorite(_ id: Int)
     func removeFromFavorite(_ id: Int)
     func getFavorites() -> [Int]
 }
 
+// MARK: - RealmStorageDelegate
+protocol RealmStorageDelegate: AnyObject {
+    func favoritesChanged()
+}
+
 // MARK: - RealmStorage
 final class RealmStorage {
+    weak var delegate: RealmStorageDelegate?
     private let realm = try! Realm()
     
     private func readData<T: Object>(forType: T.Type = T.self) -> [T]  {
@@ -40,8 +48,10 @@ extension RealmStorage: StorageProtocol {
     func removeFromFavorite(_ id: Int) {
         guard let characterObject = readData(forType: CharacterObject.self).first(where: { $0.characterId == id }) else { return }
         
-        try? self.realm.write({
-            realm.delete(characterObject)
+        realm.writeAsync({ [weak self] in
+            self?.realm.delete(characterObject)
+        }, onComplete: { [weak self] _ in
+            self?.delegate?.favoritesChanged()
         })
     }
     

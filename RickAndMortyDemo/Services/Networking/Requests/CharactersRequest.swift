@@ -3,11 +3,11 @@ import Foundation
 struct CharactersRequest: NetworkRequest {
     var endpoint: URL?
     
-    init(_ characterIdsRange: Range<Int>) {
-        self.endpoint = URL(string: "https://rickandmortyapi.com/api/character/" + makeStringOfRange(characterIdsRange))
+    init(_ characterIds: [Int]) {
+        self.endpoint = URL(string: "https://rickandmortyapi.com/api/character/" + makeStringOfArray(characterIds))
     }
     
-    private func makeStringOfRange(_ range: Range<Int>) -> String {
-        range.sorted().map { String($0) }.joined(separator: ",")
+    private func makeStringOfArray(_ array: [Int]) -> String {
+        array.sorted().map { String($0) }.joined(separator: ",")
     }
 }

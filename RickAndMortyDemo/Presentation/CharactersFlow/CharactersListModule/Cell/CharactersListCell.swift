@@ -21,14 +21,21 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
         button.tintColor = .rmGray2
         return button
     }()
-    var cellModel: CharactersListCellModel? {
+    weak var cellModel: CharactersListCellModel? {
         didSet {
             guard let cellModel else { return }
             characterLabel.text = cellModel.name
             characterImage.image = UIImage(data: cellModel.imageData)
-            likeButton.tintColor = cellModel.isLiked ? .rmRed : .rmGray2
+            likeButton.tintColor = cellModel.isLiked ? likedColor : notLikedColor
+            likeButton.alpha = cellModel.isLiked ? likedAlpha : notLikedAlpha
         }
     }
+    
+    private let likedColor = UIColor.rmRed
+    private let likedAlpha: CGFloat = 1
+    
+    private let notLikedColor = UIColor.rmBlackSecondary
+    private let notLikedAlpha: CGFloat = 0.75
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -77,9 +84,17 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
 private extension CharactersListCell {
     func didTapLike(_ sender: UIButton) {
         let isLiked = sender.tintColor == .rmRed ? true : false
-        let newColor: UIColor = isLiked ? .rmGray2 : .rmRed
+        let newColor: UIColor = isLiked ? notLikedColor : likedColor
         
-        sender.tintColor = newColor
+        UIView.animate(withDuration: 0.3, animations: {
+            sender.tintColor = newColor
+            sender.transform = !isLiked ? CGAffineTransform(scaleX: 1.2, y: 1.2) : CGAffineTransform(scaleX: 0.9, y: 0.9)
+            sender.alpha = !isLiked ? self.likedAlpha : self.notLikedAlpha
+        }) { _ in
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = CGAffineTransform.identity
+            }
+        }
         cellModel?.isLiked = !isLiked
     }
 }
