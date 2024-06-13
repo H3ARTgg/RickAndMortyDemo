@@ -5,6 +5,11 @@ protocol Presentable: AnyObject {
     func toPresent() -> UIViewController?
 }
 
+// MARK: - RouterDelegate Protocol
+protocol RouterDelegate: AnyObject {
+    func setRootViewController(_ viewController: Presentable?)
+}
+
 // MARK: - Routable Protocol
 protocol Routable: AnyObject {
     func setRootViewController(viewController: Presentable)

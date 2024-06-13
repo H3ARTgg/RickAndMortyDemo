@@ -1,11 +1,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - RouterDelegate Protocol
-protocol RouterDelegate: AnyObject {
-    func setRootViewController(_ viewController: Presentable?)
-}
-
 // MARK: - AppDelegate
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,4 +30,3 @@ extension AppDelegate: RouterDelegate {
         window?.rootViewController = viewController?.toPresent()
     }
 }
-
