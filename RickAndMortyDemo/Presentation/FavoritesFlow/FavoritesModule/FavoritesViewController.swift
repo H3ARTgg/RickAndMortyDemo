@@ -63,6 +63,9 @@ final class FavoritesViewController: UIViewController {
         // DataSource & Delegate
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self
+        
+        // Target
+        customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
     }
     
     // MARK: - Bindings

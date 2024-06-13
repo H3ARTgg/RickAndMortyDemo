@@ -55,11 +55,11 @@ final class FavoritesViewModel: FavoritesViewModelProtocol, FavoritesCoordinatio
     func requestFavoriteCharacters() {
         let oldCount = currentFavoritesCount
         let favoritesIdsArray = realmStorage.getFavorites().sorted()
-        currentFavoritesCount = favoritesIdsArray.count
+        let newCount = favoritesIdsArray.count
         /// if favorites count doesn't changed, then return
-        guard oldCount != currentFavoritesCount else { return }
+        guard oldCount != newCount else { return }
         /// if is favorites empty, then send empty array
-        guard currentFavoritesCount != 0 else { charactersSubject.send([]); return }
+        guard newCount != 0 else { charactersSubject.send([]); return }
         
         networkManager.getCharactersPublisher(characterIds: favoritesIdsArray)
             .flatMap { [unowned self] characters in
@@ -77,10 +77,12 @@ final class FavoritesViewModel: FavoritesViewModelProtocol, FavoritesCoordinatio
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 if case .failure(let error) = completion {
+                    currentFavoritesCount = oldCount
                     self.errorSubject.send(error)
                 }
             }, receiveValue: { [weak self] results in
                 guard let self = self else { return }
+                currentFavoritesCount = newCount
                 charactersModels = results.map({ ($0.0, $0.1) })
                 
                 /// making models for cells
