@@ -30,10 +30,14 @@ bird_person = "Человек-Птица";
 organic_gun = "Органическое оружие";
 giant = "Гигант";
 
-failed_character_info = "Не удалось получать данные персонажа";
-failed_characters = "Не удалось получать персонажей";
+failed_character_info = "Не удалось получить данные персонажа";
+failed_characters = "Не удалось получить персонажей";
 
 cancel = "Отмена";
 
 search_placeholder = "Введите имя персонажа..";
 nothing_found = "Ничего не найдено :(";
+
+favorites = "Избранные";
+no_favorites = "Пока нет избранных";
+failed_favorites = "Не удалось получить избранные";

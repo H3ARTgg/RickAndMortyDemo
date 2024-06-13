@@ -37,3 +37,7 @@ cancel = "Cancel";
 
 search_placeholder = "Type the character name..";
 nothing_found = "Nothing found :(";
+
+favorites = "Favorites";
+no_favorites = "No favorites yet";
+failed_favorites = "Failed to get favorites";

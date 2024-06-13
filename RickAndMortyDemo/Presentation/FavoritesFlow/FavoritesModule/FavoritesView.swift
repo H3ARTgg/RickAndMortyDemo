@@ -17,14 +17,14 @@ final class FavoritesView: UIView {
     private(set) var retryView: RetryView = {
         let view = RetryView()
         view.tag = 1
-        view.titleLabel.text = "Failed to get favorites"
+        view.titleLabel.text = .failedFavorites
         return view
     }()
     private(set) var noFavoritesLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title17
-        label.text = "No favorites yet"
+        label.text = .noFavorites
         label.isHidden = true
         return label
     }()
@@ -32,7 +32,7 @@ final class FavoritesView: UIView {
         let label = UILabel()
         label.textColor = .rmWhite
         label.font = .title28
-        label.text = "Favorites"
+        label.text = .favorites
         return label
     }()
     private let loader: CustomLoader = CustomLoader(frame: .zero)

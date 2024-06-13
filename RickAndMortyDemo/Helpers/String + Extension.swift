@@ -39,6 +39,10 @@ enum LocalizedKeys: String {
     case cancel = "cancel"
     case searchPlaceholder = "search_placeholder"
     case nothingFound = "nothing_found"
+    
+    case favorites = "favorites"
+    case noFavorites = "no_favorites"
+    case failedFavorites = "failed_favorites"
 }
 
 extension String {
@@ -48,6 +52,11 @@ extension String {
     static let cancel = NSLocalizedString(LocalizedKeys.cancel.rawValue, comment: "")
     static let searchPlaceholder = NSLocalizedString(LocalizedKeys.searchPlaceholder.rawValue, comment: "")
     static let nothingFound = NSLocalizedString(LocalizedKeys.nothingFound.rawValue, comment: "")
+    
+    // Favorites Screen
+    static let favorites = NSLocalizedString(LocalizedKeys.favorites.rawValue, comment: "")
+    static let noFavorites = NSLocalizedString(LocalizedKeys.noFavorites.rawValue, comment: "")
+    static let failedFavorites = NSLocalizedString(LocalizedKeys.failedFavorites.rawValue, comment: "")
     
     // Headers - CharacterInfo Screen
     static let info = NSLocalizedString(LocalizedKeys.info.rawValue, comment: "")
