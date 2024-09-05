@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import Moya
 
 // MARK: - CharacterInfoCoordination Protocol
 protocol CharacterInfoCoordination: AnyObject {
@@ -14,7 +15,7 @@ protocol CharacterInfoViewModelProtocol: AnyObject {
     /// Publishes character episodes, where empty array is Error
     var episodesPublisher: AnyPublisher<[EpisodeModel], Never> { get }
     /// Publishes error
-    var errorPublisher: AnyPublisher<NetworkError, Never> { get }
+    var errorPublisher: AnyPublisher<MoyaError, Never> { get }
     
     /// Returns CharacterModel and Image Data
     func getCharactersInfo() -> (model: CharacterModel, imageData: Data)
@@ -44,8 +45,8 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
     }
     
     /// Publishes error
-    private let errorSubject = PassthroughSubject<NetworkError, Never>()
-    var errorPublisher: AnyPublisher<NetworkError, Never> {
+    private let errorSubject = PassthroughSubject<MoyaError, Never>()
+    var errorPublisher: AnyPublisher<MoyaError, Never> {
         errorSubject.eraseToAnyPublisher()
     }
     
@@ -72,7 +73,7 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
         if characterModel.origin.url.isEmpty {
             characterOriginSubject.send(CharacterOriginModel(id: 1, name: characterModel.origin.name, type: ""))
         } else {
-            networkManager.getCharacterOriginPublisher(url: characterModel.origin.url)
+            networkManager.origin(url: characterModel.origin.url)
                 .sink(receiveCompletion: { [weak self] completion in
                     guard let self else { return }
                     if case .failure(let error) = completion {
@@ -88,7 +89,7 @@ final class CharacterInfoViewModel: CharacterInfoViewModelProtocol, CharacterInf
     
     /// Request character episodes
     private func requestCharacterEpisodes() {
-        networkManager.getEpisodesPublisher(urls: characterModel.episode)
+        networkManager.episodes(urls: characterModel.episode)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 if case .failure(let error) = completion {

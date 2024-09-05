@@ -1,5 +1,6 @@
 import UIKit
 import Combine
+import Moya
 
 // MARK: - CharactersListCoordination Protocol
 protocol CharactersListCoordination: AnyObject {
@@ -14,7 +15,7 @@ protocol CharactersListViewModelProtocol: AnyObject {
     /// Publishes search results
     var characterSearchPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
     /// Publishes error
-    var errorPublisher: AnyPublisher<NetworkError, Never> { get }
+    var errorPublisher: AnyPublisher<MoyaError, Never> { get }
     
     /// Requesting next 10 characters or request already downloaded characters
     func requestCharacters(isNext: Bool)
@@ -45,8 +46,8 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     /// Publishes error
-    private let errorSubject = PassthroughSubject<NetworkError, Never>()
-    var errorPublisher: AnyPublisher<NetworkError, Never> {
+    private let errorSubject = PassthroughSubject<MoyaError, Never>()
+    var errorPublisher: AnyPublisher<MoyaError, Never> {
         errorSubject.eraseToAnyPublisher()
     }
     
@@ -75,12 +76,12 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
         }
         
         /// requesting new 10 characters
-        networkManager.getCharactersPublisher(characterIds: calculateRange(&showedIds))
+        networkManager.characters(ids: calculateRange(&showedIds))
             .flatMap { [unowned self] characters in
                 characters.publisher
                     .flatMap { character in
                         /// downloading image for character
-                        self.networkManager.getImagePublisher(url: character.image)
+                        self.networkManager.image(url: character.image)
                             .map { imageData in
                                 (character, imageData)
                             }
@@ -122,11 +123,11 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     
     /// Search characters by name
     func search(_ name: String?) {
-        networkManager.getCharactersByName(name: name ?? "")
+        networkManager.characterByName(name: name ?? "")
             .flatMap({ [unowned self] characterNameModel in
                 characterNameModel.results.publisher
                     .flatMap { characterModel in
-                        self.networkManager.getImagePublisher(url: characterModel.image)
+                        self.networkManager.image(url: characterModel.image)
                             .map { imageData in
                                 (characterModel, imageData)
                             }

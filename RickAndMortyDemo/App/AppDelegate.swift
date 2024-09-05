@@ -6,8 +6,7 @@ import SnapKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     private let coordinatorFactory: CoordinatorsFactoryProtocol = {
-        let networkService = DefaultNetworkClient()
-        let networkManager = NetworkManager(networkService: networkService)
+        let networkManager = NetworkManager()
         let storage = RealmStorage()
         let modulesFactory = ModulesFactory(networkManager: networkManager, storage: storage)
         let coordinatorFactory = CoordinatorFactory(modulesFactory: modulesFactory)

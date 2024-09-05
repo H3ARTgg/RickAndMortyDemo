@@ -20,7 +20,7 @@ final class RealmStorage {
     weak var delegate: RealmStorageDelegate?
     private let realm = try! Realm()
     
-    private func readData<T: Object>(forType: T.Type = T.self) -> [T]  {
+    private func readData<T: Object>(forType: T.Type = T.self) -> [T] {
         var object = realm.objects(T.self).toArray()
         object.reverse()
         return object
@@ -48,10 +48,9 @@ extension RealmStorage: StorageProtocol {
     func removeFromFavorite(_ id: Int) {
         guard let characterObject = readData(forType: CharacterObject.self).first(where: { $0.characterId == id }) else { return }
         
-        realm.writeAsync({ [weak self] in
-            self?.realm.delete(characterObject)
-        }, onComplete: { [weak self] _ in
-            self?.delegate?.favoritesChanged()
+        try? realm.write({
+            realm.delete(characterObject)
+            delegate?.favoritesChanged()
         })
     }
     

@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import Moya
 
 // MARK: - FavoritesCoordination
 protocol FavoritesCoordination: AnyObject {
@@ -10,7 +11,7 @@ protocol FavoritesCoordination: AnyObject {
 // MARK: - FavoritesViewModelProtocol
 protocol FavoritesViewModelProtocol: AnyObject {
     /// Publishes error
-    var errorPublisher: AnyPublisher<NetworkError, Never> { get }
+    var errorPublisher: AnyPublisher<MoyaError, Never> { get }
     /// Publishes CharactersListModel array (10 models)
     var charactersPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
     
@@ -33,8 +34,8 @@ final class FavoritesViewModel: FavoritesViewModelProtocol, FavoritesCoordinatio
     }
     
     /// Publishes error
-    private let errorSubject = PassthroughSubject<NetworkError, Never>()
-    var errorPublisher: AnyPublisher<NetworkError, Never> {
+    private let errorSubject = PassthroughSubject<MoyaError, Never>()
+    var errorPublisher: AnyPublisher<MoyaError, Never> {
         errorSubject.eraseToAnyPublisher()
     }
     
@@ -56,17 +57,23 @@ final class FavoritesViewModel: FavoritesViewModelProtocol, FavoritesCoordinatio
         let oldCount = currentFavoritesCount
         let favoritesIdsArray = realmStorage.getFavorites().sorted()
         let newCount = favoritesIdsArray.count
+        
         /// if favorites count doesn't changed, then return
         guard oldCount != newCount else { return }
         /// if is favorites empty, then send empty array
-        guard newCount != 0 else { charactersSubject.send([]); return }
+        guard newCount != 0 else {
+            charactersSubject.send([])
+            self.currentFavoritesCount = 0
+            return
+        }
+        currentFavoritesCount = newCount
         
-        networkManager.getCharactersPublisher(characterIds: favoritesIdsArray)
+        networkManager.characters(ids: favoritesIdsArray)
             .flatMap { [unowned self] characters in
                 characters.publisher
                     .flatMap { character in
                         /// downloading image for character
-                        self.networkManager.getImagePublisher(url: character.image)
+                        self.networkManager.image(url: character.image)
                             .map { imageData in
                                 (character, imageData)
                             }
