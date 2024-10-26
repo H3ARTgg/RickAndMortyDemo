@@ -6,7 +6,8 @@ enum RickAndMortyAPI {
     case image(url: String)
     case origin(url: String)
     case episodes(urls: [String])
-    case characterByName(name: String)
+    case search(filter: CharacterSearchType)
+    case nextSearch(nextPage: String)
 }
 
 extension RickAndMortyAPI: TargetType {
@@ -14,8 +15,21 @@ extension RickAndMortyAPI: TargetType {
         switch self {
         case .image(let urlString), .origin(let urlString):
             return URL(string: urlString)!
-        case .characterByName(let name):
-            return URL(string: "https://rickandmortyapi.com/api/character/?name=\(name)")!
+        case .search(let filter):
+            switch filter {
+            case .name(let name):
+                return URL(string: "https://rickandmortyapi.com/api/character/?name=\(name)")!
+            case .status(let status):
+                return URL(string: "https://rickandmortyapi.com/api/character/?status=\(status.rawValue)")!
+            case .species(let species):
+                return URL(string: "https://rickandmortyapi.com/api/character/?species=\(species)")!
+            case .type(let type):
+                return URL(string: "https://rickandmortyapi.com/api/character/?type=\(type)")!
+            case .gender(let gender):
+                return URL(string: "https://rickandmortyapi.com/api/character/?gender=\(gender.rawValue)")!
+            }
+        case .nextSearch(let page):
+            return URL(string: page)!
         case _:
             return URL(string: "https://rickandmortyapi.com/api")!
         }
@@ -27,8 +41,6 @@ extension RickAndMortyAPI: TargetType {
             return "/character/" + makeStringOfArray(ids)
         case .episodes(let urls):
             return "/episode/" + makeEpisodesString(urls)
-        case .characterByName(_):
-            return ""
         case _:
             return ""
         }
@@ -58,7 +70,9 @@ extension RickAndMortyAPI: TargetType {
             return mock(for: "origin")
         case .episodes:
             return mock(for: "episodes")
-        case .characterByName:
+        case .search:
+            return mock(for: "character")
+        case .nextSearch:
             return mock(for: "character")
         }
     }

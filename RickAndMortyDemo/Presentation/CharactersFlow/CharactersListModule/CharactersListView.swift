@@ -38,6 +38,13 @@ final class CharactersListView: UIView {
         label.alpha = 0
         return label
     }()
+    let filterButton: UIButton = {
+        let button = UIButton.systemButton(with: .filter, target: nil, action: nil)
+        button.showsMenuAsPrimaryAction = true
+        button.backgroundColor = .rmBlackSecondary
+        button.cornerRadius(12)
+        return button
+    }()
     private let loader: CustomLoader = CustomLoader(frame: .zero)
     let searchView = SearchView()
     
@@ -74,6 +81,7 @@ final class CharactersListView: UIView {
         let isUserInteractionEnabled = !isShowing
         self.searchView.cancelButton.isUserInteractionEnabled = isUserInteractionEnabled
         self.collectionView.isUserInteractionEnabled = isUserInteractionEnabled
+        self.filterButton.isUserInteractionEnabled = isUserInteractionEnabled
         
         loader.show(isShowing)
     }
@@ -89,6 +97,7 @@ final class CharactersListView: UIView {
     func showSearch(_ isShowing: Bool) {
         let height = isShowing ? 40 : 0
         let topOffset = isShowing ? 20 : 0
+        let alpha: CGFloat = isShowing ? 1 : 0
         
         guard searchView.accessibilityIdentifier != "animating" else { return }
         searchView.accessibilityIdentifier = "animating"
@@ -100,7 +109,13 @@ final class CharactersListView: UIView {
             self.collectionView.snp.updateConstraints { make in
                 make.top.equalTo(self.searchView.snp.bottom).offset(topOffset)
             }
+            self.filterButton.snp.updateConstraints { make in
+                make.height.equalTo(height)
+            }
             self.layoutIfNeeded()
+            
+            self.searchView.alpha = alpha
+            self.filterButton.alpha = alpha
         } completion: { [weak self] _ in
             self?.searchView.accessibilityIdentifier = "not_animating"
         }
@@ -111,7 +126,7 @@ final class CharactersListView: UIView {
         backgroundColor = .rmBlackBG
         [
             titleLabel, collectionView, loader,
-            retryView, searchView,
+            retryView, filterButton, searchView,
             nothingFoundLabel
         ].forEach {
             addSubview($0)
@@ -122,9 +137,18 @@ final class CharactersListView: UIView {
             make.leading.equalToSuperview().offset(24)
         }
         
+        filterButton.snp.makeConstraints { make in
+            let size = 40
+            let offset = 20
+            
+            make.width.height.equalTo(size)
+            make.leading.equalToSuperview().offset(offset)
+            make.top.equalTo(titleLabel.snp.bottom).offset(offset)
+        }
+        
         searchView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalTo(filterButton.snp.trailing).offset(12)
             make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(40)
         }

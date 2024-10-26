@@ -8,6 +8,7 @@ final class CharactersListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private lazy var dataSource = CharactersListDataSource(customView.collectionView)
     private var isScrolledToTop: Bool = true
+    private var currentFilter: CharacterSearchType = .name(name: "")
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -69,6 +70,17 @@ final class CharactersListViewController: UIViewController {
         
         // Targets
         customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
+        
+        // Menu
+        let elements = CharacterSearchType.allCases.map { type in
+            UIAction(title: type.title) { [weak self] _ in
+                self?.viewModel.setFilter(for: type)
+            }
+        }
+        
+        let menu = UIMenu(title: "Search by", options: .singleSelection, children: elements)
+        
+        customView.filterButton.menu = menu
     }
     
     // MARK: - Bindings
@@ -92,20 +104,42 @@ final class CharactersListViewController: UIViewController {
                 self.customView.showLoader(false)
                 
                 isNext ? self.dataSource.add(cellModels) : self.dataSource.reload(cellModels)
+                isNext ? nil : customView.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             })
             .store(in: &cancellables)
         
         // for search
         viewModel.characterSearchPublisher
-            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
-            .sink(receiveValue: { [weak self] models in
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] (cellModels, isNext) in
                 guard let self else { return }
                 
-                models.isEmpty ? customView.showNothingFoundLabel(true) : customView.showNothingFoundLabel(false)
+                cellModels.isEmpty && !isNext ? customView.showNothingFoundLabel(true) : customView.showNothingFoundLabel(false)
                 
                 self.customView.showLoader(false)
-                self.dataSource.reload(models)
+                
+                if !customView.collectionView.visibleCells.isEmpty {
+                    isNext ? nil : customView.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                }
+                isNext ? self.dataSource.add(cellModels) : self.dataSource.reload(cellModels)
             })
+            .store(in: &cancellables)
+        
+        // for search type
+        viewModel.searchTypePublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                switch $0 {
+                case .status(_), .gender(_):
+                    // TODO: - show filter view
+                    customView.searchView.alpha = 0
+                    customView.searchView.didTapCancel()
+                case _:
+                    customView.searchView.changePlaceholder(to: $0.searchPlaceholder)
+                    customView.searchView.alpha = 1
+                    customView.searchView.didTapCancel()
+                }
+            }
             .store(in: &cancellables)
     }
 }
@@ -130,7 +164,7 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if isScrolledToTop {
+        if isScrolledToTop || customView.collectionView.visibleCells.count < 6 {
             customView.showSearch(true)
             return
         }
@@ -156,7 +190,7 @@ extension CharactersListViewController: SearchViewDelegate {
     func search(with text: String) {
         if !text.isEmpty {
             customView.showLoader(true)
-            viewModel.search(text)
+            viewModel.search(text, isNext: false)
         } else {
             customView.showNothingFoundLabel(false)
             viewModel.requestCharacters(isNext: false)

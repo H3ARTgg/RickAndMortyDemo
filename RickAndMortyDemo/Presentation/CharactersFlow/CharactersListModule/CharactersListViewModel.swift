@@ -13,9 +13,11 @@ protocol CharactersListViewModelProtocol: AnyObject {
     /// Publishes CharactersListModel array (10 models)
     var charactersPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> { get }
     /// Publishes search results
-    var characterSearchPublisher: AnyPublisher<[CharactersListCellModel], Never> { get }
+    var characterSearchPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> { get }
     /// Publishes error
     var errorPublisher: AnyPublisher<MoyaError, Never> { get }
+    /// SearchType changing
+    var searchTypePublisher: AnyPublisher<CharacterSearchType, Never> { get }
     
     /// Requesting next 10 characters or request already downloaded characters
     func requestCharacters(isNext: Bool)
@@ -23,8 +25,10 @@ protocol CharactersListViewModelProtocol: AnyObject {
     func getCharactersCount() -> Int
     /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
     func routeToCharacterInfo(with indexPath: IndexPath)
-    /// Search characters by name
-    func search(_ name: String?)
+    /// Search characters by filter
+    func search(_ text: String, isNext: Bool)
+    /// Set search type (filter)
+    func setFilter(for type: CharacterSearchType)
 }
 
 // MARK: - CharactersListViewModel
@@ -40,8 +44,8 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     /// Publishes search results
-    private let characterSearchSubject = PassthroughSubject<[CharactersListCellModel], Never>()
-    var characterSearchPublisher: AnyPublisher<[CharactersListCellModel], Never> {
+    private let characterSearchSubject = PassthroughSubject<(cellModels: [CharactersListCellModel], isNext: Bool), Never>()
+    var characterSearchPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> {
         characterSearchSubject.eraseToAnyPublisher()
     }
     
@@ -49,6 +53,12 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     private let errorSubject = PassthroughSubject<MoyaError, Never>()
     var errorPublisher: AnyPublisher<MoyaError, Never> {
         errorSubject.eraseToAnyPublisher()
+    }
+    
+    /// SearchType changing
+    private let searchTypeSubject = PassthroughSubject<CharacterSearchType, Never>()
+    var searchTypePublisher: AnyPublisher<CharacterSearchType, Never> {
+        searchTypeSubject.eraseToAnyPublisher()
     }
     
     private let networkManager: NetworkManagerProtocol
@@ -59,6 +69,12 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     private var oldShowedIds: Int = 0
     private var showedIds: Int = 0
     private var cancellables = Set<AnyCancellable>()
+    
+    // Searching
+    private var currentFilter: CharacterSearchType = .name(name: "")
+    private var isSearching: Bool = false
+    private var searchedModels: [(model: CharacterModel, imageData: Data)] = []
+    private var nextPage: String?
     
     // MARK: - Init
     init(networkManager: NetworkManagerProtocol, storage: StorageProtocol) {
@@ -71,7 +87,16 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     func requestCharacters(isNext: Bool) {
         /// showing already downloaded characters
         if !isNext {
+            isSearching = false
+            nextPage = nil
+            searchedModels = []
+            
             charactersSubject.send((charactersCellModels, isNext))
+            return
+        }
+        
+        if isSearching {
+            search("", isNext: isNext)
             return
         }
         
@@ -111,21 +136,65 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     
     /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
     func routeToCharacterInfo(with indexPath: IndexPath) {
-        guard charactersModels.indices.contains(indexPath.row) else { return }
-        let characterModel = charactersModels[indexPath.row]
-        headForCharacterInfo?(characterModel.model, characterModel.imageData)
+        let model: (model: CharacterModel, imageData: Data)
+        
+        if isSearching {
+            guard searchedModels.indices.contains(indexPath.row) else { return }
+            model = searchedModels[indexPath.row]
+        } else {
+            guard charactersModels.indices.contains(indexPath.row) else { return }
+            model = charactersModels[indexPath.row]
+        }
+        
+        headForCharacterInfo?(model.model, model.imageData)
     }
     
     /// Get download characters count (Int)
     func getCharactersCount() -> Int {
-        return charactersCellModels.count
+        if isSearching {
+            return searchedModels.count
+        } else {
+            return charactersCellModels.count
+        }
     }
     
-    /// Search characters by name
-    func search(_ name: String?) {
-        networkManager.characterByName(name: name ?? "")
+    /// Search characters by filter
+    func search(_ text: String, isNext: Bool = false) {
+        isSearching = true
+        let newType: CharacterSearchType
+        let publisher: AnyPublisher<CharacterSearch, MoyaError>
+        
+        switch currentFilter {
+        case .name(_):
+            newType = .name(name: text)
+        case .status(_):
+            newType = .status(status: .alive)
+        case .species(_):
+            newType = .species(species: text)
+        case .type(_):
+            newType = .type(type: text)
+        case .gender(_):
+            newType = .gender(gender: .male)
+        }
+        
+        if isNext {
+            if let nextPage {
+                publisher = networkManager.search(filter: newType, nextPage: nextPage)
+            } else {
+                self.characterSearchSubject.send(([], isNext: isNext))
+                return
+            }
+        } else {
+            nextPage = nil
+            searchedModels = []
+            
+            publisher = networkManager.search(filter: newType, nextPage: nil)
+        }
+        
+        publisher
             .flatMap({ [unowned self] characterNameModel in
-                characterNameModel.results.publisher
+                self.nextPage = characterNameModel.info.next
+                return characterNameModel.results.publisher
                     .flatMap { characterModel in
                         self.networkManager.image(url: characterModel.image)
                             .map { imageData in
@@ -137,15 +206,22 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 if case .failure(_) = completion {
-                    self.characterSearchSubject.send([])
+                    self.characterSearchSubject.send(([], isNext: isNext))
                 }
             }, receiveValue: { [weak self] foundCharacters in
                 guard let self else { return }
                 /// making models for cells
+                searchedModels.append(contentsOf: foundCharacters)
+                
                 let cellModels = foundCharacters.map { CharactersListCellModel(characterId: $0.0.id, name: $0.0.name, imageData: $0.1, storage: self.realmStorage) }
-                self.characterSearchSubject.send(cellModels)
+                self.characterSearchSubject.send((cellModels, isNext))
             })
             .store(in: &cancellables)
+    }
+    
+    func setFilter(for type: CharacterSearchType) {
+        currentFilter = type
+        searchTypeSubject.send(type)
     }
     
     // MARK: - Private Methods

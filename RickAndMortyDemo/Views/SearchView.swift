@@ -26,7 +26,7 @@ final class SearchView: UIView {
         field.font = .regular16
         field.textColor = .rmWhite
         field.attributedPlaceholder = NSAttributedString(
-            string: .searchPlaceholder,
+            string: "Search by name",
             attributes: [
                 .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
                 .font: UIFont.regular16
@@ -80,9 +80,19 @@ final class SearchView: UIView {
         }
     }
     
+    func changePlaceholder(to title: String) {
+        searchField.attributedPlaceholder = NSAttributedString(
+            string: title,
+            attributes: [
+                .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
+                .font: UIFont.regular16
+            ]
+        )
+    }
+    
     // MARK: - Actions
     @objc
-    private func didTapCancel() {
+    func didTapCancel() {
         endEditing(true)
         showCancel(false)
         searchField.text = ""
