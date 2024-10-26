@@ -14,6 +14,8 @@ extension RickAndMortyAPI: TargetType {
         switch self {
         case .image(let urlString), .origin(let urlString):
             return URL(string: urlString)!
+        case .characterByName(let name):
+            return URL(string: "https://rickandmortyapi.com/api/character/?name=\(name)")!
         case _:
             return URL(string: "https://rickandmortyapi.com/api")!
         }
@@ -25,8 +27,8 @@ extension RickAndMortyAPI: TargetType {
             return "/character/" + makeStringOfArray(ids)
         case .episodes(let urls):
             return "/episode/" + makeEpisodesString(urls)
-        case .characterByName(let name):
-            return "/character/" + "?name=" + name
+        case .characterByName(_):
+            return ""
         case _:
             return ""
         }
