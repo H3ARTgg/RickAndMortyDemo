@@ -7,6 +7,7 @@ final class CharactersListViewController: UIViewController {
     private let viewModel: CharactersListViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private lazy var dataSource = CharactersListDataSource(customView.collectionView)
+    private var isScrolledToTop: Bool = true
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -120,9 +121,7 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            customView.showSearch(true, force: true)
-        }
+        isScrolledToTop = indexPath.row < 3
         
         if indexPath.row == viewModel.getCharactersCount() - 1 {
             viewModel.requestCharacters(isNext: true)
@@ -131,6 +130,17 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if isScrolledToTop {
+            customView.showSearch(true)
+            return
+        }
+        
+        if velocity.y.sign == .minus {
+            if velocity.y > -2 {
+                return
+            }
+        }
+        
         guard velocity.y != 0 else { return }
         customView.showSearch(velocity.y < 0)
     }

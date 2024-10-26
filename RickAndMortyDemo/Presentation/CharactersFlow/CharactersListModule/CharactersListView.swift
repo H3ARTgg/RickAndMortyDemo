@@ -71,6 +71,10 @@ final class CharactersListView: UIView {
     
     /// Show loader
     func showLoader(_ isShowing: Bool) {
+        let isUserInteractionEnabled = !isShowing
+        self.searchView.cancelButton.isUserInteractionEnabled = isUserInteractionEnabled
+        self.collectionView.isUserInteractionEnabled = isUserInteractionEnabled
+        
         loader.show(isShowing)
     }
     
@@ -82,11 +86,11 @@ final class CharactersListView: UIView {
         }
     }
     
-    func showSearch(_ isShowing: Bool, force: Bool = false) {
+    func showSearch(_ isShowing: Bool) {
         let height = isShowing ? 40 : 0
         let topOffset = isShowing ? 20 : 0
         
-        guard searchView.accessibilityIdentifier != "animating" && !force else { return }
+        guard searchView.accessibilityIdentifier != "animating" else { return }
         searchView.accessibilityIdentifier = "animating"
         
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction]) {

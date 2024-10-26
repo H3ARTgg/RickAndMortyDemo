@@ -19,6 +19,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         appCoordinator.startFlow()
+        
+        UIButton.appearance().isExclusiveTouch = true
+        UIButton.appearance().isMultipleTouchEnabled = false
         return true
     }
 }
