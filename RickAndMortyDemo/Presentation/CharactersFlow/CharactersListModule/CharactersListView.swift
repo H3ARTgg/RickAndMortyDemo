@@ -25,13 +25,13 @@ final class CharactersListView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title28
+        label.font = .setGilroy(28, type: .bold)
         label.text = .characters
         return label
     }()
     private let nothingFoundLabel: UILabel = {
         let label = UILabel()
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.textColor = .rmWhite
         label.textAlignment = .center
         label.text = .nothingFound
@@ -40,12 +40,17 @@ final class CharactersListView: UIView {
     }()
     let filterButton: UIButton = {
         let button = UIButton.systemButton(with: .filter, target: nil, action: nil)
-        button.showsMenuAsPrimaryAction = true
+//        button.showsMenuAsPrimaryAction = true
         button.backgroundColor = .rmBlackSecondary
         button.cornerRadius(12)
         return button
     }()
     private let loader: CustomLoader = CustomLoader(frame: .zero)
+    let filterView: FilterView = {
+        let view = FilterView()
+        view.alpha = 0
+        return view
+    }()
     let searchView = SearchView()
     
     // MARK: - Init
@@ -116,8 +121,20 @@ final class CharactersListView: UIView {
             
             self.searchView.alpha = alpha
             self.filterButton.alpha = alpha
+            
+            if self.filterView.isShowing {
+                self.filterView.alpha = alpha
+            }
         } completion: { [weak self] _ in
             self?.searchView.accessibilityIdentifier = "not_animating"
+        }
+    }
+    
+    func showFilter(_ isShowing: Bool) {
+        let alpha: CGFloat = isShowing ? 1 : 0
+        guard alpha != filterView.alpha else { return }
+        UIView.animate(withDuration: 0.15) {
+            self.filterView.alpha = alpha
         }
     }
     
@@ -127,7 +144,7 @@ final class CharactersListView: UIView {
         [
             titleLabel, collectionView, loader,
             retryView, filterButton, searchView,
-            nothingFoundLabel
+            nothingFoundLabel, filterView
         ].forEach {
             addSubview($0)
         }
@@ -174,6 +191,15 @@ final class CharactersListView: UIView {
         
         nothingFoundLabel.snp.makeConstraints { make in
             make.center.equalTo(collectionView.snp.center)
+        }
+        
+        filterView.snp.makeConstraints { make in
+            let offset = 10
+            
+            make.top.equalTo(filterButton.snp.bottom).offset(offset)
+            make.leading.equalToSuperview().offset(offset * 2)
+            make.height.greaterThanOrEqualTo(420)
+            make.width.equalTo(UIScreen.main.bounds.width / 2)
         }
     }
 }

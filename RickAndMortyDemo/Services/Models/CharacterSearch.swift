@@ -10,6 +10,24 @@ enum CharacterSearchType: CaseIterable {
         [.name(name: ""), .status(status: .alive), .species(species: ""), .type(type: ""), .gender(gender: .male)]
     }
     
+    var characterStatus: CharacterStatus? {
+        switch self {
+        case .status(let status):
+            return status
+        case _:
+            return nil
+        }
+    }
+    
+    var characterGender: CharacterGender? {
+        switch self {
+        case .gender(let gender):
+            return gender
+        case _:
+            return nil
+        }
+    }
+    
     var title: String {
         switch self {
         case .name:
@@ -50,7 +68,7 @@ enum CharacterStatus: String {
 
 // MARK: - CharacterGender
 enum CharacterGender: String {
-    case female, male, genderless
+    case female, male, genderless, unknown
     
     var title: String {
         rawValue.capitalized

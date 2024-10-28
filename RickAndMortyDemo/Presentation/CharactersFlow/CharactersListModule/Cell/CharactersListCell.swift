@@ -5,7 +5,7 @@ final class CharactersListCell: UICollectionViewCell, ReuseIdentifying, Identifi
     private let characterLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label

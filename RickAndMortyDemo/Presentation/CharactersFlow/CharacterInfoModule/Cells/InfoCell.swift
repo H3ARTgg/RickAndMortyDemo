@@ -13,39 +13,39 @@ final class InfoCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
         let label = UILabel()
         label.text = .species
         label.textColor = .rmGray
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private let typeTitle: UILabel = {
         let label = UILabel()
         label.text = .type
         label.textColor = .rmGray
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private let genderTitle: UILabel = {
         let label = UILabel()
         label.text = .gender
         label.textColor = .rmGray
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private let speciesInfo: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private let typeInfo: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private let genderInfo: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     var cellModel: InfoCellModel? {

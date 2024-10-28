@@ -16,8 +16,6 @@ protocol CharactersListViewModelProtocol: AnyObject {
     var characterSearchPublisher: AnyPublisher<(cellModels: [CharactersListCellModel], isNext: Bool), Never> { get }
     /// Publishes error
     var errorPublisher: AnyPublisher<MoyaError, Never> { get }
-    /// SearchType changing
-    var searchTypePublisher: AnyPublisher<CharacterSearchType, Never> { get }
     
     /// Requesting next 10 characters or request already downloaded characters
     func requestCharacters(isNext: Bool)
@@ -26,9 +24,9 @@ protocol CharactersListViewModelProtocol: AnyObject {
     /// Route to CharacterInfo Screen (triggers headForCharacterInfo)
     func routeToCharacterInfo(with indexPath: IndexPath)
     /// Search characters by filter
-    func search(_ text: String, isNext: Bool)
-    /// Set search type (filter)
-    func setFilter(for type: CharacterSearchType)
+    func search(_ text: String?, isNext: Bool)
+    /// Set search types (filters)
+    func setFilters(_ types: [CharacterSearchType])
 }
 
 // MARK: - CharactersListViewModel
@@ -55,12 +53,6 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
         errorSubject.eraseToAnyPublisher()
     }
     
-    /// SearchType changing
-    private let searchTypeSubject = PassthroughSubject<CharacterSearchType, Never>()
-    var searchTypePublisher: AnyPublisher<CharacterSearchType, Never> {
-        searchTypeSubject.eraseToAnyPublisher()
-    }
-    
     private let networkManager: NetworkManagerProtocol
     private let realmStorage: StorageProtocol
     
@@ -71,7 +63,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     private var cancellables = Set<AnyCancellable>()
     
     // Searching
-    private var currentFilter: CharacterSearchType = .name(name: "")
+    private var currentFilters: [CharacterSearchType] = []
     private var isSearching: Bool = false
     private var searchedModels: [(model: CharacterModel, imageData: Data)] = []
     private var nextPage: String?
@@ -159,27 +151,19 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
     }
     
     /// Search characters by filter
-    func search(_ text: String, isNext: Bool = false) {
+    func search(_ text: String?, isNext: Bool = false) {
         isSearching = true
-        let newType: CharacterSearchType
-        let publisher: AnyPublisher<CharacterSearch, MoyaError>
+        var newFilters = currentFilters
         
-        switch currentFilter {
-        case .name(_):
-            newType = .name(name: text)
-        case .status(_):
-            newType = .status(status: .alive)
-        case .species(_):
-            newType = .species(species: text)
-        case .type(_):
-            newType = .type(type: text)
-        case .gender(_):
-            newType = .gender(gender: .male)
+        if let text, !text.isEmpty {
+            let nameType = CharacterSearchType.name(name: text)
+            newFilters.append(nameType)
         }
+        let publisher: AnyPublisher<CharacterSearch, MoyaError>
         
         if isNext {
             if let nextPage {
-                publisher = networkManager.search(filter: newType, nextPage: nextPage)
+                publisher = networkManager.search(filters: newFilters, nextPage: nextPage)
             } else {
                 self.characterSearchSubject.send(([], isNext: isNext))
                 return
@@ -188,7 +172,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             nextPage = nil
             searchedModels = []
             
-            publisher = networkManager.search(filter: newType, nextPage: nil)
+            publisher = networkManager.search(filters: newFilters, nextPage: nil)
         }
         
         publisher
@@ -219,9 +203,8 @@ final class CharactersListViewModel: CharactersListViewModelProtocol, Characters
             .store(in: &cancellables)
     }
     
-    func setFilter(for type: CharacterSearchType) {
-        currentFilter = type
-        searchTypeSubject.send(type)
+    func setFilters(_ types: [CharacterSearchType]) {
+        currentFilters = types
     }
     
     // MARK: - Private Methods

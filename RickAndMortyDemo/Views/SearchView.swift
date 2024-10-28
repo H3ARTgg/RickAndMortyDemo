@@ -23,13 +23,13 @@ final class SearchView: UIView {
         let field = UITextField()
         field.backgroundColor = .clear
         field.tintColor = .rmWhite
-        field.font = .regular16
+        field.font = .setGilroy(16)
         field.textColor = .rmWhite
         field.attributedPlaceholder = NSAttributedString(
             string: "Search by name",
             attributes: [
                 .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
-                .font: UIFont.regular16
+                .font: UIFont.setGilroy(16)
             ]
         )
         return field
@@ -39,12 +39,12 @@ final class SearchView: UIView {
         button.backgroundColor = .clear
         button.setTitle(.cancel, for: .normal)
         button.setTitleColor(.rmWhite, for: .normal)
-        button.titleLabel?.font = .regular16
+        button.titleLabel?.font = .setGilroy(16)
         button.alpha = 0
         return button
     }()
     weak var delegate: SearchViewDelegate?
-    private let cancelButtonWidth: CGFloat = 50
+    private let cancelButtonWidth: CGFloat = 60
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -66,7 +66,7 @@ final class SearchView: UIView {
         let alpha: CGFloat = isShowing ? 1 : 0
         guard alpha != cancelButton.alpha else { return }
         let cancelWidth: CGFloat = isShowing ? cancelButtonWidth : 0
-        let trailingOffset = isShowing ? -62 : 0
+        let trailingOffset = isShowing ? -72 : 0
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.alpha = alpha
             self.containerView.snp.updateConstraints { make in
@@ -78,16 +78,6 @@ final class SearchView: UIView {
             
             self.layoutIfNeeded()
         }
-    }
-    
-    func changePlaceholder(to title: String) {
-        searchField.attributedPlaceholder = NSAttributedString(
-            string: title,
-            attributes: [
-                .foregroundColor: UIColor.rmWhite.withAlphaComponent(0.75),
-                .font: UIFont.regular16
-            ]
-        )
     }
     
     // MARK: - Actions

@@ -8,7 +8,6 @@ final class CharactersListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private lazy var dataSource = CharactersListDataSource(customView.collectionView)
     private var isScrolledToTop: Bool = true
-    private var currentFilter: CharacterSearchType = .name(name: "")
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -67,20 +66,11 @@ final class CharactersListViewController: UIViewController {
         customView.collectionView.dataSource = dataSource
         customView.collectionView.delegate = self
         customView.searchView.delegate = self
+        customView.filterView.delegate = self
         
         // Targets
         customView.retryView.retryButton.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
-        
-        // Menu
-        let elements = CharacterSearchType.allCases.map { type in
-            UIAction(title: type.title) { [weak self] _ in
-                self?.viewModel.setFilter(for: type)
-            }
-        }
-        
-        let menu = UIMenu(title: "Search by", options: .singleSelection, children: elements)
-        
-        customView.filterButton.menu = menu
+        customView.filterButton.addTarget(self, action: #selector(didTapFilter), for: .touchUpInside)
     }
     
     // MARK: - Bindings
@@ -124,23 +114,14 @@ final class CharactersListViewController: UIViewController {
                 isNext ? self.dataSource.add(cellModels) : self.dataSource.reload(cellModels)
             })
             .store(in: &cancellables)
-        
-        // for search type
-        viewModel.searchTypePublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                switch $0 {
-                case .status(_), .gender(_):
-                    // TODO: - show filter view
-                    customView.searchView.alpha = 0
-                    customView.searchView.didTapCancel()
-                case _:
-                    customView.searchView.changePlaceholder(to: $0.searchPlaceholder)
-                    customView.searchView.alpha = 1
-                    customView.searchView.didTapCancel()
-                }
-            }
-            .store(in: &cancellables)
+    }
+}
+
+// MARK: - FilterView Delegate
+extension CharactersListViewController: FilterViewDelegate {
+    func didReceiveFilters(_ filters: [CharacterSearchType]) {
+        viewModel.setFilters(filters)
+        viewModel.search(customView.searchView.searchField.text, isNext: false)
     }
 }
 
@@ -183,6 +164,8 @@ extension CharactersListViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - SearchViewDelegate
 extension CharactersListViewController: SearchViewDelegate {
     func didTapCancel() {
+        viewModel.setFilters([])
+        customView.filterView.resetAll()
         customView.showNothingFoundLabel(false)
         viewModel.requestCharacters(isNext: false)
     }
@@ -204,5 +187,10 @@ private extension CharactersListViewController {
     func didTapRetry() {
         customView.showLoader(true)
         viewModel.requestCharacters(isNext: true)
+    }
+    
+    func didTapFilter() {
+        customView.filterView.isShowing.toggle()
+        customView.showFilter(customView.filterView.isShowing)
     }
 }

@@ -11,14 +11,14 @@ final class OriginCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     private let originName: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.numberOfLines = 0
         return label
     }()
     private let originType: UILabel = {
         let label = UILabel()
         label.textColor = .rmGreen
-        label.font = .regular13
+        label.font = .setGilroy(13)
         return label
     }()
     private let containerView: UIView = {

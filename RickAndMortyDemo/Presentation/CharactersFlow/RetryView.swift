@@ -5,7 +5,7 @@ final class RetryView: UIView {
     private(set) var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.textAlignment = .center
         label.text = .failedCharacters
         return label

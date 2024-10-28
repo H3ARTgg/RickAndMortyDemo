@@ -9,7 +9,7 @@ protocol NetworkManagerProtocol: AnyObject {
     func image(url: String) -> AnyPublisher<Data, MoyaError>
     func origin(url: String) -> AnyPublisher<CharacterOriginModel, MoyaError>
     func episodes(urls: [String]) -> AnyPublisher<[EpisodeModel], MoyaError>
-    func search(filter: CharacterSearchType, nextPage: String?) -> AnyPublisher<CharacterSearch, MoyaError>
+    func search(filters: [CharacterSearchType], nextPage: String?) -> AnyPublisher<CharacterSearch, MoyaError>
 }
 
 // MARK: - NetworkManager
@@ -70,12 +70,12 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
     
-    func search(filter: CharacterSearchType, nextPage: String?) -> AnyPublisher<CharacterSearch, MoyaError> {
+    func search(filters: [CharacterSearchType], nextPage: String?) -> AnyPublisher<CharacterSearch, MoyaError> {
         let target: MultiTarget
         if let nextPage {
             target = MultiTarget(RickAndMortyAPI.nextSearch(nextPage: nextPage))
         } else {
-            target = MultiTarget(RickAndMortyAPI.search(filter: filter))
+            target = MultiTarget(RickAndMortyAPI.search(filters: filters))
         }
         
         return provider.requestPublisher(target)

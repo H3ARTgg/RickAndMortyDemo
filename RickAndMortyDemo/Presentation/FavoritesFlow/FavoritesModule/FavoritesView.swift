@@ -23,7 +23,7 @@ final class FavoritesView: UIView {
     private(set) var noFavoritesLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.text = .noFavorites
         label.isHidden = true
         return label
@@ -31,7 +31,7 @@ final class FavoritesView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title28
+        label.font = .setGilroy(28, type: .bold)
         label.text = .favorites
         return label
     }()

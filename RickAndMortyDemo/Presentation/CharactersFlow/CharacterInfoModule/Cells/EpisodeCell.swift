@@ -10,7 +10,7 @@ final class EpisodeCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     private let episodeName: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title17
+        label.font = .setGilroy(17, type: .bold)
         label.numberOfLines = 0
         label.textAlignment = .left
         return label
@@ -18,13 +18,13 @@ final class EpisodeCell: UICollectionViewCell, ReuseIdentifying, Identifiable {
     private let airDate: UILabel = {
         let label = UILabel()
         label.textColor = .rmGray2
-        label.font = .regular12
+        label.font = .setGilroy(12)
         return label
     }()
     private let episode: UILabel = {
         let label = UILabel()
         label.textColor = .rmGreen
-        label.font = .regular13
+        label.font = .setGilroy(13)
         return label
     }()
     var cellModel: EpisodeModel? {

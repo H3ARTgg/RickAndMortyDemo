@@ -6,7 +6,7 @@ enum RickAndMortyAPI {
     case image(url: String)
     case origin(url: String)
     case episodes(urls: [String])
-    case search(filter: CharacterSearchType)
+    case search(filters: [CharacterSearchType])
     case nextSearch(nextPage: String)
 }
 
@@ -15,19 +15,8 @@ extension RickAndMortyAPI: TargetType {
         switch self {
         case .image(let urlString), .origin(let urlString):
             return URL(string: urlString)!
-        case .search(let filter):
-            switch filter {
-            case .name(let name):
-                return URL(string: "https://rickandmortyapi.com/api/character/?name=\(name)")!
-            case .status(let status):
-                return URL(string: "https://rickandmortyapi.com/api/character/?status=\(status.rawValue)")!
-            case .species(let species):
-                return URL(string: "https://rickandmortyapi.com/api/character/?species=\(species)")!
-            case .type(let type):
-                return URL(string: "https://rickandmortyapi.com/api/character/?type=\(type)")!
-            case .gender(let gender):
-                return URL(string: "https://rickandmortyapi.com/api/character/?gender=\(gender.rawValue)")!
-            }
+        case .search(let filters):
+            return makeURLOfFilters(filters)
         case .nextSearch(let page):
             return URL(string: page)!
         case _:
@@ -94,6 +83,31 @@ extension RickAndMortyAPI {
                 with: ""
             )}
             .joined(separator: ",")
+    }
+    
+    private func makeURLOfFilters(_ array: [CharacterSearchType]) -> URL {
+        var compenents = URLComponents(string: "https://rickandmortyapi.com/api/character/")
+        var queries: [URLQueryItem] = []
+        
+        array.forEach { type in
+            let queryItem: URLQueryItem
+            switch type {
+            case .name(let name):
+                queryItem = URLQueryItem(name: "name", value: name)
+            case .status(let status):
+                queryItem = URLQueryItem(name: "status", value: status.rawValue)
+            case .species(let species):
+                queryItem = URLQueryItem(name: "species", value: species)
+            case .type(let type):
+                queryItem = URLQueryItem(name: "type", value: type)
+            case .gender(let gender):
+                queryItem = URLQueryItem(name: "gender", value: gender.rawValue)
+            }
+            queries.append(queryItem)
+        }
+        
+        compenents?.queryItems = queries
+        return compenents!.url!
     }
     
     private func mock(for name: String, with extens: String = "json") -> Data {

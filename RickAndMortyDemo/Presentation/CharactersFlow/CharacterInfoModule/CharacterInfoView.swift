@@ -24,14 +24,14 @@ final class CharacterInfoView: UIView {
     private let characterNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .title22
+        label.font = .setGilroy(22, type: .bold)
         label.numberOfLines = 0
         return label
     }()
     private let characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .rmWhite
-        label.font = .regular16
+        label.font = .setGilroy(16)
         return label
     }()
     private(set) var characterCollectionView: UICollectionView = {
