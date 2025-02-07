@@ -103,6 +103,7 @@ final class CharactersListView: UIView {
         let height = isShowing ? 40 : 0
         let topOffset = isShowing ? 20 : 0
         let alpha: CGFloat = isShowing ? 1 : 0
+        let retryViewTopOffset = isShowing ? 20 : 0
         
         guard searchView.accessibilityIdentifier != "animating" else { return }
         searchView.accessibilityIdentifier = "animating"
@@ -116,6 +117,9 @@ final class CharactersListView: UIView {
             }
             self.filterButton.snp.updateConstraints { make in
                 make.height.equalTo(height)
+            }
+            self.retryView.snp.updateConstraints { make in
+                make.top.equalTo(self.searchView.snp.bottom).offset(retryViewTopOffset)
             }
             self.layoutIfNeeded()
             
